@@ -1,0 +1,702 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        
+        <title>
+            
+    
+                SQL and Generic Functions
+             &mdash; 
+    SQLAlchemy 0.8 Documentation
+
+        </title>
+        
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/docs.css" type="text/css" />
+
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+          URL_ROOT:    '../',
+          VERSION:     '0.8.3',
+          COLLAPSE_MODINDEX: false,
+          FILE_SUFFIX: '.html'
+      };
+    </script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/init.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+        <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="SQLAlchemy 0.8 Documentation" href="../index.html" />
+        <link rel="up" title="SQL Statements and Expressions API" href="expression_api.html" />
+        <link rel="next" title="Column and Data Types" href="types.html" />
+        <link rel="prev" title="Insert, Updates, Deletes" href="dml.html" />
+
+    </head>
+    <body>
+        
+
+
+
+
+
+
+
+
+
+
+<div id="docs-container">
+
+
+
+<div id="docs-header">
+    <h1>SQLAlchemy 0.8 Documentation</h1>
+
+    <div id="docs-search">
+    Search:
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" /> <input type="submit" value="Search" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+
+    <div id="docs-version-header">
+        Release: <span class="version-num">0.8.3</span> | Release Date: October 26, 2013
+
+
+    </div>
+
+</div>
+
+<div id="docs-top-navigation">
+    <div id="docs-top-page-control" class="docs-navigation-links">
+        <ul>
+            <li>Prev:
+            <a href="dml.html" title="previous chapter">Insert, Updates, Deletes</a>
+            </li>
+            <li>Next:
+            <a href="types.html" title="next chapter">Column and Data Types</a>
+            </li>
+
+        <li>
+            <a href="../contents.html">Table of Contents</a> |
+            <a href="../genindex.html">Index</a>
+            | <a href="../_sources/core/functions.txt">view source
+        </li>
+        </ul>
+    </div>
+
+    <div id="docs-navigation-banner">
+        <a href="../index.html">SQLAlchemy 0.8 Documentation</a>
+                » <a href="index.html" title="SQLAlchemy Core">SQLAlchemy Core</a>
+                » <a href="expression_api.html" title="SQL Statements and Expressions API">SQL Statements and Expressions API</a>
+        » 
+                SQL and Generic Functions
+             
+
+        <h2>
+            
+                SQL and Generic Functions
+            
+        </h2>
+    </div>
+
+</div>
+
+<div id="docs-body-container">
+
+    <div id="docs-sidebar">
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">SQL and Generic Functions</a></li>
+</ul>
+
+
+    <h4>Previous Topic</h4>
+    <p>
+    <a href="dml.html" title="previous chapter">Insert, Updates, Deletes</a>
+    </p>
+    <h4>Next Topic</h4>
+    <p>
+    <a href="types.html" title="next chapter">Column and Data Types</a>
+    </p>
+
+
+    <h4>Quick Search</h4>
+    <p>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" /> <input type="submit" value="Search" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </p>
+
+    </div>
+
+    <div id="docs-body" class="withsidebar" >
+        
+<div class="section" id="module-sqlalchemy.sql.expression">
+<span id="sql-and-generic-functions"></span><span id="generic-functions"></span><span id="functions-toplevel"></span><h1>SQL and Generic Functions<a class="headerlink" href="#module-sqlalchemy.sql.expression" title="Permalink to this headline">¶</a></h1>
+<p>SQL functions which are known to SQLAlchemy with regards to database-specific
+rendering, return types and argument behavior. Generic functions are invoked
+like all SQL functions, using the <a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.func" title="sqlalchemy.sql.expression.func"><tt class="xref py py-attr docutils literal"><span class="pre">func</span></tt></a> attribute:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">select</span><span class="p">([</span><span class="n">func</span><span class="o">.</span><span class="n">count</span><span class="p">()])</span><span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">sometable</span><span class="p">)</span></pre></div>
+</div>
+<p>Note that any name not known to <a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.func" title="sqlalchemy.sql.expression.func"><tt class="xref py py-attr docutils literal"><span class="pre">func</span></tt></a> generates the function name as is
+- there is no restriction on what SQL functions can be called, known or
+unknown to SQLAlchemy, built-in or user defined. The section here only
+describes those functions where SQLAlchemy already knows what argument and
+return types are in use.</p>
+<span class="target" id="module-sqlalchemy.sql.functions"></span><dl class="class">
+<dt id="sqlalchemy.sql.functions.AnsiFunction">
+<em class="property">class </em><tt class="descclassname">sqlalchemy.sql.functions.</tt><tt class="descname">AnsiFunction</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#sqlalchemy.sql.functions.AnsiFunction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sqlalchemy.sql.functions.GenericFunction" title="sqlalchemy.sql.functions.GenericFunction"><tt class="xref py py-class docutils literal"><span class="pre">sqlalchemy.sql.functions.GenericFunction</span></tt></a></p>
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.AnsiFunction.identifier">
+<tt class="descname">identifier</tt><em class="property"> = 'AnsiFunction'</em><a class="headerlink" href="#sqlalchemy.sql.functions.AnsiFunction.identifier" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.AnsiFunction.name">
+<tt class="descname">name</tt><em class="property"> = 'AnsiFunction'</em><a class="headerlink" href="#sqlalchemy.sql.functions.AnsiFunction.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="sqlalchemy.sql.functions.GenericFunction">
+<em class="property">class </em><tt class="descclassname">sqlalchemy.sql.functions.</tt><tt class="descname">GenericFunction</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#sqlalchemy.sql.functions.GenericFunction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">sqlalchemy.sql.expression.Function</span></tt></p>
+<p>Define a &#8216;generic&#8217; function.</p>
+<p>A generic function is a pre-established <tt class="xref py py-class docutils literal"><span class="pre">Function</span></tt>
+class that is instantiated automatically when called
+by name from the <a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.func" title="sqlalchemy.sql.expression.func"><tt class="xref py py-data docutils literal"><span class="pre">func</span></tt></a> attribute.    Note that
+calling any name from <a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.func" title="sqlalchemy.sql.expression.func"><tt class="xref py py-data docutils literal"><span class="pre">func</span></tt></a> has the effect that
+a new <tt class="xref py py-class docutils literal"><span class="pre">Function</span></tt> instance is created automatically,
+given that name.  The primary use case for defining
+a <a class="reference internal" href="#sqlalchemy.sql.functions.GenericFunction" title="sqlalchemy.sql.functions.GenericFunction"><tt class="xref py py-class docutils literal"><span class="pre">GenericFunction</span></tt></a> class is so that a function
+of a particular name may be given a fixed return type.
+It can also include custom argument parsing schemes as well
+as additional methods.</p>
+<p>Subclasses of <a class="reference internal" href="#sqlalchemy.sql.functions.GenericFunction" title="sqlalchemy.sql.functions.GenericFunction"><tt class="xref py py-class docutils literal"><span class="pre">GenericFunction</span></tt></a> are automatically
+registered under the name of the class.  For
+example, a user-defined function <tt class="docutils literal"><span class="pre">as_utc()</span></tt> would
+be available immediately:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">sqlalchemy.sql.functions</span> <span class="kn">import</span> <span class="n">GenericFunction</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy.types</span> <span class="kn">import</span> <span class="n">DateTime</span>
+
+<span class="k">class</span> <span class="nc">as_utc</span><span class="p">(</span><span class="n">GenericFunction</span><span class="p">):</span>
+    <span class="nb">type</span> <span class="o">=</span> <span class="n">DateTime</span>
+
+<span class="k">print</span> <span class="n">select</span><span class="p">([</span><span class="n">func</span><span class="o">.</span><span class="n">as_utc</span><span class="p">()])</span></pre></div>
+</div>
+<p>User-defined generic functions can be organized into
+packages by specifying the &#8220;package&#8221; attribute when defining
+<a class="reference internal" href="#sqlalchemy.sql.functions.GenericFunction" title="sqlalchemy.sql.functions.GenericFunction"><tt class="xref py py-class docutils literal"><span class="pre">GenericFunction</span></tt></a>.   Third party libraries
+containing many functions may want to use this in order
+to avoid name conflicts with other systems.   For example,
+if our <tt class="docutils literal"><span class="pre">as_utc()</span></tt> function were part of a package
+&#8220;time&#8221;:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">as_utc</span><span class="p">(</span><span class="n">GenericFunction</span><span class="p">):</span>
+    <span class="nb">type</span> <span class="o">=</span> <span class="n">DateTime</span>
+    <span class="n">package</span> <span class="o">=</span> <span class="s">&quot;time&quot;</span></pre></div>
+</div>
+<p>The above function would be available from <a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.func" title="sqlalchemy.sql.expression.func"><tt class="xref py py-data docutils literal"><span class="pre">func</span></tt></a>
+using the package name <tt class="docutils literal"><span class="pre">time</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="n">select</span><span class="p">([</span><span class="n">func</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">as_utc</span><span class="p">()])</span></pre></div>
+</div>
+<p>A final option is to allow the function to be accessed
+from one name in <a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.func" title="sqlalchemy.sql.expression.func"><tt class="xref py py-data docutils literal"><span class="pre">func</span></tt></a> but to render as a different name.
+The <tt class="docutils literal"><span class="pre">identifier</span></tt> attribute will override the name used to
+access the function as loaded from <a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.func" title="sqlalchemy.sql.expression.func"><tt class="xref py py-data docutils literal"><span class="pre">func</span></tt></a>, but will retain
+the usage of <tt class="docutils literal"><span class="pre">name</span></tt> as the rendered name:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">GeoBuffer</span><span class="p">(</span><span class="n">GenericFunction</span><span class="p">):</span>
+    <span class="nb">type</span> <span class="o">=</span> <span class="n">Geometry</span>
+    <span class="n">package</span> <span class="o">=</span> <span class="s">&quot;geo&quot;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;ST_Buffer&quot;</span>
+    <span class="n">identifier</span> <span class="o">=</span> <span class="s">&quot;buffer&quot;</span></pre></div>
+</div>
+<p>The above function will render as follows:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">func</span><span class="o">.</span><span class="n">geo</span><span class="o">.</span><span class="n">buffer</span><span class="p">()</span>
+<span class="go">ST_Buffer()</span></pre></div>
+</div>
+<div class="versionadded">
+<p><span>New in version 0.8: </span><a class="reference internal" href="#sqlalchemy.sql.functions.GenericFunction" title="sqlalchemy.sql.functions.GenericFunction"><tt class="xref py py-class docutils literal"><span class="pre">GenericFunction</span></tt></a> now supports
+automatic registration of new functions as well as package
+and custom naming support.</p>
+</div>
+<div class="versionchanged">
+<p><span>Changed in version 0.8: </span>The attribute name <tt class="docutils literal"><span class="pre">type</span></tt> is used
+to specify the function&#8217;s return type at the class level.
+Previously, the name <tt class="docutils literal"><span class="pre">__return_type__</span></tt> was used.  This
+name is still recognized for backwards-compatibility.</p>
+</div>
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.GenericFunction.coerce_arguments">
+<tt class="descname">coerce_arguments</tt><em class="property"> = True</em><a class="headerlink" href="#sqlalchemy.sql.functions.GenericFunction.coerce_arguments" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.GenericFunction.identifier">
+<tt class="descname">identifier</tt><em class="property"> = 'GenericFunction'</em><a class="headerlink" href="#sqlalchemy.sql.functions.GenericFunction.identifier" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.GenericFunction.name">
+<tt class="descname">name</tt><em class="property"> = 'GenericFunction'</em><a class="headerlink" href="#sqlalchemy.sql.functions.GenericFunction.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="sqlalchemy.sql.functions.ReturnTypeFromArgs">
+<em class="property">class </em><tt class="descclassname">sqlalchemy.sql.functions.</tt><tt class="descname">ReturnTypeFromArgs</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#sqlalchemy.sql.functions.ReturnTypeFromArgs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sqlalchemy.sql.functions.GenericFunction" title="sqlalchemy.sql.functions.GenericFunction"><tt class="xref py py-class docutils literal"><span class="pre">sqlalchemy.sql.functions.GenericFunction</span></tt></a></p>
+<p>Define a function whose return type is the same as its arguments.</p>
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.ReturnTypeFromArgs.identifier">
+<tt class="descname">identifier</tt><em class="property"> = 'ReturnTypeFromArgs'</em><a class="headerlink" href="#sqlalchemy.sql.functions.ReturnTypeFromArgs.identifier" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.ReturnTypeFromArgs.name">
+<tt class="descname">name</tt><em class="property"> = 'ReturnTypeFromArgs'</em><a class="headerlink" href="#sqlalchemy.sql.functions.ReturnTypeFromArgs.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="sqlalchemy.sql.functions.char_length">
+<em class="property">class </em><tt class="descclassname">sqlalchemy.sql.functions.</tt><tt class="descname">char_length</tt><big>(</big><em>arg</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#sqlalchemy.sql.functions.char_length" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sqlalchemy.sql.functions.GenericFunction" title="sqlalchemy.sql.functions.GenericFunction"><tt class="xref py py-class docutils literal"><span class="pre">sqlalchemy.sql.functions.GenericFunction</span></tt></a></p>
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.char_length.identifier">
+<tt class="descname">identifier</tt><em class="property"> = 'char_length'</em><a class="headerlink" href="#sqlalchemy.sql.functions.char_length.identifier" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.char_length.name">
+<tt class="descname">name</tt><em class="property"> = 'char_length'</em><a class="headerlink" href="#sqlalchemy.sql.functions.char_length.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.char_length.type">
+<tt class="descname">type</tt><a class="headerlink" href="#sqlalchemy.sql.functions.char_length.type" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">Integer</span></tt></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="sqlalchemy.sql.functions.coalesce">
+<em class="property">class </em><tt class="descclassname">sqlalchemy.sql.functions.</tt><tt class="descname">coalesce</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#sqlalchemy.sql.functions.coalesce" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sqlalchemy.sql.functions.ReturnTypeFromArgs" title="sqlalchemy.sql.functions.ReturnTypeFromArgs"><tt class="xref py py-class docutils literal"><span class="pre">sqlalchemy.sql.functions.ReturnTypeFromArgs</span></tt></a></p>
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.coalesce.identifier">
+<tt class="descname">identifier</tt><em class="property"> = 'coalesce'</em><a class="headerlink" href="#sqlalchemy.sql.functions.coalesce.identifier" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.coalesce.name">
+<tt class="descname">name</tt><em class="property"> = 'coalesce'</em><a class="headerlink" href="#sqlalchemy.sql.functions.coalesce.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="sqlalchemy.sql.functions.concat">
+<em class="property">class </em><tt class="descclassname">sqlalchemy.sql.functions.</tt><tt class="descname">concat</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#sqlalchemy.sql.functions.concat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sqlalchemy.sql.functions.GenericFunction" title="sqlalchemy.sql.functions.GenericFunction"><tt class="xref py py-class docutils literal"><span class="pre">sqlalchemy.sql.functions.GenericFunction</span></tt></a></p>
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.concat.identifier">
+<tt class="descname">identifier</tt><em class="property"> = 'concat'</em><a class="headerlink" href="#sqlalchemy.sql.functions.concat.identifier" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.concat.name">
+<tt class="descname">name</tt><em class="property"> = 'concat'</em><a class="headerlink" href="#sqlalchemy.sql.functions.concat.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.concat.type">
+<tt class="descname">type</tt><a class="headerlink" href="#sqlalchemy.sql.functions.concat.type" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">String</span></tt></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="sqlalchemy.sql.functions.count">
+<em class="property">class </em><tt class="descclassname">sqlalchemy.sql.functions.</tt><tt class="descname">count</tt><big>(</big><em>expression=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#sqlalchemy.sql.functions.count" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sqlalchemy.sql.functions.GenericFunction" title="sqlalchemy.sql.functions.GenericFunction"><tt class="xref py py-class docutils literal"><span class="pre">sqlalchemy.sql.functions.GenericFunction</span></tt></a></p>
+<p>The ANSI COUNT aggregate function.  With no arguments,
+emits COUNT *.</p>
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.count.identifier">
+<tt class="descname">identifier</tt><em class="property"> = 'count'</em><a class="headerlink" href="#sqlalchemy.sql.functions.count.identifier" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.count.name">
+<tt class="descname">name</tt><em class="property"> = 'count'</em><a class="headerlink" href="#sqlalchemy.sql.functions.count.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.count.type">
+<tt class="descname">type</tt><a class="headerlink" href="#sqlalchemy.sql.functions.count.type" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">Integer</span></tt></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="sqlalchemy.sql.functions.current_date">
+<em class="property">class </em><tt class="descclassname">sqlalchemy.sql.functions.</tt><tt class="descname">current_date</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#sqlalchemy.sql.functions.current_date" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sqlalchemy.sql.functions.AnsiFunction" title="sqlalchemy.sql.functions.AnsiFunction"><tt class="xref py py-class docutils literal"><span class="pre">sqlalchemy.sql.functions.AnsiFunction</span></tt></a></p>
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.current_date.identifier">
+<tt class="descname">identifier</tt><em class="property"> = 'current_date'</em><a class="headerlink" href="#sqlalchemy.sql.functions.current_date.identifier" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.current_date.name">
+<tt class="descname">name</tt><em class="property"> = 'current_date'</em><a class="headerlink" href="#sqlalchemy.sql.functions.current_date.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.current_date.type">
+<tt class="descname">type</tt><a class="headerlink" href="#sqlalchemy.sql.functions.current_date.type" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">Date</span></tt></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="sqlalchemy.sql.functions.current_time">
+<em class="property">class </em><tt class="descclassname">sqlalchemy.sql.functions.</tt><tt class="descname">current_time</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#sqlalchemy.sql.functions.current_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sqlalchemy.sql.functions.AnsiFunction" title="sqlalchemy.sql.functions.AnsiFunction"><tt class="xref py py-class docutils literal"><span class="pre">sqlalchemy.sql.functions.AnsiFunction</span></tt></a></p>
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.current_time.identifier">
+<tt class="descname">identifier</tt><em class="property"> = 'current_time'</em><a class="headerlink" href="#sqlalchemy.sql.functions.current_time.identifier" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.current_time.name">
+<tt class="descname">name</tt><em class="property"> = 'current_time'</em><a class="headerlink" href="#sqlalchemy.sql.functions.current_time.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.current_time.type">
+<tt class="descname">type</tt><a class="headerlink" href="#sqlalchemy.sql.functions.current_time.type" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">Time</span></tt></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="sqlalchemy.sql.functions.current_timestamp">
+<em class="property">class </em><tt class="descclassname">sqlalchemy.sql.functions.</tt><tt class="descname">current_timestamp</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#sqlalchemy.sql.functions.current_timestamp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sqlalchemy.sql.functions.AnsiFunction" title="sqlalchemy.sql.functions.AnsiFunction"><tt class="xref py py-class docutils literal"><span class="pre">sqlalchemy.sql.functions.AnsiFunction</span></tt></a></p>
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.current_timestamp.identifier">
+<tt class="descname">identifier</tt><em class="property"> = 'current_timestamp'</em><a class="headerlink" href="#sqlalchemy.sql.functions.current_timestamp.identifier" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.current_timestamp.name">
+<tt class="descname">name</tt><em class="property"> = 'current_timestamp'</em><a class="headerlink" href="#sqlalchemy.sql.functions.current_timestamp.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.current_timestamp.type">
+<tt class="descname">type</tt><a class="headerlink" href="#sqlalchemy.sql.functions.current_timestamp.type" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">DateTime</span></tt></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="sqlalchemy.sql.functions.current_user">
+<em class="property">class </em><tt class="descclassname">sqlalchemy.sql.functions.</tt><tt class="descname">current_user</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#sqlalchemy.sql.functions.current_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sqlalchemy.sql.functions.AnsiFunction" title="sqlalchemy.sql.functions.AnsiFunction"><tt class="xref py py-class docutils literal"><span class="pre">sqlalchemy.sql.functions.AnsiFunction</span></tt></a></p>
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.current_user.identifier">
+<tt class="descname">identifier</tt><em class="property"> = 'current_user'</em><a class="headerlink" href="#sqlalchemy.sql.functions.current_user.identifier" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.current_user.name">
+<tt class="descname">name</tt><em class="property"> = 'current_user'</em><a class="headerlink" href="#sqlalchemy.sql.functions.current_user.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.current_user.type">
+<tt class="descname">type</tt><a class="headerlink" href="#sqlalchemy.sql.functions.current_user.type" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">String</span></tt></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="sqlalchemy.sql.functions.localtime">
+<em class="property">class </em><tt class="descclassname">sqlalchemy.sql.functions.</tt><tt class="descname">localtime</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#sqlalchemy.sql.functions.localtime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sqlalchemy.sql.functions.AnsiFunction" title="sqlalchemy.sql.functions.AnsiFunction"><tt class="xref py py-class docutils literal"><span class="pre">sqlalchemy.sql.functions.AnsiFunction</span></tt></a></p>
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.localtime.identifier">
+<tt class="descname">identifier</tt><em class="property"> = 'localtime'</em><a class="headerlink" href="#sqlalchemy.sql.functions.localtime.identifier" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.localtime.name">
+<tt class="descname">name</tt><em class="property"> = 'localtime'</em><a class="headerlink" href="#sqlalchemy.sql.functions.localtime.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.localtime.type">
+<tt class="descname">type</tt><a class="headerlink" href="#sqlalchemy.sql.functions.localtime.type" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">DateTime</span></tt></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="sqlalchemy.sql.functions.localtimestamp">
+<em class="property">class </em><tt class="descclassname">sqlalchemy.sql.functions.</tt><tt class="descname">localtimestamp</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#sqlalchemy.sql.functions.localtimestamp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sqlalchemy.sql.functions.AnsiFunction" title="sqlalchemy.sql.functions.AnsiFunction"><tt class="xref py py-class docutils literal"><span class="pre">sqlalchemy.sql.functions.AnsiFunction</span></tt></a></p>
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.localtimestamp.identifier">
+<tt class="descname">identifier</tt><em class="property"> = 'localtimestamp'</em><a class="headerlink" href="#sqlalchemy.sql.functions.localtimestamp.identifier" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.localtimestamp.name">
+<tt class="descname">name</tt><em class="property"> = 'localtimestamp'</em><a class="headerlink" href="#sqlalchemy.sql.functions.localtimestamp.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.localtimestamp.type">
+<tt class="descname">type</tt><a class="headerlink" href="#sqlalchemy.sql.functions.localtimestamp.type" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">DateTime</span></tt></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="sqlalchemy.sql.functions.max">
+<em class="property">class </em><tt class="descclassname">sqlalchemy.sql.functions.</tt><tt class="descname">max</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#sqlalchemy.sql.functions.max" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sqlalchemy.sql.functions.ReturnTypeFromArgs" title="sqlalchemy.sql.functions.ReturnTypeFromArgs"><tt class="xref py py-class docutils literal"><span class="pre">sqlalchemy.sql.functions.ReturnTypeFromArgs</span></tt></a></p>
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.max.identifier">
+<tt class="descname">identifier</tt><em class="property"> = 'max'</em><a class="headerlink" href="#sqlalchemy.sql.functions.max.identifier" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.max.name">
+<tt class="descname">name</tt><em class="property"> = 'max'</em><a class="headerlink" href="#sqlalchemy.sql.functions.max.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="sqlalchemy.sql.functions.min">
+<em class="property">class </em><tt class="descclassname">sqlalchemy.sql.functions.</tt><tt class="descname">min</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#sqlalchemy.sql.functions.min" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sqlalchemy.sql.functions.ReturnTypeFromArgs" title="sqlalchemy.sql.functions.ReturnTypeFromArgs"><tt class="xref py py-class docutils literal"><span class="pre">sqlalchemy.sql.functions.ReturnTypeFromArgs</span></tt></a></p>
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.min.identifier">
+<tt class="descname">identifier</tt><em class="property"> = 'min'</em><a class="headerlink" href="#sqlalchemy.sql.functions.min.identifier" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.min.name">
+<tt class="descname">name</tt><em class="property"> = 'min'</em><a class="headerlink" href="#sqlalchemy.sql.functions.min.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="sqlalchemy.sql.functions.next_value">
+<em class="property">class </em><tt class="descclassname">sqlalchemy.sql.functions.</tt><tt class="descname">next_value</tt><big>(</big><em>seq</em>, <em>**kw</em><big>)</big><a class="headerlink" href="#sqlalchemy.sql.functions.next_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sqlalchemy.sql.functions.GenericFunction" title="sqlalchemy.sql.functions.GenericFunction"><tt class="xref py py-class docutils literal"><span class="pre">sqlalchemy.sql.functions.GenericFunction</span></tt></a></p>
+<p>Represent the &#8216;next value&#8217;, given a <a class="reference internal" href="defaults.html#sqlalchemy.schema.Sequence" title="sqlalchemy.schema.Sequence"><tt class="xref py py-class docutils literal"><span class="pre">Sequence</span></tt></a>
+as it&#8217;s single argument.</p>
+<p>Compiles into the appropriate function on each backend,
+or will raise NotImplementedError if used on a backend
+that does not provide support for sequences.</p>
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.next_value.identifier">
+<tt class="descname">identifier</tt><em class="property"> = 'next_value'</em><a class="headerlink" href="#sqlalchemy.sql.functions.next_value.identifier" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.next_value.name">
+<tt class="descname">name</tt><em class="property"> = 'next_value'</em><a class="headerlink" href="#sqlalchemy.sql.functions.next_value.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.next_value.type">
+<tt class="descname">type</tt><em class="property"> = Integer()</em><a class="headerlink" href="#sqlalchemy.sql.functions.next_value.type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="sqlalchemy.sql.functions.now">
+<em class="property">class </em><tt class="descclassname">sqlalchemy.sql.functions.</tt><tt class="descname">now</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#sqlalchemy.sql.functions.now" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sqlalchemy.sql.functions.GenericFunction" title="sqlalchemy.sql.functions.GenericFunction"><tt class="xref py py-class docutils literal"><span class="pre">sqlalchemy.sql.functions.GenericFunction</span></tt></a></p>
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.now.identifier">
+<tt class="descname">identifier</tt><em class="property"> = 'now'</em><a class="headerlink" href="#sqlalchemy.sql.functions.now.identifier" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.now.name">
+<tt class="descname">name</tt><em class="property"> = 'now'</em><a class="headerlink" href="#sqlalchemy.sql.functions.now.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.now.type">
+<tt class="descname">type</tt><a class="headerlink" href="#sqlalchemy.sql.functions.now.type" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">DateTime</span></tt></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="sqlalchemy.sql.functions.random">
+<em class="property">class </em><tt class="descclassname">sqlalchemy.sql.functions.</tt><tt class="descname">random</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#sqlalchemy.sql.functions.random" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sqlalchemy.sql.functions.GenericFunction" title="sqlalchemy.sql.functions.GenericFunction"><tt class="xref py py-class docutils literal"><span class="pre">sqlalchemy.sql.functions.GenericFunction</span></tt></a></p>
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.random.identifier">
+<tt class="descname">identifier</tt><em class="property"> = 'random'</em><a class="headerlink" href="#sqlalchemy.sql.functions.random.identifier" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.random.name">
+<tt class="descname">name</tt><em class="property"> = 'random'</em><a class="headerlink" href="#sqlalchemy.sql.functions.random.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="sqlalchemy.sql.functions.register_function">
+<tt class="descclassname">sqlalchemy.sql.functions.</tt><tt class="descname">register_function</tt><big>(</big><em>identifier</em>, <em>fn</em>, <em>package='_default'</em><big>)</big><a class="headerlink" href="#sqlalchemy.sql.functions.register_function" title="Permalink to this definition">¶</a></dt>
+<dd><p>Associate a callable with a particular func. name.</p>
+<p>This is normally called by _GenericMeta, but is also
+available by itself so that a non-Function construct
+can be associated with the <a class="reference internal" href="sqlelement.html#sqlalchemy.sql.expression.func" title="sqlalchemy.sql.expression.func"><tt class="xref py py-data docutils literal"><span class="pre">func</span></tt></a> accessor (i.e.
+CAST, EXTRACT).</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="sqlalchemy.sql.functions.session_user">
+<em class="property">class </em><tt class="descclassname">sqlalchemy.sql.functions.</tt><tt class="descname">session_user</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#sqlalchemy.sql.functions.session_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sqlalchemy.sql.functions.AnsiFunction" title="sqlalchemy.sql.functions.AnsiFunction"><tt class="xref py py-class docutils literal"><span class="pre">sqlalchemy.sql.functions.AnsiFunction</span></tt></a></p>
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.session_user.identifier">
+<tt class="descname">identifier</tt><em class="property"> = 'session_user'</em><a class="headerlink" href="#sqlalchemy.sql.functions.session_user.identifier" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.session_user.name">
+<tt class="descname">name</tt><em class="property"> = 'session_user'</em><a class="headerlink" href="#sqlalchemy.sql.functions.session_user.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.session_user.type">
+<tt class="descname">type</tt><a class="headerlink" href="#sqlalchemy.sql.functions.session_user.type" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">String</span></tt></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="sqlalchemy.sql.functions.sum">
+<em class="property">class </em><tt class="descclassname">sqlalchemy.sql.functions.</tt><tt class="descname">sum</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#sqlalchemy.sql.functions.sum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sqlalchemy.sql.functions.ReturnTypeFromArgs" title="sqlalchemy.sql.functions.ReturnTypeFromArgs"><tt class="xref py py-class docutils literal"><span class="pre">sqlalchemy.sql.functions.ReturnTypeFromArgs</span></tt></a></p>
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.sum.identifier">
+<tt class="descname">identifier</tt><em class="property"> = 'sum'</em><a class="headerlink" href="#sqlalchemy.sql.functions.sum.identifier" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.sum.name">
+<tt class="descname">name</tt><em class="property"> = 'sum'</em><a class="headerlink" href="#sqlalchemy.sql.functions.sum.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="sqlalchemy.sql.functions.sysdate">
+<em class="property">class </em><tt class="descclassname">sqlalchemy.sql.functions.</tt><tt class="descname">sysdate</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#sqlalchemy.sql.functions.sysdate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sqlalchemy.sql.functions.AnsiFunction" title="sqlalchemy.sql.functions.AnsiFunction"><tt class="xref py py-class docutils literal"><span class="pre">sqlalchemy.sql.functions.AnsiFunction</span></tt></a></p>
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.sysdate.identifier">
+<tt class="descname">identifier</tt><em class="property"> = 'sysdate'</em><a class="headerlink" href="#sqlalchemy.sql.functions.sysdate.identifier" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.sysdate.name">
+<tt class="descname">name</tt><em class="property"> = 'sysdate'</em><a class="headerlink" href="#sqlalchemy.sql.functions.sysdate.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.sysdate.type">
+<tt class="descname">type</tt><a class="headerlink" href="#sqlalchemy.sql.functions.sysdate.type" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">DateTime</span></tt></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="sqlalchemy.sql.functions.user">
+<em class="property">class </em><tt class="descclassname">sqlalchemy.sql.functions.</tt><tt class="descname">user</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#sqlalchemy.sql.functions.user" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sqlalchemy.sql.functions.AnsiFunction" title="sqlalchemy.sql.functions.AnsiFunction"><tt class="xref py py-class docutils literal"><span class="pre">sqlalchemy.sql.functions.AnsiFunction</span></tt></a></p>
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.user.identifier">
+<tt class="descname">identifier</tt><em class="property"> = 'user'</em><a class="headerlink" href="#sqlalchemy.sql.functions.user.identifier" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.user.name">
+<tt class="descname">name</tt><em class="property"> = 'user'</em><a class="headerlink" href="#sqlalchemy.sql.functions.user.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="sqlalchemy.sql.functions.user.type">
+<tt class="descname">type</tt><a class="headerlink" href="#sqlalchemy.sql.functions.user.type" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">String</span></tt></p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+    </div>
+
+</div>
+
+<div id="docs-bottom-navigation" class="docs-navigation-links">
+        Previous:
+        <a href="dml.html" title="previous chapter">Insert, Updates, Deletes</a>
+        Next:
+        <a href="types.html" title="next chapter">Column and Data Types</a>
+
+    <div id="docs-copyright">
+        &copy; <a href="../copyright.html">Copyright</a> 2007-2013, the SQLAlchemy authors and contributors.
+        Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2b1.
+    </div>
+</div>
+
+</div>
+
+        
+    </body>
+</html>
+
+

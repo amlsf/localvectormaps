@@ -1,0 +1,1015 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        
+        <title>
+            
+    
+                Frequently Asked Questions
+             &mdash; 
+    SQLAlchemy 0.8 Documentation
+
+        </title>
+        
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/docs.css" type="text/css" />
+
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+          URL_ROOT:    './',
+          VERSION:     '0.8.3',
+          COLLAPSE_MODINDEX: false,
+          FILE_SUFFIX: '.html'
+      };
+    </script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/init.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+        <link rel="copyright" title="Copyright" href="copyright.html" />
+    <link rel="top" title="SQLAlchemy 0.8 Documentation" href="index.html" />
+
+    </head>
+    <body>
+        
+
+
+
+
+
+
+
+
+
+
+<div id="docs-container">
+
+
+
+<div id="docs-header">
+    <h1>SQLAlchemy 0.8 Documentation</h1>
+
+    <div id="docs-search">
+    Search:
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" /> <input type="submit" value="Search" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+
+    <div id="docs-version-header">
+        Release: <span class="version-num">0.8.3</span> | Release Date: October 26, 2013
+
+
+    </div>
+
+</div>
+
+<div id="docs-top-navigation">
+    <div id="docs-top-page-control" class="docs-navigation-links">
+        <ul>
+
+        <li>
+            <a href="contents.html">Table of Contents</a> |
+            <a href="genindex.html">Index</a>
+            | <a href="_sources/faq.txt">view source
+        </li>
+        </ul>
+    </div>
+
+    <div id="docs-navigation-banner">
+        <a href="index.html">SQLAlchemy 0.8 Documentation</a>
+        » 
+                Frequently Asked Questions
+             
+
+        <h2>
+            
+                Frequently Asked Questions
+            
+        </h2>
+    </div>
+
+</div>
+
+<div id="docs-body-container">
+
+    <div id="docs-sidebar">
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Frequently Asked Questions</a><ul>
+<li><a class="reference internal" href="#connections-engines">Connections / Engines</a><ul>
+<li><a class="reference internal" href="#how-do-i-configure-logging">How do I configure logging?</a></li>
+<li><a class="reference internal" href="#how-do-i-pool-database-connections-are-my-connections-pooled">How do I pool database connections?   Are my connections pooled?</a></li>
+<li><a class="reference internal" href="#how-do-i-pass-custom-connect-arguments-to-my-database-api">How do I pass custom connect arguments to my database API?</a></li>
+<li><a class="reference internal" href="#mysql-server-has-gone-away">&#8220;MySQL Server has gone away&#8221;</a></li>
+<li><a class="reference internal" href="#why-does-sqlalchemy-issue-so-many-rollbacks">Why does SQLAlchemy issue so many ROLLBACKs?</a><ul>
+<li><a class="reference internal" href="#i-m-on-myisam-how-do-i-turn-it-off">I&#8217;m on MyISAM - how do I turn it off?</a></li>
+<li><a class="reference internal" href="#i-m-on-sql-server-how-do-i-turn-those-rollbacks-into-commits">I&#8217;m on SQL Server - how do I turn those ROLLBACKs into COMMITs?</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#i-am-using-multiple-connections-with-a-sqlite-database-typically-to-test-transaction-operation-and-my-test-program-is-not-working">I am using multiple connections with a SQLite database (typically to test transaction operation), and my test program is not working!</a></li>
+<li><a class="reference internal" href="#how-do-i-get-at-the-raw-dbapi-connection-when-using-an-engine">How do I get at the raw DBAPI connection when using an Engine?</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#metadata-schema">MetaData / Schema</a><ul>
+<li><a class="reference internal" href="#my-program-is-hanging-when-i-say-table-drop-metadata-drop-all">My program is hanging when I say <tt class="docutils literal"><span class="pre">table.drop()</span></tt> / <tt class="docutils literal"><span class="pre">metadata.drop_all()</span></tt></a></li>
+<li><a class="reference internal" href="#does-sqlalchemy-support-alter-table-create-view-create-trigger-schema-upgrade-functionality">Does SQLAlchemy support ALTER TABLE, CREATE VIEW, CREATE TRIGGER, Schema Upgrade Functionality?</a></li>
+<li><a class="reference internal" href="#how-can-i-sort-table-objects-in-order-of-their-dependency">How can I sort Table objects in order of their dependency?</a></li>
+<li><a class="reference internal" href="#how-can-i-get-the-create-table-drop-table-output-as-a-string">How can I get the CREATE TABLE/ DROP TABLE output as a string?</a></li>
+<li><a class="reference internal" href="#how-can-i-subclass-table-column-to-provide-certain-behaviors-configurations">How can I subclass Table/Column to provide certain behaviors/configurations?</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#sql-expressions">SQL Expressions</a><ul>
+<li><a class="reference internal" href="#why-does-col-in-produce-col-col-why-not-1-0">Why does <tt class="docutils literal"><span class="pre">.col.in_([])</span></tt> Produce <tt class="docutils literal"><span class="pre">col</span> <span class="pre">!=</span> <span class="pre">col</span></tt>? Why not <tt class="docutils literal"><span class="pre">1=0</span></tt>?</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#orm-configuration">ORM Configuration</a><ul>
+<li><a class="reference internal" href="#how-do-i-map-a-table-that-has-no-primary-key">How do I map a table that has no primary key?</a></li>
+<li><a class="reference internal" href="#how-do-i-configure-a-column-that-is-a-python-reserved-word-or-similar">How do I configure a Column that is a Python reserved word or similar?</a></li>
+<li><a class="reference internal" href="#how-do-i-get-a-list-of-all-columns-relationships-mapped-attributes-etc-given-a-mapped-class">How do I get a list of all columns, relationships, mapped attributes, etc. given a mapped class?</a></li>
+<li><a class="reference internal" href="#i-m-using-declarative-and-setting-primaryjoin-secondaryjoin-using-an-and-or-or-and-i-am-getting-an-error-message-about-foreign-keys">I&#8217;m using Declarative and setting primaryjoin/secondaryjoin using an <tt class="docutils literal"><span class="pre">and_()</span></tt> or <tt class="docutils literal"><span class="pre">or_()</span></tt>, and I am getting an error message about foreign keys.</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#sessions-queries">Sessions / Queries</a><ul>
+<li><a class="reference internal" href="#this-session-s-transaction-has-been-rolled-back-due-to-a-previous-exception-during-flush-or-similar">&#8220;This Session&#8217;s transaction has been rolled back due to a previous exception during flush.&#8221; (or similar)</a><ul>
+<li><a class="reference internal" href="#but-why-does-flush-insist-on-issuing-a-rollback">But why does flush() insist on issuing a ROLLBACK?</a></li>
+<li><a class="reference internal" href="#but-why-isn-t-the-one-automatic-call-to-rollback-enough-why-must-i-rollback-again">But why isn&#8217;t the one automatic call to ROLLBACK enough?  Why must I ROLLBACK again?</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#i-m-inserting-400-000-rows-with-the-orm-and-it-s-really-slow">I&#8217;m inserting 400,000 rows with the ORM and it&#8217;s really slow!</a></li>
+<li><a class="reference internal" href="#how-do-i-make-a-query-that-always-adds-a-certain-filter-to-every-query">How do I make a Query that always adds a certain filter to every query?</a></li>
+<li><a class="reference internal" href="#i-ve-created-a-mapping-against-an-outer-join-and-while-the-query-returns-rows-no-objects-are-returned-why-not">I&#8217;ve created a mapping against an Outer Join, and while the query returns rows, no objects are returned.  Why not?</a></li>
+<li><a class="reference internal" href="#i-m-using-joinedload-or-lazy-false-to-create-a-join-outer-join-and-sqlalchemy-is-not-constructing-the-correct-query-when-i-try-to-add-a-where-order-by-limit-etc-which-relies-upon-the-outer-join">I&#8217;m using <tt class="docutils literal"><span class="pre">joinedload()</span></tt> or <tt class="docutils literal"><span class="pre">lazy=False</span></tt> to create a JOIN/OUTER JOIN and SQLAlchemy is not constructing the correct query when I try to add a WHERE, ORDER BY, LIMIT, etc. (which relies upon the (OUTER) JOIN)</a></li>
+<li><a class="reference internal" href="#query-has-no-len-why-not">Query has no <tt class="docutils literal"><span class="pre">__len__()</span></tt>, why not?</a></li>
+<li><a class="reference internal" href="#how-do-i-use-textual-sql-with-orm-queries">How Do I use Textual SQL with ORM Queries?</a></li>
+<li><a class="reference internal" href="#i-m-calling-session-delete-myobject-and-it-isn-t-removed-from-the-parent-collection">I&#8217;m calling <tt class="docutils literal"><span class="pre">Session.delete(myobject)</span></tt> and it isn&#8217;t removed from the parent collection!</a></li>
+<li><a class="reference internal" href="#why-isnt-my-init-called-when-i-load-objects">why isnt my <tt class="docutils literal"><span class="pre">__init__()</span></tt> called when I load objects?</a></li>
+<li><a class="reference internal" href="#how-do-i-use-on-delete-cascade-with-sa-s-orm">how do I use ON DELETE CASCADE with SA&#8217;s ORM?</a></li>
+<li><a class="reference internal" href="#i-set-the-foo-id-attribute-on-my-instance-to-7-but-the-foo-attribute-is-still-none-shouldn-t-it-have-loaded-foo-with-id-7">I set the &#8220;foo_id&#8221; attribute on my instance to &#8220;7&#8221;, but the &#8220;foo&#8221; attribute is still <tt class="docutils literal"><span class="pre">None</span></tt> - shouldn&#8217;t it have loaded Foo with id #7?</a></li>
+<li><a class="reference internal" href="#is-there-a-way-to-automagically-have-only-unique-keywords-or-other-kinds-of-objects-without-doing-a-query-for-the-keyword-and-getting-a-reference-to-the-row-containing-that-keyword">Is there a way to automagically have only unique keywords (or other kinds of objects) without doing a query for the keyword and getting a reference to the row containing that keyword?</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+
+
+
+    <h4>Quick Search</h4>
+    <p>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" /> <input type="submit" value="Search" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </p>
+
+    </div>
+
+    <div id="docs-body" class="withsidebar" >
+        
+<div class="section" id="frequently-asked-questions">
+<span id="faq-toplevel"></span><h1>Frequently Asked Questions<a class="headerlink" href="#frequently-asked-questions" title="Permalink to this headline">¶</a></h1>
+<div class="contents faq local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#connections-engines" id="id1">Connections / Engines</a><ul>
+<li><a class="reference internal" href="#how-do-i-configure-logging" id="id2">How do I configure logging?</a></li>
+<li><a class="reference internal" href="#how-do-i-pool-database-connections-are-my-connections-pooled" id="id3">How do I pool database connections?   Are my connections pooled?</a></li>
+<li><a class="reference internal" href="#how-do-i-pass-custom-connect-arguments-to-my-database-api" id="id4">How do I pass custom connect arguments to my database API?</a></li>
+<li><a class="reference internal" href="#mysql-server-has-gone-away" id="id5">&#8220;MySQL Server has gone away&#8221;</a></li>
+<li><a class="reference internal" href="#why-does-sqlalchemy-issue-so-many-rollbacks" id="id6">Why does SQLAlchemy issue so many ROLLBACKs?</a><ul>
+<li><a class="reference internal" href="#i-m-on-myisam-how-do-i-turn-it-off" id="id7">I&#8217;m on MyISAM - how do I turn it off?</a></li>
+<li><a class="reference internal" href="#i-m-on-sql-server-how-do-i-turn-those-rollbacks-into-commits" id="id8">I&#8217;m on SQL Server - how do I turn those ROLLBACKs into COMMITs?</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#i-am-using-multiple-connections-with-a-sqlite-database-typically-to-test-transaction-operation-and-my-test-program-is-not-working" id="id9">I am using multiple connections with a SQLite database (typically to test transaction operation), and my test program is not working!</a></li>
+<li><a class="reference internal" href="#how-do-i-get-at-the-raw-dbapi-connection-when-using-an-engine" id="id10">How do I get at the raw DBAPI connection when using an Engine?</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#metadata-schema" id="id11">MetaData / Schema</a><ul>
+<li><a class="reference internal" href="#my-program-is-hanging-when-i-say-table-drop-metadata-drop-all" id="id12">My program is hanging when I say <tt class="docutils literal"><span class="pre">table.drop()</span></tt> / <tt class="docutils literal"><span class="pre">metadata.drop_all()</span></tt></a></li>
+<li><a class="reference internal" href="#does-sqlalchemy-support-alter-table-create-view-create-trigger-schema-upgrade-functionality" id="id13">Does SQLAlchemy support ALTER TABLE, CREATE VIEW, CREATE TRIGGER, Schema Upgrade Functionality?</a></li>
+<li><a class="reference internal" href="#how-can-i-sort-table-objects-in-order-of-their-dependency" id="id14">How can I sort Table objects in order of their dependency?</a></li>
+<li><a class="reference internal" href="#how-can-i-get-the-create-table-drop-table-output-as-a-string" id="id15">How can I get the CREATE TABLE/ DROP TABLE output as a string?</a></li>
+<li><a class="reference internal" href="#how-can-i-subclass-table-column-to-provide-certain-behaviors-configurations" id="id16">How can I subclass Table/Column to provide certain behaviors/configurations?</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#sql-expressions" id="id17">SQL Expressions</a><ul>
+<li><a class="reference internal" href="#why-does-col-in-produce-col-col-why-not-1-0" id="id18">Why does <tt class="docutils literal"><span class="pre">.col.in_([])</span></tt> Produce <tt class="docutils literal"><span class="pre">col</span> <span class="pre">!=</span> <span class="pre">col</span></tt>? Why not <tt class="docutils literal"><span class="pre">1=0</span></tt>?</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#orm-configuration" id="id19">ORM Configuration</a><ul>
+<li><a class="reference internal" href="#how-do-i-map-a-table-that-has-no-primary-key" id="id20">How do I map a table that has no primary key?</a></li>
+<li><a class="reference internal" href="#how-do-i-configure-a-column-that-is-a-python-reserved-word-or-similar" id="id21">How do I configure a Column that is a Python reserved word or similar?</a></li>
+<li><a class="reference internal" href="#how-do-i-get-a-list-of-all-columns-relationships-mapped-attributes-etc-given-a-mapped-class" id="id22">How do I get a list of all columns, relationships, mapped attributes, etc. given a mapped class?</a></li>
+<li><a class="reference internal" href="#i-m-using-declarative-and-setting-primaryjoin-secondaryjoin-using-an-and-or-or-and-i-am-getting-an-error-message-about-foreign-keys" id="id23">I&#8217;m using Declarative and setting primaryjoin/secondaryjoin using an <tt class="docutils literal"><span class="pre">and_()</span></tt> or <tt class="docutils literal"><span class="pre">or_()</span></tt>, and I am getting an error message about foreign keys.</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#sessions-queries" id="id24">Sessions / Queries</a><ul>
+<li><a class="reference internal" href="#this-session-s-transaction-has-been-rolled-back-due-to-a-previous-exception-during-flush-or-similar" id="id25">&#8220;This Session&#8217;s transaction has been rolled back due to a previous exception during flush.&#8221; (or similar)</a><ul>
+<li><a class="reference internal" href="#but-why-does-flush-insist-on-issuing-a-rollback" id="id26">But why does flush() insist on issuing a ROLLBACK?</a></li>
+<li><a class="reference internal" href="#but-why-isn-t-the-one-automatic-call-to-rollback-enough-why-must-i-rollback-again" id="id27">But why isn&#8217;t the one automatic call to ROLLBACK enough?  Why must I ROLLBACK again?</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#i-m-inserting-400-000-rows-with-the-orm-and-it-s-really-slow" id="id28">I&#8217;m inserting 400,000 rows with the ORM and it&#8217;s really slow!</a></li>
+<li><a class="reference internal" href="#how-do-i-make-a-query-that-always-adds-a-certain-filter-to-every-query" id="id29">How do I make a Query that always adds a certain filter to every query?</a></li>
+<li><a class="reference internal" href="#i-ve-created-a-mapping-against-an-outer-join-and-while-the-query-returns-rows-no-objects-are-returned-why-not" id="id30">I&#8217;ve created a mapping against an Outer Join, and while the query returns rows, no objects are returned.  Why not?</a></li>
+<li><a class="reference internal" href="#i-m-using-joinedload-or-lazy-false-to-create-a-join-outer-join-and-sqlalchemy-is-not-constructing-the-correct-query-when-i-try-to-add-a-where-order-by-limit-etc-which-relies-upon-the-outer-join" id="id31">I&#8217;m using <tt class="docutils literal"><span class="pre">joinedload()</span></tt> or <tt class="docutils literal"><span class="pre">lazy=False</span></tt> to create a JOIN/OUTER JOIN and SQLAlchemy is not constructing the correct query when I try to add a WHERE, ORDER BY, LIMIT, etc. (which relies upon the (OUTER) JOIN)</a></li>
+<li><a class="reference internal" href="#query-has-no-len-why-not" id="id32">Query has no <tt class="docutils literal"><span class="pre">__len__()</span></tt>, why not?</a></li>
+<li><a class="reference internal" href="#how-do-i-use-textual-sql-with-orm-queries" id="id33">How Do I use Textual SQL with ORM Queries?</a></li>
+<li><a class="reference internal" href="#i-m-calling-session-delete-myobject-and-it-isn-t-removed-from-the-parent-collection" id="id34">I&#8217;m calling <tt class="docutils literal"><span class="pre">Session.delete(myobject)</span></tt> and it isn&#8217;t removed from the parent collection!</a></li>
+<li><a class="reference internal" href="#why-isnt-my-init-called-when-i-load-objects" id="id35">why isnt my <tt class="docutils literal"><span class="pre">__init__()</span></tt> called when I load objects?</a></li>
+<li><a class="reference internal" href="#how-do-i-use-on-delete-cascade-with-sa-s-orm" id="id36">how do I use ON DELETE CASCADE with SA&#8217;s ORM?</a></li>
+<li><a class="reference internal" href="#i-set-the-foo-id-attribute-on-my-instance-to-7-but-the-foo-attribute-is-still-none-shouldn-t-it-have-loaded-foo-with-id-7" id="id37">I set the &#8220;foo_id&#8221; attribute on my instance to &#8220;7&#8221;, but the &#8220;foo&#8221; attribute is still <tt class="docutils literal"><span class="pre">None</span></tt> - shouldn&#8217;t it have loaded Foo with id #7?</a></li>
+<li><a class="reference internal" href="#is-there-a-way-to-automagically-have-only-unique-keywords-or-other-kinds-of-objects-without-doing-a-query-for-the-keyword-and-getting-a-reference-to-the-row-containing-that-keyword" id="id38">Is there a way to automagically have only unique keywords (or other kinds of objects) without doing a query for the keyword and getting a reference to the row containing that keyword?</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="connections-engines">
+<h2>Connections / Engines<a class="headerlink" href="#connections-engines" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="how-do-i-configure-logging">
+<h3>How do I configure logging?<a class="headerlink" href="#how-do-i-configure-logging" title="Permalink to this headline">¶</a></h3>
+<p>See <a class="reference internal" href="core/engines.html#dbengine-logging"><em>Configuring Logging</em></a>.</p>
+</div>
+<div class="section" id="how-do-i-pool-database-connections-are-my-connections-pooled">
+<h3>How do I pool database connections?   Are my connections pooled?<a class="headerlink" href="#how-do-i-pool-database-connections-are-my-connections-pooled" title="Permalink to this headline">¶</a></h3>
+<p>SQLAlchemy performs application-level connection pooling automatically
+in most cases.  With the exception of SQLite, a <a class="reference internal" href="core/connections.html#sqlalchemy.engine.Engine" title="sqlalchemy.engine.Engine"><tt class="xref py py-class docutils literal"><span class="pre">Engine</span></tt></a> object
+refers to a <a class="reference internal" href="core/pooling.html#sqlalchemy.pool.QueuePool" title="sqlalchemy.pool.QueuePool"><tt class="xref py py-class docutils literal"><span class="pre">QueuePool</span></tt></a> as a source of connectivity.</p>
+<p>For more detail, see <a class="reference internal" href="core/engines.html"><em>Engine Configuration</em></a> and <a class="reference internal" href="core/pooling.html"><em>Connection Pooling</em></a>.</p>
+</div>
+<div class="section" id="how-do-i-pass-custom-connect-arguments-to-my-database-api">
+<h3>How do I pass custom connect arguments to my database API?<a class="headerlink" href="#how-do-i-pass-custom-connect-arguments-to-my-database-api" title="Permalink to this headline">¶</a></h3>
+<p>The <a class="reference internal" href="core/engines.html#sqlalchemy.create_engine" title="sqlalchemy.create_engine"><tt class="xref py py-func docutils literal"><span class="pre">create_engine()</span></tt></a> call accepts additional arguments either
+directly via the <tt class="docutils literal"><span class="pre">connect_args</span></tt> keyword argument:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">e</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="s">&quot;mysql://scott:tiger@localhost/test&quot;</span><span class="p">,</span>
+                                        <span class="n">connect_args</span><span class="o">=</span><span class="p">{</span><span class="s">&quot;encoding&quot;</span><span class="p">:</span> <span class="s">&quot;utf8&quot;</span><span class="p">})</span></pre></div>
+</div>
+<p>Or for basic string and integer arguments, they can usually be specified
+in the query string of the URL:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">e</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="s">&quot;mysql://scott:tiger@localhost/test?encoding=utf8&quot;</span><span class="p">)</span></pre></div>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="core/engines.html#custom-dbapi-args"><em>Custom DBAPI connect() arguments</em></a></p>
+</div>
+</div>
+<div class="section" id="mysql-server-has-gone-away">
+<h3>&#8220;MySQL Server has gone away&#8221;<a class="headerlink" href="#mysql-server-has-gone-away" title="Permalink to this headline">¶</a></h3>
+<p>There are two major causes for this error:</p>
+<p>1. The MySQL client closes connections which have been idle for a set period
+of time, defaulting to eight hours.   This can be avoided by using the <tt class="docutils literal"><span class="pre">pool_recycle</span></tt>
+setting with <a class="reference internal" href="core/engines.html#sqlalchemy.create_engine" title="sqlalchemy.create_engine"><tt class="xref py py-func docutils literal"><span class="pre">create_engine()</span></tt></a>, described at <a class="reference internal" href="dialects/mysql.html#mysql-connection-timeouts"><em>Connection Timeouts</em></a>.</p>
+<p>2. Usage of the MySQLdb <a class="reference internal" href="glossary.html#term-dbapi"><em class="xref std std-term">DBAPI</em></a>, or a similar DBAPI, in a non-threadsafe manner, or in an otherwise
+inappropriate way.   The MySQLdb connection object is not threadsafe - this expands
+out to any SQLAlchemy system that links to a single connection, which includes the ORM
+<a class="reference internal" href="orm/session.html#sqlalchemy.orm.session.Session" title="sqlalchemy.orm.session.Session"><tt class="xref py py-class docutils literal"><span class="pre">Session</span></tt></a>.  For background
+on how <a class="reference internal" href="orm/session.html#sqlalchemy.orm.session.Session" title="sqlalchemy.orm.session.Session"><tt class="xref py py-class docutils literal"><span class="pre">Session</span></tt></a> should be used in a multithreaded environment,
+see <a class="reference internal" href="orm/session.html#session-faq-threadsafe"><em>Is the session thread-safe?</em></a>.</p>
+</div>
+<div class="section" id="why-does-sqlalchemy-issue-so-many-rollbacks">
+<h3>Why does SQLAlchemy issue so many ROLLBACKs?<a class="headerlink" href="#why-does-sqlalchemy-issue-so-many-rollbacks" title="Permalink to this headline">¶</a></h3>
+<p>SQLAlchemy currently assumes DBAPI connections are in &#8220;non-autocommit&#8221; mode -
+this is the default behavior of the Python database API, meaning it
+must be assumed that a transaction is always in progress. The
+connection pool issues <tt class="docutils literal"><span class="pre">connection.rollback()</span></tt> when a connection is returned.
+This is so that any transactional resources remaining on the connection are
+released. On a database like Postgresql or MSSQL where table resources are
+aggressively locked, this is critical so that rows and tables don&#8217;t remain
+locked within connections that are no longer in use. An application can
+otherwise hang. It&#8217;s not just for locks, however, and is equally critical on
+any database that has any kind of transaction isolation, including MySQL with
+InnoDB. Any connection that is still inside an old transaction will return
+stale data, if that data was already queried on that connection within
+isolation. For background on why you might see stale data even on MySQL, see
+<a class="reference external" href="http://dev.mysql.com/doc/refman/5.1/en/innodb-transaction-model.html">http://dev.mysql.com/doc/refman/5.1/en/innodb-transaction-model.html</a></p>
+<div class="section" id="i-m-on-myisam-how-do-i-turn-it-off">
+<h4>I&#8217;m on MyISAM - how do I turn it off?<a class="headerlink" href="#i-m-on-myisam-how-do-i-turn-it-off" title="Permalink to this headline">¶</a></h4>
+<p>The behavior of the connection pool&#8217;s connection return behavior can be
+configured using <tt class="docutils literal"><span class="pre">reset_on_return</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">create_engine</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy.pool</span> <span class="kn">import</span> <span class="n">QueuePool</span>
+
+<span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="s">&#39;mysql://scott:tiger@localhost/myisam_database&#39;</span><span class="p">,</span> <span class="n">pool</span><span class="o">=</span><span class="n">QueuePool</span><span class="p">(</span><span class="n">reset_on_return</span><span class="o">=</span><span class="bp">False</span><span class="p">))</span></pre></div>
+</div>
+</div>
+<div class="section" id="i-m-on-sql-server-how-do-i-turn-those-rollbacks-into-commits">
+<h4>I&#8217;m on SQL Server - how do I turn those ROLLBACKs into COMMITs?<a class="headerlink" href="#i-m-on-sql-server-how-do-i-turn-those-rollbacks-into-commits" title="Permalink to this headline">¶</a></h4>
+<p><tt class="docutils literal"><span class="pre">reset_on_return</span></tt> accepts the values <tt class="docutils literal"><span class="pre">commit</span></tt>, <tt class="docutils literal"><span class="pre">rollback</span></tt> in addition
+to <tt class="docutils literal"><span class="pre">True</span></tt>, <tt class="docutils literal"><span class="pre">False</span></tt>, and <tt class="docutils literal"><span class="pre">None</span></tt>.   Setting to <tt class="docutils literal"><span class="pre">commit</span></tt> will cause
+a COMMIT as any connection is returned to the pool:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="s">&#39;mssql://scott:tiger@mydsn&#39;</span><span class="p">,</span> <span class="n">pool</span><span class="o">=</span><span class="n">QueuePool</span><span class="p">(</span><span class="n">reset_on_return</span><span class="o">=</span><span class="s">&#39;commit&#39;</span><span class="p">))</span></pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="i-am-using-multiple-connections-with-a-sqlite-database-typically-to-test-transaction-operation-and-my-test-program-is-not-working">
+<h3>I am using multiple connections with a SQLite database (typically to test transaction operation), and my test program is not working!<a class="headerlink" href="#i-am-using-multiple-connections-with-a-sqlite-database-typically-to-test-transaction-operation-and-my-test-program-is-not-working" title="Permalink to this headline">¶</a></h3>
+<p>If using a SQLite <tt class="docutils literal"><span class="pre">:memory:</span></tt> database, or a version of SQLAlchemy prior
+to version 0.7, the default connection pool is the <a class="reference internal" href="core/pooling.html#sqlalchemy.pool.SingletonThreadPool" title="sqlalchemy.pool.SingletonThreadPool"><tt class="xref py py-class docutils literal"><span class="pre">SingletonThreadPool</span></tt></a>,
+which maintains exactly one SQLite connection per thread.  So two
+connections in use in the same thread will actually be the same SQLite
+connection.   Make sure you&#8217;re not using a :memory: database and
+use <a class="reference internal" href="core/pooling.html#sqlalchemy.pool.NullPool" title="sqlalchemy.pool.NullPool"><tt class="xref py py-class docutils literal"><span class="pre">NullPool</span></tt></a>, which is the default for non-memory databases in
+current SQLAlchemy versions.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="dialects/sqlite.html#pysqlite-threading-pooling"><em>Threading/Pooling Behavior</em></a> - info on PySQLite&#8217;s behavior.</p>
+</div>
+</div>
+<div class="section" id="how-do-i-get-at-the-raw-dbapi-connection-when-using-an-engine">
+<h3>How do I get at the raw DBAPI connection when using an Engine?<a class="headerlink" href="#how-do-i-get-at-the-raw-dbapi-connection-when-using-an-engine" title="Permalink to this headline">¶</a></h3>
+<p>With a regular SA engine-level Connection, you can get at a pool-proxied
+version of the DBAPI connection via the <a class="reference internal" href="core/connections.html#sqlalchemy.engine.Connection.connection" title="sqlalchemy.engine.Connection.connection"><tt class="xref py py-attr docutils literal"><span class="pre">Connection.connection</span></tt></a> attribute on
+<a class="reference internal" href="core/connections.html#sqlalchemy.engine.Connection" title="sqlalchemy.engine.Connection"><tt class="xref py py-class docutils literal"><span class="pre">Connection</span></tt></a>, and for the really-real DBAPI connection you can call the
+<tt class="xref py py-attr docutils literal"><span class="pre">ConnectionFairy.connection</span></tt> attribute on that - but there should never be any need to access
+the non-pool-proxied DBAPI connection, as all methods are proxied through:</p>
+<div class="highlight-python"><pre>engine = create_engine(...)
+conn = engine.connect()
+conn.connection.&lt;do DBAPI things&gt;
+cursor = conn.connection.cursor(&lt;DBAPI specific arguments..&gt;)</pre>
+</div>
+<p>You must ensure that you revert any isolation level settings or other
+operation-specific settings on the connection back to normal before returning
+it to the pool.</p>
+<p>As an alternative to reverting settings, you can call the <a class="reference internal" href="core/connections.html#sqlalchemy.engine.Connection.detach" title="sqlalchemy.engine.Connection.detach"><tt class="xref py py-meth docutils literal"><span class="pre">Connection.detach()</span></tt></a> method on
+either <a class="reference internal" href="core/connections.html#sqlalchemy.engine.Connection" title="sqlalchemy.engine.Connection"><tt class="xref py py-class docutils literal"><span class="pre">Connection</span></tt></a> or the proxied connection, which will de-associate
+the connection from the pool such that it will be closed and discarded
+when <a class="reference internal" href="core/connections.html#sqlalchemy.engine.Connection.close" title="sqlalchemy.engine.Connection.close"><tt class="xref py py-meth docutils literal"><span class="pre">Connection.close()</span></tt></a> is called:</p>
+<div class="highlight-python"><pre>conn = engine.connect()
+conn.detach()  # detaches the DBAPI connection from the connection pool
+conn.connection.&lt;go nuts&gt;
+conn.close()  # connection is closed for real, the pool replaces it with a new connection</pre>
+</div>
+</div>
+</div>
+<div class="section" id="metadata-schema">
+<h2>MetaData / Schema<a class="headerlink" href="#metadata-schema" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="my-program-is-hanging-when-i-say-table-drop-metadata-drop-all">
+<h3>My program is hanging when I say <tt class="docutils literal"><span class="pre">table.drop()</span></tt> / <tt class="docutils literal"><span class="pre">metadata.drop_all()</span></tt><a class="headerlink" href="#my-program-is-hanging-when-i-say-table-drop-metadata-drop-all" title="Permalink to this headline">¶</a></h3>
+<p>This usually corresponds to two conditions: 1. using PostgreSQL, which is really
+strict about table locks, and 2. you have a connection still open which
+contains locks on the table and is distinct from the connection being used for
+the DROP statement.  Heres the most minimal version of the pattern:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">connection</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">mytable</span><span class="o">.</span><span class="n">select</span><span class="p">())</span>
+
+<span class="n">mytable</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span></pre></div>
+</div>
+<p>Above, a connection pool connection is still checked out; furthermore, the
+result object above also maintains a link to this connection.  If
+&#8220;implicit execution&#8221; is used, the result will hold this connection opened until
+the result object is closed or all rows are exhausted.</p>
+<p>The call to <tt class="docutils literal"><span class="pre">mytable.drop(engine)</span></tt> attempts to emit DROP TABLE on a second
+connection procured from the <a class="reference internal" href="core/connections.html#sqlalchemy.engine.Engine" title="sqlalchemy.engine.Engine"><tt class="xref py py-class docutils literal"><span class="pre">Engine</span></tt></a> which will lock.</p>
+<p>The solution is to close out all connections before emitting DROP TABLE:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">connection</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">mytable</span><span class="o">.</span><span class="n">select</span><span class="p">())</span>
+
+<span class="c"># fully read result sets</span>
+<span class="n">result</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+
+<span class="c"># close connections</span>
+<span class="n">connection</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="c"># now locks are removed</span>
+<span class="n">mytable</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span></pre></div>
+</div>
+</div>
+<div class="section" id="does-sqlalchemy-support-alter-table-create-view-create-trigger-schema-upgrade-functionality">
+<h3>Does SQLAlchemy support ALTER TABLE, CREATE VIEW, CREATE TRIGGER, Schema Upgrade Functionality?<a class="headerlink" href="#does-sqlalchemy-support-alter-table-create-view-create-trigger-schema-upgrade-functionality" title="Permalink to this headline">¶</a></h3>
+<p>General ALTER support isn&#8217;t present in SQLAlchemy directly.  For special DDL
+on an ad-hoc basis, the <a class="reference internal" href="core/ddl.html#sqlalchemy.schema.DDL" title="sqlalchemy.schema.DDL"><tt class="xref py py-class docutils literal"><span class="pre">DDL</span></tt></a> and related constructs can be used.
+See <a class="reference internal" href="core/ddl.html"><em>Customizing DDL</em></a> for a discussion on this subject.</p>
+<p>A more comprehensive option is to use schema migration tools, such as Alembic
+or SQLAlchemy-Migrate; see <a class="reference internal" href="core/metadata.html#schema-migrations"><em>Altering Schemas through Migrations</em></a> for discussion on this.</p>
+</div>
+<div class="section" id="how-can-i-sort-table-objects-in-order-of-their-dependency">
+<h3>How can I sort Table objects in order of their dependency?<a class="headerlink" href="#how-can-i-sort-table-objects-in-order-of-their-dependency" title="Permalink to this headline">¶</a></h3>
+<p>This is available via the <a class="reference internal" href="core/metadata.html#sqlalchemy.schema.MetaData.sorted_tables" title="sqlalchemy.schema.MetaData.sorted_tables"><tt class="xref py py-attr docutils literal"><span class="pre">MetaData.sorted_tables</span></tt></a> function:</p>
+<div class="highlight-python"><pre>metadata = MetaData()
+# ... add Table objects to metadata
+ti = metadata.sorted_tables:
+for t in ti:
+    print t</pre>
+</div>
+</div>
+<div class="section" id="how-can-i-get-the-create-table-drop-table-output-as-a-string">
+<h3>How can I get the CREATE TABLE/ DROP TABLE output as a string?<a class="headerlink" href="#how-can-i-get-the-create-table-drop-table-output-as-a-string" title="Permalink to this headline">¶</a></h3>
+<p>Modern SQLAlchemy has clause constructs which represent DDL operations. These
+can be rendered to strings like any other SQL expression:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">sqlalchemy.schema</span> <span class="kn">import</span> <span class="n">CreateTable</span>
+
+<span class="k">print</span> <span class="n">CreateTable</span><span class="p">(</span><span class="n">mytable</span><span class="p">)</span></pre></div>
+</div>
+<p>To get the string specific to a certain engine:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="n">CreateTable</span><span class="p">(</span><span class="n">mytable</span><span class="p">)</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span></pre></div>
+</div>
+<p>There&#8217;s also a special form of <a class="reference internal" href="core/connections.html#sqlalchemy.engine.Engine" title="sqlalchemy.engine.Engine"><tt class="xref py py-class docutils literal"><span class="pre">Engine</span></tt></a> that can let you dump an entire
+metadata creation sequence, using this recipe:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">dump</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="o">*</span><span class="n">multiparams</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">):</span>
+    <span class="k">print</span> <span class="n">sql</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">dialect</span><span class="o">=</span><span class="n">engine</span><span class="o">.</span><span class="n">dialect</span><span class="p">)</span>
+<span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="s">&#39;postgresql://&#39;</span><span class="p">,</span> <span class="n">strategy</span><span class="o">=</span><span class="s">&#39;mock&#39;</span><span class="p">,</span> <span class="n">executor</span><span class="o">=</span><span class="n">dump</span><span class="p">)</span>
+<span class="n">metadata</span><span class="o">.</span><span class="n">create_all</span><span class="p">(</span><span class="n">engine</span><span class="p">,</span> <span class="n">checkfirst</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span></pre></div>
+</div>
+<p>The <a class="reference external" href="https://bitbucket.org/zzzeek/alembic">Alembic</a> tool also supports
+an &#8220;offline&#8221; SQL generation mode that renders database migrations as SQL scripts.</p>
+</div>
+<div class="section" id="how-can-i-subclass-table-column-to-provide-certain-behaviors-configurations">
+<h3>How can I subclass Table/Column to provide certain behaviors/configurations?<a class="headerlink" href="#how-can-i-subclass-table-column-to-provide-certain-behaviors-configurations" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference internal" href="core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><tt class="xref py py-class docutils literal"><span class="pre">Table</span></tt></a> and <a class="reference internal" href="core/metadata.html#sqlalchemy.schema.Column" title="sqlalchemy.schema.Column"><tt class="xref py py-class docutils literal"><span class="pre">Column</span></tt></a> are not good targets for direct subclassing.
+However, there are simple ways to get on-construction behaviors using creation
+functions, and behaviors related to the linkages between schema objects such as
+constraint conventions or naming conventions using attachment events.
+An example of many of these
+techniques can be seen at <a class="reference external" href="http://www.sqlalchemy.org/trac/wiki/UsageRecipes/NamingConventions">Naming Conventions</a>.</p>
+</div>
+</div>
+<div class="section" id="sql-expressions">
+<h2>SQL Expressions<a class="headerlink" href="#sql-expressions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="why-does-col-in-produce-col-col-why-not-1-0">
+<h3>Why does <tt class="docutils literal"><span class="pre">.col.in_([])</span></tt> Produce <tt class="docutils literal"><span class="pre">col</span> <span class="pre">!=</span> <span class="pre">col</span></tt>? Why not <tt class="docutils literal"><span class="pre">1=0</span></tt>?<a class="headerlink" href="#why-does-col-in-produce-col-col-why-not-1-0" title="Permalink to this headline">¶</a></h3>
+<p>A little introduction to the issue. The IN operator in SQL, given a list of
+elements to compare against a column, generally does not accept an empty list,
+that is while it is valid to say:</p>
+<div class="highlight-python"><pre>column IN (1, 2, 3)</pre>
+</div>
+<p>it&#8217;s not valid to say:</p>
+<div class="highlight-python"><pre>column IN ()</pre>
+</div>
+<p>SQLAlchemy&#8217;s <tt class="xref py py-meth docutils literal"><span class="pre">Operators.in_()</span></tt> operator, when given an empty list, produces this
+expression:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">column</span> <span class="o">!=</span> <span class="n">column</span></pre></div>
+</div>
+<p>As of version 0.6, it also produces a warning stating that a less efficient
+comparison operation will be rendered. This expression is the only one that is
+both database agnostic and produces correct results.</p>
+<p>For example, the naive approach of &#8220;just evaluate to false, by comparing 1=0
+or 1!=1&#8221;, does not handle nulls properly. An expression like:</p>
+<div class="highlight-python"><pre>NOT column != column</pre>
+</div>
+<p>will not return a row when &#8220;column&#8221; is null, but an expression which does not
+take the column into account:</p>
+<div class="highlight-python"><pre>NOT 1=0</pre>
+</div>
+<p>will.</p>
+<p>Closer to the mark is the following CASE expression:</p>
+<div class="highlight-python"><pre>CASE WHEN column IS NOT NULL THEN 1=0 ELSE NULL END</pre>
+</div>
+<p>We don&#8217;t use this expression due to its verbosity, and its also not
+typically accepted by Oracle within a WHERE clause - depending
+on how you phrase it, you&#8217;ll either get &#8220;ORA-00905: missing keyword&#8221; or
+&#8220;ORA-00920: invalid relational operator&#8221;. It&#8217;s also still less efficient than
+just rendering SQL without the clause altogether (or not issuing the SQL at
+all, if the statement is just a simple search).</p>
+<p>The best approach therefore is to avoid the usage of IN given an argument list
+of zero length.  Instead, don&#8217;t emit the Query in the first place, if no rows
+should be returned.  The warning is best promoted to a full error condition
+using the Python warnings filter (see <a class="reference external" href="http://docs.python.org/library/warnings.html">http://docs.python.org/library/warnings.html</a>).</p>
+</div>
+</div>
+<div class="section" id="orm-configuration">
+<h2>ORM Configuration<a class="headerlink" href="#orm-configuration" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="how-do-i-map-a-table-that-has-no-primary-key">
+<h3>How do I map a table that has no primary key?<a class="headerlink" href="#how-do-i-map-a-table-that-has-no-primary-key" title="Permalink to this headline">¶</a></h3>
+<p>In almost all cases, a table does have a so-called <em class="xref std std-term">candidate key</em>, which is a column or series
+of columns that uniquely identify a row.  If a table truly doesn&#8217;t have this, and has actual
+fully duplicate rows, the table is not corresponding to <a class="reference external" href="http://en.wikipedia.org/wiki/First_normal_form">first normal form</a> and cannot be mapped.   Otherwise, whatever columns comprise the best candidate key can be
+applied directly to the mapper:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">SomeClass</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+        <span class="n">__table__</span> <span class="o">=</span> <span class="n">some_table_with_no_pk</span>
+        <span class="n">__mapper_args__</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s">&#39;primary_key&#39;</span><span class="p">:[</span><span class="n">some_table_with_no_pk</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span> <span class="n">some_table_with_no_pk</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">bar</span><span class="p">]</span>
+        <span class="p">}</span></pre></div>
+</div>
+<p>Better yet is when using fully declared table metadata, use the <tt class="docutils literal"><span class="pre">primary_key=True</span></tt>
+flag on those columns:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">SomeClass</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+        <span class="n">__tablename__</span> <span class="o">=</span> <span class="s">&quot;some_table_with_no_pk&quot;</span>
+
+        <span class="n">uid</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">bar</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span></pre></div>
+</div>
+<p>All tables in a relational database should have primary keys.   Even a many-to-many
+association table - the primary key would be the composite of the two association
+columns:</p>
+<div class="highlight-python"><pre>CREATE TABLE my_association (
+  user_id INTEGER REFERENCES user(id),
+  account_id INTEGER REFERENCES account(id),
+  PRIMARY KEY (user_id, account_id)
+)</pre>
+</div>
+</div>
+<div class="section" id="how-do-i-configure-a-column-that-is-a-python-reserved-word-or-similar">
+<h3>How do I configure a Column that is a Python reserved word or similar?<a class="headerlink" href="#how-do-i-configure-a-column-that-is-a-python-reserved-word-or-similar" title="Permalink to this headline">¶</a></h3>
+<p>Column-based attributes can be given any name desired in the mapping. See
+<a class="reference internal" href="orm/mapper_config.html#mapper-column-distinct-names"><em>Naming Columns Distinctly from Attribute Names</em></a>.</p>
+</div>
+<div class="section" id="how-do-i-get-a-list-of-all-columns-relationships-mapped-attributes-etc-given-a-mapped-class">
+<h3>How do I get a list of all columns, relationships, mapped attributes, etc. given a mapped class?<a class="headerlink" href="#how-do-i-get-a-list-of-all-columns-relationships-mapped-attributes-etc-given-a-mapped-class" title="Permalink to this headline">¶</a></h3>
+<p>This information is all available from the <a class="reference internal" href="orm/mapper_config.html#sqlalchemy.orm.mapper.Mapper" title="sqlalchemy.orm.mapper.Mapper"><tt class="xref py py-class docutils literal"><span class="pre">Mapper</span></tt></a> object.</p>
+<p>To get at the <a class="reference internal" href="orm/mapper_config.html#sqlalchemy.orm.mapper.Mapper" title="sqlalchemy.orm.mapper.Mapper"><tt class="xref py py-class docutils literal"><span class="pre">Mapper</span></tt></a> for a particular mapped class, call the
+<a class="reference internal" href="core/inspection.html#sqlalchemy.inspection.inspect" title="sqlalchemy.inspection.inspect"><tt class="xref py py-func docutils literal"><span class="pre">inspect()</span></tt></a> function on it:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">inspect</span>
+
+<span class="n">mapper</span> <span class="o">=</span> <span class="n">inspect</span><span class="p">(</span><span class="n">MyClass</span><span class="p">)</span></pre></div>
+</div>
+<p>From there, all information about the class can be acquired using such methods as:</p>
+<ul class="simple">
+<li><a class="reference internal" href="orm/mapper_config.html#sqlalchemy.orm.mapper.Mapper.attrs" title="sqlalchemy.orm.mapper.Mapper.attrs"><tt class="xref py py-attr docutils literal"><span class="pre">Mapper.attrs</span></tt></a> - a namespace of all mapped attributes.  The attributes
+themselves are instances of <a class="reference internal" href="orm/internals.html#sqlalchemy.orm.interfaces.MapperProperty" title="sqlalchemy.orm.interfaces.MapperProperty"><tt class="xref py py-class docutils literal"><span class="pre">MapperProperty</span></tt></a>, which contain additional
+attributes that can lead to the mapped SQL expression or column, if applicable.</li>
+<li><a class="reference internal" href="orm/mapper_config.html#sqlalchemy.orm.mapper.Mapper.column_attrs" title="sqlalchemy.orm.mapper.Mapper.column_attrs"><tt class="xref py py-attr docutils literal"><span class="pre">Mapper.column_attrs</span></tt></a> - the mapped attribute namespace
+limited to column and SQL expression attributes.   You might want to use
+<a class="reference internal" href="orm/mapper_config.html#sqlalchemy.orm.mapper.Mapper.columns" title="sqlalchemy.orm.mapper.Mapper.columns"><tt class="xref py py-attr docutils literal"><span class="pre">Mapper.columns</span></tt></a> to get at the <a class="reference internal" href="core/metadata.html#sqlalchemy.schema.Column" title="sqlalchemy.schema.Column"><tt class="xref py py-class docutils literal"><span class="pre">Column</span></tt></a> objects directly.</li>
+<li><a class="reference internal" href="orm/mapper_config.html#sqlalchemy.orm.mapper.Mapper.relationships" title="sqlalchemy.orm.mapper.Mapper.relationships"><tt class="xref py py-attr docutils literal"><span class="pre">Mapper.relationships</span></tt></a> - namespace of all <a class="reference internal" href="orm/internals.html#sqlalchemy.orm.properties.RelationshipProperty" title="sqlalchemy.orm.properties.RelationshipProperty"><tt class="xref py py-class docutils literal"><span class="pre">RelationshipProperty</span></tt></a> attributes.</li>
+<li><a class="reference internal" href="orm/mapper_config.html#sqlalchemy.orm.mapper.Mapper.all_orm_descriptors" title="sqlalchemy.orm.mapper.Mapper.all_orm_descriptors"><tt class="xref py py-attr docutils literal"><span class="pre">Mapper.all_orm_descriptors</span></tt></a> - namespace of all mapped attributes, plus user-defined
+attributes defined using systems such as <a class="reference internal" href="orm/extensions/hybrid.html#sqlalchemy.ext.hybrid.hybrid_property" title="sqlalchemy.ext.hybrid.hybrid_property"><tt class="xref py py-class docutils literal"><span class="pre">hybrid_property</span></tt></a>, <a class="reference internal" href="orm/extensions/associationproxy.html#sqlalchemy.ext.associationproxy.AssociationProxy" title="sqlalchemy.ext.associationproxy.AssociationProxy"><tt class="xref py py-class docutils literal"><span class="pre">AssociationProxy</span></tt></a> and others.</li>
+<li><a class="reference internal" href="orm/mapper_config.html#sqlalchemy.orm.mapper.Mapper.columns" title="sqlalchemy.orm.mapper.Mapper.columns"><tt class="xref py py-attr docutils literal"><span class="pre">Mapper.columns</span></tt></a> - A namespace of <a class="reference internal" href="core/metadata.html#sqlalchemy.schema.Column" title="sqlalchemy.schema.Column"><tt class="xref py py-class docutils literal"><span class="pre">Column</span></tt></a> objects and other named
+SQL expressions associated with the mapping.</li>
+<li><a class="reference internal" href="orm/mapper_config.html#sqlalchemy.orm.mapper.Mapper.mapped_table" title="sqlalchemy.orm.mapper.Mapper.mapped_table"><tt class="xref py py-attr docutils literal"><span class="pre">Mapper.mapped_table</span></tt></a> - The <a class="reference internal" href="core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><tt class="xref py py-class docutils literal"><span class="pre">Table</span></tt></a> or other selectable to which
+this mapper is mapped.</li>
+<li><a class="reference internal" href="orm/mapper_config.html#sqlalchemy.orm.mapper.Mapper.local_table" title="sqlalchemy.orm.mapper.Mapper.local_table"><tt class="xref py py-attr docutils literal"><span class="pre">Mapper.local_table</span></tt></a> - The <a class="reference internal" href="core/metadata.html#sqlalchemy.schema.Table" title="sqlalchemy.schema.Table"><tt class="xref py py-class docutils literal"><span class="pre">Table</span></tt></a> that is &#8220;local&#8221; to this mapper;
+this differs from <a class="reference internal" href="orm/mapper_config.html#sqlalchemy.orm.mapper.Mapper.mapped_table" title="sqlalchemy.orm.mapper.Mapper.mapped_table"><tt class="xref py py-attr docutils literal"><span class="pre">Mapper.mapped_table</span></tt></a> in the case of a mapper mapped
+using inheritance to a composed selectable.</li>
+</ul>
+</div>
+<div class="section" id="i-m-using-declarative-and-setting-primaryjoin-secondaryjoin-using-an-and-or-or-and-i-am-getting-an-error-message-about-foreign-keys">
+<h3>I&#8217;m using Declarative and setting primaryjoin/secondaryjoin using an <tt class="docutils literal"><span class="pre">and_()</span></tt> or <tt class="docutils literal"><span class="pre">or_()</span></tt>, and I am getting an error message about foreign keys.<a class="headerlink" href="#i-m-using-declarative-and-setting-primaryjoin-secondaryjoin-using-an-and-or-or-and-i-am-getting-an-error-message-about-foreign-keys" title="Permalink to this headline">¶</a></h3>
+<p>Are you doing this?:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">MyClass</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="c"># ....</span>
+
+    <span class="n">foo</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="s">&quot;Dest&quot;</span><span class="p">,</span> <span class="n">primaryjoin</span><span class="o">=</span><span class="n">and_</span><span class="p">(</span><span class="s">&quot;MyClass.id==Dest.foo_id&quot;</span><span class="p">,</span> <span class="s">&quot;MyClass.foo==Dest.bar&quot;</span><span class="p">))</span></pre></div>
+</div>
+<p>That&#8217;s an <tt class="docutils literal"><span class="pre">and_()</span></tt> of two string expressions, which SQLAlchemy cannot apply any mapping towards.  Declarative allows <a class="reference internal" href="orm/relationships.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><tt class="xref py py-func docutils literal"><span class="pre">relationship()</span></tt></a> arguments to be specified as strings, which are converted into expression objects using <tt class="docutils literal"><span class="pre">eval()</span></tt>.   But this doesn&#8217;t occur inside of an <tt class="docutils literal"><span class="pre">and_()</span></tt> expression - it&#8217;s a special operation declarative applies only to the <em>entirety</em> of what&#8217;s passed to primaryjoin or other arguments as a string:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">MyClass</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="c"># ....</span>
+
+    <span class="n">foo</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="s">&quot;Dest&quot;</span><span class="p">,</span> <span class="n">primaryjoin</span><span class="o">=</span><span class="s">&quot;and_(MyClass.id==Dest.foo_id, MyClass.foo==Dest.bar)&quot;</span><span class="p">)</span></pre></div>
+</div>
+<p>Or if the objects you need are already available, skip the strings:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">MyClass</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="c"># ....</span>
+
+    <span class="n">foo</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="n">Dest</span><span class="p">,</span> <span class="n">primaryjoin</span><span class="o">=</span><span class="n">and_</span><span class="p">(</span><span class="n">MyClass</span><span class="o">.</span><span class="n">id</span><span class="o">==</span><span class="n">Dest</span><span class="o">.</span><span class="n">foo_id</span><span class="p">,</span> <span class="n">MyClass</span><span class="o">.</span><span class="n">foo</span><span class="o">==</span><span class="n">Dest</span><span class="o">.</span><span class="n">bar</span><span class="p">))</span></pre></div>
+</div>
+<p>The same idea applies to all the other arguments, such as <tt class="docutils literal"><span class="pre">foreign_keys</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># wrong !</span>
+<span class="n">foo</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="n">Dest</span><span class="p">,</span> <span class="n">foreign_keys</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;Dest.foo_id&quot;</span><span class="p">,</span> <span class="s">&quot;Dest.bar_id&quot;</span><span class="p">])</span>
+
+<span class="c"># correct !</span>
+<span class="n">foo</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="n">Dest</span><span class="p">,</span> <span class="n">foreign_keys</span><span class="o">=</span><span class="s">&quot;[Dest.foo_id, Dest.bar_id]&quot;</span><span class="p">)</span>
+
+<span class="c"># also correct !</span>
+<span class="n">foo</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="n">Dest</span><span class="p">,</span> <span class="n">foreign_keys</span><span class="o">=</span><span class="p">[</span><span class="n">Dest</span><span class="o">.</span><span class="n">foo_id</span><span class="p">,</span> <span class="n">Dest</span><span class="o">.</span><span class="n">bar_id</span><span class="p">])</span>
+
+<span class="c"># if you&#39;re using columns from the class that you&#39;re inside of, just use the column objects !</span>
+<span class="k">class</span> <span class="nc">MyClass</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">foo_id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+    <span class="n">bar_id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+    <span class="c"># ...</span>
+
+    <span class="n">foo</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="n">Dest</span><span class="p">,</span> <span class="n">foreign_keys</span><span class="o">=</span><span class="p">[</span><span class="n">foo_id</span><span class="p">,</span> <span class="n">bar_id</span><span class="p">])</span></pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="sessions-queries">
+<h2>Sessions / Queries<a class="headerlink" href="#sessions-queries" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="this-session-s-transaction-has-been-rolled-back-due-to-a-previous-exception-during-flush-or-similar">
+<h3>&#8220;This Session&#8217;s transaction has been rolled back due to a previous exception during flush.&#8221; (or similar)<a class="headerlink" href="#this-session-s-transaction-has-been-rolled-back-due-to-a-previous-exception-during-flush-or-similar" title="Permalink to this headline">¶</a></h3>
+<p>This is an error that occurs when a <a class="reference internal" href="orm/session.html#sqlalchemy.orm.session.Session.flush" title="sqlalchemy.orm.session.Session.flush"><tt class="xref py py-meth docutils literal"><span class="pre">Session.flush()</span></tt></a> raises an exception, rolls back
+the transaction, but further commands upon the <cite>Session</cite> are called without an
+explicit call to <a class="reference internal" href="orm/session.html#sqlalchemy.orm.session.Session.rollback" title="sqlalchemy.orm.session.Session.rollback"><tt class="xref py py-meth docutils literal"><span class="pre">Session.rollback()</span></tt></a> or <a class="reference internal" href="orm/session.html#sqlalchemy.orm.session.Session.close" title="sqlalchemy.orm.session.Session.close"><tt class="xref py py-meth docutils literal"><span class="pre">Session.close()</span></tt></a>.</p>
+<p>It usually corresponds to an application that catches an exception
+upon <a class="reference internal" href="orm/session.html#sqlalchemy.orm.session.Session.flush" title="sqlalchemy.orm.session.Session.flush"><tt class="xref py py-meth docutils literal"><span class="pre">Session.flush()</span></tt></a> or <a class="reference internal" href="orm/session.html#sqlalchemy.orm.session.Session.commit" title="sqlalchemy.orm.session.Session.commit"><tt class="xref py py-meth docutils literal"><span class="pre">Session.commit()</span></tt></a> and
+does not properly handle the exception.    For example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">create_engine</span><span class="p">,</span> <span class="n">Column</span><span class="p">,</span> <span class="n">Integer</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy.orm</span> <span class="kn">import</span> <span class="n">sessionmaker</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy.ext.declarative</span> <span class="kn">import</span> <span class="n">declarative_base</span>
+
+<span class="n">Base</span> <span class="o">=</span> <span class="n">declarative_base</span><span class="p">(</span><span class="n">create_engine</span><span class="p">(</span><span class="s">&#39;sqlite://&#39;</span><span class="p">))</span>
+
+<span class="k">class</span> <span class="nc">Foo</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s">&#39;foo&#39;</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="n">Base</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">create_all</span><span class="p">()</span>
+
+<span class="n">session</span> <span class="o">=</span> <span class="n">sessionmaker</span><span class="p">()()</span>
+
+<span class="c"># constraint violation</span>
+<span class="n">session</span><span class="o">.</span><span class="n">add_all</span><span class="p">([</span><span class="n">Foo</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">Foo</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">)])</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="c"># ignore error</span>
+    <span class="k">pass</span>
+
+<span class="c"># continue using session without rolling back</span>
+<span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span></pre></div>
+</div>
+<p>The usage of the <a class="reference internal" href="orm/session.html#sqlalchemy.orm.session.Session" title="sqlalchemy.orm.session.Session"><tt class="xref py py-class docutils literal"><span class="pre">Session</span></tt></a> should fit within a structure similar to this:</p>
+<div class="highlight-python"><pre>try:
+    &lt;use session&gt;
+    session.commit()
+except:
+   session.rollback()
+   raise
+finally:
+   session.close()  # optional, depends on use case</pre>
+</div>
+<p>Many things can cause a failure within the try/except besides flushes. You
+should always have some kind of &#8220;framing&#8221; of your session operations so that
+connection and transaction resources have a definitive boundary, otherwise
+your application doesn&#8217;t really have its usage of resources under control.
+This is not to say that you need to put try/except blocks all throughout your
+application - on the contrary, this would be a terrible idea.  You should
+architect your application such that there is one (or few) point(s) of
+&#8220;framing&#8221; around session operations.</p>
+<p>For a detailed discussion on how to organize usage of the <a class="reference internal" href="orm/session.html#sqlalchemy.orm.session.Session" title="sqlalchemy.orm.session.Session"><tt class="xref py py-class docutils literal"><span class="pre">Session</span></tt></a>,
+please see <a class="reference internal" href="orm/session.html#session-faq-whentocreate"><em>When do I construct a Session, when do I commit it, and when do I close it?</em></a>.</p>
+<div class="section" id="but-why-does-flush-insist-on-issuing-a-rollback">
+<h4>But why does flush() insist on issuing a ROLLBACK?<a class="headerlink" href="#but-why-does-flush-insist-on-issuing-a-rollback" title="Permalink to this headline">¶</a></h4>
+<p>It would be great if <a class="reference internal" href="orm/session.html#sqlalchemy.orm.session.Session.flush" title="sqlalchemy.orm.session.Session.flush"><tt class="xref py py-meth docutils literal"><span class="pre">Session.flush()</span></tt></a> could partially complete and then not roll
+back, however this is beyond its current capabilities since its internal
+bookkeeping would have to be modified such that it can be halted at any time
+and be exactly consistent with what&#8217;s been flushed to the database. While this
+is theoretically possible, the usefulness of the enhancement is greatly
+decreased by the fact that many database operations require a ROLLBACK in any
+case. Postgres in particular has operations which, once failed, the
+transaction is not allowed to continue:</p>
+<div class="highlight-python"><pre>test=&gt; create table foo(id integer primary key);
+NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "foo_pkey" for table "foo"
+CREATE TABLE
+test=&gt; begin;
+BEGIN
+test=&gt; insert into foo values(1);
+INSERT 0 1
+test=&gt; commit;
+COMMIT
+test=&gt; begin;
+BEGIN
+test=&gt; insert into foo values(1);
+ERROR:  duplicate key value violates unique constraint "foo_pkey"
+test=&gt; insert into foo values(2);
+ERROR:  current transaction is aborted, commands ignored until end of transaction block</pre>
+</div>
+<p>What SQLAlchemy offers that solves both issues is support of SAVEPOINT, via
+<a class="reference internal" href="orm/session.html#sqlalchemy.orm.session.Session.begin_nested" title="sqlalchemy.orm.session.Session.begin_nested"><tt class="xref py py-meth docutils literal"><span class="pre">Session.begin_nested()</span></tt></a>. Using <a class="reference internal" href="orm/session.html#sqlalchemy.orm.session.Session.begin_nested" title="sqlalchemy.orm.session.Session.begin_nested"><tt class="xref py py-meth docutils literal"><span class="pre">Session.begin_nested()</span></tt></a>, you can frame an operation that may
+potentially fail within a transaction, and then &#8220;roll back&#8221; to the point
+before its failure while maintaining the enclosing transaction.</p>
+</div>
+<div class="section" id="but-why-isn-t-the-one-automatic-call-to-rollback-enough-why-must-i-rollback-again">
+<h4>But why isn&#8217;t the one automatic call to ROLLBACK enough?  Why must I ROLLBACK again?<a class="headerlink" href="#but-why-isn-t-the-one-automatic-call-to-rollback-enough-why-must-i-rollback-again" title="Permalink to this headline">¶</a></h4>
+<p>This is again a matter of the <a class="reference internal" href="orm/session.html#sqlalchemy.orm.session.Session" title="sqlalchemy.orm.session.Session"><tt class="xref py py-class docutils literal"><span class="pre">Session</span></tt></a> providing a consistent interface and
+refusing to guess about what context its being used. For example, the
+<a class="reference internal" href="orm/session.html#sqlalchemy.orm.session.Session" title="sqlalchemy.orm.session.Session"><tt class="xref py py-class docutils literal"><span class="pre">Session</span></tt></a> supports &#8220;framing&#8221; above within multiple levels. Such as, suppose
+you had a decorator <tt class="docutils literal"><span class="pre">&#64;with_session()</span></tt>, which did this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">with_session</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
+   <span class="k">def</span> <span class="nf">go</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+       <span class="n">session</span><span class="o">.</span><span class="n">begin</span><span class="p">(</span><span class="n">subtransactions</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+       <span class="k">try</span><span class="p">:</span>
+           <span class="n">ret</span> <span class="o">=</span> <span class="n">fn</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+           <span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+           <span class="k">return</span> <span class="n">ret</span>
+       <span class="k">except</span><span class="p">:</span>
+           <span class="n">session</span><span class="o">.</span><span class="n">rollback</span><span class="p">()</span>
+           <span class="k">raise</span>
+   <span class="k">return</span> <span class="n">go</span></pre></div>
+</div>
+<p>The above decorator begins a transaction if one does not exist already, and
+then commits it, if it were the creator. The &#8220;subtransactions&#8221; flag means that
+if <a class="reference internal" href="orm/session.html#sqlalchemy.orm.session.Session.begin" title="sqlalchemy.orm.session.Session.begin"><tt class="xref py py-meth docutils literal"><span class="pre">Session.begin()</span></tt></a> were already called by an enclosing function, nothing happens
+except a counter is incremented - this counter is decremented when <a class="reference internal" href="orm/session.html#sqlalchemy.orm.session.Session.commit" title="sqlalchemy.orm.session.Session.commit"><tt class="xref py py-meth docutils literal"><span class="pre">Session.commit()</span></tt></a>
+is called and only when it goes back to zero does the actual COMMIT happen. It
+allows this usage pattern:</p>
+<div class="highlight-python"><pre>@with_session
+def one():
+   # do stuff
+   two()
+
+
+@with_session
+def two():
+   # etc.
+
+one()
+
+two()</pre>
+</div>
+<p><tt class="docutils literal"><span class="pre">one()</span></tt> can call <tt class="docutils literal"><span class="pre">two()</span></tt>, or <tt class="docutils literal"><span class="pre">two()</span></tt> can be called by itself, and the
+<tt class="docutils literal"><span class="pre">&#64;with_session</span></tt> decorator ensures the appropriate &#8220;framing&#8221; - the transaction
+boundaries stay on the outermost call level. As you can see, if <tt class="docutils literal"><span class="pre">two()</span></tt> calls
+<tt class="docutils literal"><span class="pre">flush()</span></tt> which throws an exception and then issues a <tt class="docutils literal"><span class="pre">rollback()</span></tt>, there will
+<em>always</em> be a second <tt class="docutils literal"><span class="pre">rollback()</span></tt> performed by the decorator, and possibly a
+third corresponding to two levels of decorator. If the <tt class="docutils literal"><span class="pre">flush()</span></tt> pushed the
+<tt class="docutils literal"><span class="pre">rollback()</span></tt> all the way out to the top of the stack, and then we said that
+all remaining <tt class="docutils literal"><span class="pre">rollback()</span></tt> calls are moot, there is some silent behavior going
+on there. A poorly written enclosing method might suppress the exception, and
+then call <tt class="docutils literal"><span class="pre">commit()</span></tt> assuming nothing is wrong, and then you have a silent
+failure condition. The main reason people get this error in fact is because
+they didn&#8217;t write clean &#8220;framing&#8221; code and they would have had other problems
+down the road.</p>
+<p>If you think the above use case is a little exotic, the same kind of thing
+comes into play if you want to SAVEPOINT- you might call <tt class="docutils literal"><span class="pre">begin_nested()</span></tt>
+several times, and the <tt class="docutils literal"><span class="pre">commit()</span></tt>/<tt class="docutils literal"><span class="pre">rollback()</span></tt> calls each resolve the most
+recent <tt class="docutils literal"><span class="pre">begin_nested()</span></tt>. The meaning of <tt class="docutils literal"><span class="pre">rollback()</span></tt> or <tt class="docutils literal"><span class="pre">commit()</span></tt> is
+dependent upon which enclosing block it is called, and you might have any
+sequence of <tt class="docutils literal"><span class="pre">rollback()</span></tt>/<tt class="docutils literal"><span class="pre">commit()</span></tt> in any order, and its the level of nesting
+that determines their behavior.</p>
+<p>In both of the above cases, if <tt class="docutils literal"><span class="pre">flush()</span></tt> broke the nesting of transaction
+blocks, the behavior is, depending on scenario, anywhere from &#8220;magic&#8221; to
+silent failure to blatant interruption of code flow.</p>
+<p><tt class="docutils literal"><span class="pre">flush()</span></tt> makes its own &#8220;subtransaction&#8221;, so that a transaction is started up
+regardless of the external transactional state, and when complete it calls
+<tt class="docutils literal"><span class="pre">commit()</span></tt>, or <tt class="docutils literal"><span class="pre">rollback()</span></tt> upon failure - but that <tt class="docutils literal"><span class="pre">rollback()</span></tt> corresponds
+to its own subtransaction - it doesn&#8217;t want to guess how you&#8217;d like to handle
+the external &#8220;framing&#8221; of the transaction, which could be nested many levels
+with any combination of subtransactions and real SAVEPOINTs. The job of
+starting/ending the &#8220;frame&#8221; is kept consistently with the code external to the
+<tt class="docutils literal"><span class="pre">flush()</span></tt>, and we made a decision that this was the most consistent approach.</p>
+</div>
+</div>
+<div class="section" id="i-m-inserting-400-000-rows-with-the-orm-and-it-s-really-slow">
+<h3>I&#8217;m inserting 400,000 rows with the ORM and it&#8217;s really slow!<a class="headerlink" href="#i-m-inserting-400-000-rows-with-the-orm-and-it-s-really-slow" title="Permalink to this headline">¶</a></h3>
+<p>The SQLAlchemy ORM uses the <a class="reference internal" href="glossary.html#term-unit-of-work"><em class="xref std std-term">unit of work</em></a> pattern when synchronizing
+changes to the database. This pattern goes far beyond simple &#8220;inserts&#8221;
+of data. It includes that attributes which are assigned on objects are
+received using an attribute instrumentation system which tracks
+changes on objects as they are made, includes that all rows inserted
+are tracked in an identity map which has the effect that for each row
+SQLAlchemy must retrieve its &#8220;last inserted id&#8221; if not already given,
+and also involves that rows to be inserted are scanned and sorted for
+dependencies as needed. Objects are also subject to a fair degree of
+bookkeeping in order to keep all of this running, which for a very
+large number of rows at once can create an inordinate amount of time
+spent with large data structures, hence it&#8217;s best to chunk these.</p>
+<p>Basically, unit of work is a large degree of automation in order to
+automate the task of persisting a complex object graph into a
+relational database with no explicit persistence code, and this
+automation has a price.</p>
+<p>ORMs are basically not intended for high-performance bulk inserts -
+this is the whole reason SQLAlchemy offers the Core in addition to the
+ORM as a first-class component.</p>
+<p>For the use case of fast bulk inserts, the
+SQL generation and execution system that the ORM builds on top of
+is part of the Core.  Using this system directly, we can produce an INSERT that
+is competitive with using the raw database API directly.</p>
+<p>The example below illustrates time-based tests for four different
+methods of inserting rows, going from the most automated to the least.
+With cPython 2.7, runtimes observed:</p>
+<div class="highlight-python"><pre>classics-MacBook-Pro:sqlalchemy classic$ python test.py
+SQLAlchemy ORM: Total time for 100000 records 14.3528850079 secs
+SQLAlchemy ORM pk given: Total time for 100000 records 10.0164160728 secs
+SQLAlchemy Core: Total time for 100000 records 0.775382995605 secs
+sqlite3: Total time for 100000 records 0.676795005798 sec</pre>
+</div>
+<p>We can reduce the time by a factor of three using recent versions of <a class="reference external" href="http://pypy.org/">Pypy</a>:</p>
+<div class="highlight-python"><pre>classics-MacBook-Pro:sqlalchemy classic$ /usr/local/src/pypy-2.1-beta2-osx64/bin/pypy test.py
+SQLAlchemy ORM: Total time for 100000 records 5.88369488716 secs
+SQLAlchemy ORM pk given: Total time for 100000 records 3.52294301987 secs
+SQLAlchemy Core: Total time for 100000 records 0.613556146622 secs
+sqlite3: Total time for 100000 records 0.442467927933 sec</pre>
+</div>
+<p>Script:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">sqlite3</span>
+
+<span class="kn">from</span> <span class="nn">sqlalchemy.ext.declarative</span> <span class="kn">import</span> <span class="n">declarative_base</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">Column</span><span class="p">,</span> <span class="n">Integer</span><span class="p">,</span> <span class="n">String</span><span class="p">,</span>  <span class="n">create_engine</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy.orm</span> <span class="kn">import</span> <span class="n">scoped_session</span><span class="p">,</span> <span class="n">sessionmaker</span>
+
+<span class="n">Base</span> <span class="o">=</span> <span class="n">declarative_base</span><span class="p">()</span>
+<span class="n">DBSession</span> <span class="o">=</span> <span class="n">scoped_session</span><span class="p">(</span><span class="n">sessionmaker</span><span class="p">())</span>
+<span class="n">engine</span> <span class="o">=</span> <span class="bp">None</span>
+
+<span class="k">class</span> <span class="nc">Customer</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s">&quot;customer&quot;</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">255</span><span class="p">))</span>
+
+<span class="k">def</span> <span class="nf">init_sqlalchemy</span><span class="p">(</span><span class="n">dbname</span><span class="o">=</span><span class="s">&#39;sqlite:///sqlalchemy.db&#39;</span><span class="p">):</span>
+    <span class="k">global</span> <span class="n">engine</span>
+    <span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="n">dbname</span><span class="p">,</span> <span class="n">echo</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">DBSession</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span>
+    <span class="n">DBSession</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">bind</span><span class="o">=</span><span class="n">engine</span><span class="p">,</span> <span class="n">autoflush</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">expire_on_commit</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">Base</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">drop_all</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span>
+    <span class="n">Base</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">create_all</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">test_sqlalchemy_orm</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">100000</span><span class="p">):</span>
+    <span class="n">init_sqlalchemy</span><span class="p">()</span>
+    <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="n">customer</span> <span class="o">=</span> <span class="n">Customer</span><span class="p">()</span>
+        <span class="n">customer</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#39;NAME &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">DBSession</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">customer</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">1000</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">DBSession</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+    <span class="n">DBSession</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">&quot;SQLAlchemy ORM: Total time for &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">+</span>
+                <span class="s">&quot; records &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot; secs&quot;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">test_sqlalchemy_orm_pk_given</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">100000</span><span class="p">):</span>
+    <span class="n">init_sqlalchemy</span><span class="p">()</span>
+    <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="n">customer</span> <span class="o">=</span> <span class="n">Customer</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&quot;NAME &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+        <span class="n">DBSession</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">customer</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">1000</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">DBSession</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+    <span class="n">DBSession</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">&quot;SQLAlchemy ORM pk given: Total time for &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">+</span>
+        <span class="s">&quot; records &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot; secs&quot;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">test_sqlalchemy_core</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">100000</span><span class="p">):</span>
+    <span class="n">init_sqlalchemy</span><span class="p">()</span>
+    <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">engine</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+        <span class="n">Customer</span><span class="o">.</span><span class="n">__table__</span><span class="o">.</span><span class="n">insert</span><span class="p">(),</span>
+        <span class="p">[{</span><span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&#39;NAME &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)}</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span>
+    <span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">&quot;SQLAlchemy Core: Total time for &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">+</span>
+        <span class="s">&quot; records &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot; secs&quot;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">init_sqlite3</span><span class="p">(</span><span class="n">dbname</span><span class="p">):</span>
+    <span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">dbname</span><span class="p">)</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&quot;DROP TABLE IF EXISTS customer&quot;</span><span class="p">)</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&quot;CREATE TABLE customer (id INTEGER NOT NULL, &quot;</span>
+                                <span class="s">&quot;name VARCHAR(255), PRIMARY KEY(id))&quot;</span><span class="p">)</span>
+    <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">conn</span>
+
+<span class="k">def</span> <span class="nf">test_sqlite3</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">100000</span><span class="p">,</span> <span class="n">dbname</span><span class="o">=</span><span class="s">&#39;sqlite3.db&#39;</span><span class="p">):</span>
+    <span class="n">conn</span> <span class="o">=</span> <span class="n">init_sqlite3</span><span class="p">(</span><span class="n">dbname</span><span class="p">)</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+    <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="n">row</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;NAME &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">),)</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&quot;INSERT INTO customer (name) VALUES (?)&quot;</span><span class="p">,</span> <span class="n">row</span><span class="p">)</span>
+    <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">&quot;sqlite3: Total time for &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">+</span>
+        <span class="s">&quot; records &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot; sec&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">test_sqlalchemy_orm</span><span class="p">(</span><span class="mi">100000</span><span class="p">)</span>
+    <span class="n">test_sqlalchemy_orm_pk_given</span><span class="p">(</span><span class="mi">100000</span><span class="p">)</span>
+    <span class="n">test_sqlalchemy_core</span><span class="p">(</span><span class="mi">100000</span><span class="p">)</span>
+    <span class="n">test_sqlite3</span><span class="p">(</span><span class="mi">100000</span><span class="p">)</span></pre></div>
+</div>
+</div>
+<div class="section" id="how-do-i-make-a-query-that-always-adds-a-certain-filter-to-every-query">
+<h3>How do I make a Query that always adds a certain filter to every query?<a class="headerlink" href="#how-do-i-make-a-query-that-always-adds-a-certain-filter-to-every-query" title="Permalink to this headline">¶</a></h3>
+<p>See the recipe at <a class="reference external" href="http://www.sqlalchemy.org/trac/wiki/UsageRecipes/PreFilteredQuery">PreFilteredQuery</a>.</p>
+</div>
+<div class="section" id="i-ve-created-a-mapping-against-an-outer-join-and-while-the-query-returns-rows-no-objects-are-returned-why-not">
+<h3>I&#8217;ve created a mapping against an Outer Join, and while the query returns rows, no objects are returned.  Why not?<a class="headerlink" href="#i-ve-created-a-mapping-against-an-outer-join-and-while-the-query-returns-rows-no-objects-are-returned-why-not" title="Permalink to this headline">¶</a></h3>
+<p>Rows returned by an outer join may contain NULL for part of the primary key,
+as the primary key is the composite of both tables.  The <a class="reference internal" href="orm/query.html#sqlalchemy.orm.query.Query" title="sqlalchemy.orm.query.Query"><tt class="xref py py-class docutils literal"><span class="pre">Query</span></tt></a> object ignores incoming rows
+that don&#8217;t have an acceptable primary key.   Based on the setting of the <tt class="docutils literal"><span class="pre">allow_partial_pks</span></tt>
+flag on <a class="reference internal" href="orm/mapper_config.html#sqlalchemy.orm.mapper" title="sqlalchemy.orm.mapper"><tt class="xref py py-func docutils literal"><span class="pre">mapper()</span></tt></a>, a primary key is accepted if the value has at least one non-NULL
+value, or alternatively if the value has no NULL values.  See <tt class="docutils literal"><span class="pre">allow_partial_pks</span></tt>
+at <a class="reference internal" href="orm/mapper_config.html#sqlalchemy.orm.mapper" title="sqlalchemy.orm.mapper"><tt class="xref py py-func docutils literal"><span class="pre">mapper()</span></tt></a>.</p>
+</div>
+<div class="section" id="i-m-using-joinedload-or-lazy-false-to-create-a-join-outer-join-and-sqlalchemy-is-not-constructing-the-correct-query-when-i-try-to-add-a-where-order-by-limit-etc-which-relies-upon-the-outer-join">
+<h3>I&#8217;m using <tt class="docutils literal"><span class="pre">joinedload()</span></tt> or <tt class="docutils literal"><span class="pre">lazy=False</span></tt> to create a JOIN/OUTER JOIN and SQLAlchemy is not constructing the correct query when I try to add a WHERE, ORDER BY, LIMIT, etc. (which relies upon the (OUTER) JOIN)<a class="headerlink" href="#i-m-using-joinedload-or-lazy-false-to-create-a-join-outer-join-and-sqlalchemy-is-not-constructing-the-correct-query-when-i-try-to-add-a-where-order-by-limit-etc-which-relies-upon-the-outer-join" title="Permalink to this headline">¶</a></h3>
+<p>The joins generated by joined eager loading are only used to fully load related
+collections, and are designed to have no impact on the primary results of the query.
+Since they are anonymously aliased, they cannot be referenced directly.</p>
+<p>For detail on this beahvior, see <a class="reference internal" href="orm/loading.html"><em>Relationship Loading Techniques</em></a>.</p>
+</div>
+<div class="section" id="query-has-no-len-why-not">
+<h3>Query has no <tt class="docutils literal"><span class="pre">__len__()</span></tt>, why not?<a class="headerlink" href="#query-has-no-len-why-not" title="Permalink to this headline">¶</a></h3>
+<p>The Python <tt class="docutils literal"><span class="pre">__len__()</span></tt> magic method applied to an object allows the <tt class="docutils literal"><span class="pre">len()</span></tt>
+builtin to be used to determine the length of the collection. It&#8217;s intuitive
+that a SQL query object would link <tt class="docutils literal"><span class="pre">__len__()</span></tt> to the <a class="reference internal" href="orm/query.html#sqlalchemy.orm.query.Query.count" title="sqlalchemy.orm.query.Query.count"><tt class="xref py py-meth docutils literal"><span class="pre">Query.count()</span></tt></a>
+method, which emits a <cite>SELECT COUNT</cite>. The reason this is not possible is
+because evaluating the query as a list would incur two SQL calls instead of
+one:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Iterates</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">print</span> <span class="s">&quot;LEN!&quot;</span>
+        <span class="k">return</span> <span class="mi">5</span>
+
+    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">print</span> <span class="s">&quot;ITER!&quot;</span>
+        <span class="k">return</span> <span class="nb">iter</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+
+<span class="nb">list</span><span class="p">(</span><span class="n">Iterates</span><span class="p">())</span></pre></div>
+</div>
+<p>output:</p>
+<div class="highlight-python"><pre>ITER!
+LEN!</pre>
+</div>
+</div>
+<div class="section" id="how-do-i-use-textual-sql-with-orm-queries">
+<h3>How Do I use Textual SQL with ORM Queries?<a class="headerlink" href="#how-do-i-use-textual-sql-with-orm-queries" title="Permalink to this headline">¶</a></h3>
+<p>See:</p>
+<ul class="simple">
+<li><a class="reference internal" href="orm/tutorial.html#orm-tutorial-literal-sql"><em>Using Literal SQL</em></a> - Ad-hoc textual blocks with <a class="reference internal" href="orm/query.html#sqlalchemy.orm.query.Query" title="sqlalchemy.orm.query.Query"><tt class="xref py py-class docutils literal"><span class="pre">Query</span></tt></a></li>
+<li><a class="reference internal" href="orm/session.html#session-sql-expressions"><em>Using SQL Expressions with Sessions</em></a> - Using <a class="reference internal" href="orm/session.html#sqlalchemy.orm.session.Session" title="sqlalchemy.orm.session.Session"><tt class="xref py py-class docutils literal"><span class="pre">Session</span></tt></a> with textual SQL directly.</li>
+</ul>
+</div>
+<div class="section" id="i-m-calling-session-delete-myobject-and-it-isn-t-removed-from-the-parent-collection">
+<h3>I&#8217;m calling <tt class="docutils literal"><span class="pre">Session.delete(myobject)</span></tt> and it isn&#8217;t removed from the parent collection!<a class="headerlink" href="#i-m-calling-session-delete-myobject-and-it-isn-t-removed-from-the-parent-collection" title="Permalink to this headline">¶</a></h3>
+<p>See <a class="reference internal" href="orm/session.html#session-deleting-from-collections"><em>Deleting from Collections</em></a> for a description of this behavior.</p>
+</div>
+<div class="section" id="why-isnt-my-init-called-when-i-load-objects">
+<h3>why isnt my <tt class="docutils literal"><span class="pre">__init__()</span></tt> called when I load objects?<a class="headerlink" href="#why-isnt-my-init-called-when-i-load-objects" title="Permalink to this headline">¶</a></h3>
+<p>See <a class="reference internal" href="orm/mapper_config.html#mapping-constructors"><em>Constructors and Object Initialization</em></a> for a description of this behavior.</p>
+</div>
+<div class="section" id="how-do-i-use-on-delete-cascade-with-sa-s-orm">
+<h3>how do I use ON DELETE CASCADE with SA&#8217;s ORM?<a class="headerlink" href="#how-do-i-use-on-delete-cascade-with-sa-s-orm" title="Permalink to this headline">¶</a></h3>
+<p>SQLAlchemy will always issue UPDATE or DELETE statements for dependent
+rows which are currently loaded in the <a class="reference internal" href="orm/session.html#sqlalchemy.orm.session.Session" title="sqlalchemy.orm.session.Session"><tt class="xref py py-class docutils literal"><span class="pre">Session</span></tt></a>.  For rows which
+are not loaded, it will by default issue SELECT statements to load
+those rows and udpate/delete those as well; in other words it assumes
+there is no ON DELETE CASCADE configured.
+To configure SQLAlchemy to cooperate with ON DELETE CASCADE, see
+<a class="reference internal" href="orm/collections.html#passive-deletes"><em>Using Passive Deletes</em></a>.</p>
+</div>
+<div class="section" id="i-set-the-foo-id-attribute-on-my-instance-to-7-but-the-foo-attribute-is-still-none-shouldn-t-it-have-loaded-foo-with-id-7">
+<h3>I set the &#8220;foo_id&#8221; attribute on my instance to &#8220;7&#8221;, but the &#8220;foo&#8221; attribute is still <tt class="docutils literal"><span class="pre">None</span></tt> - shouldn&#8217;t it have loaded Foo with id #7?<a class="headerlink" href="#i-set-the-foo-id-attribute-on-my-instance-to-7-but-the-foo-attribute-is-still-none-shouldn-t-it-have-loaded-foo-with-id-7" title="Permalink to this headline">¶</a></h3>
+<p>The ORM is not constructed in such a way as to support
+immediate population of relationships driven from foreign
+key attribute changes - instead, it is designed to work the
+other way around - foreign key attributes are handled by the
+ORM behind the scenes, the end user sets up object
+relationships naturally. Therefore, the recommended way to
+set <tt class="docutils literal"><span class="pre">o.foo</span></tt> is to do just that - set it!:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">foo</span> <span class="o">=</span> <span class="n">Session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">Foo</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
+<span class="n">o</span><span class="o">.</span><span class="n">foo</span> <span class="o">=</span> <span class="n">foo</span>
+<span class="n">Session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span></pre></div>
+</div>
+<p>Manipulation of foreign key attributes is of course entirely legal.  However,
+setting a foreign-key attribute to a new value currently does not trigger
+an &#8220;expire&#8221; event of the <a class="reference internal" href="orm/relationships.html#sqlalchemy.orm.relationship" title="sqlalchemy.orm.relationship"><tt class="xref py py-func docutils literal"><span class="pre">relationship()</span></tt></a> in which it&#8217;s involved (this may
+be implemented in the future).  This means
+that for the following sequence:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">o</span> <span class="o">=</span> <span class="n">Session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">SomeClass</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+<span class="k">assert</span> <span class="n">o</span><span class="o">.</span><span class="n">foo</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="n">o</span><span class="o">.</span><span class="n">foo_id</span> <span class="o">=</span> <span class="mi">7</span></pre></div>
+</div>
+<p><tt class="docutils literal"><span class="pre">o.foo</span></tt> is loaded when we checked it for <tt class="docutils literal"><span class="pre">None</span></tt>.  Setting
+<tt class="docutils literal"><span class="pre">o.foo_id=7</span></tt> will have the value of &#8220;7&#8221; as pending, but no flush
+has occurred.</p>
+<p>For <tt class="docutils literal"><span class="pre">o.foo</span></tt> to load based on the foreign key mutation is usually achieved
+naturally after the commit, which both flushes the new foreign key value
+and expires all state:</p>
+<div class="highlight-python"><pre>Session.commit()
+assert o.foo is &lt;Foo object with id 7&gt;</pre>
+</div>
+<p>A more minimal operation is to expire the attribute individually.  The
+<a class="reference internal" href="orm/session.html#sqlalchemy.orm.session.Session.flush" title="sqlalchemy.orm.session.Session.flush"><tt class="xref py py-meth docutils literal"><span class="pre">Session.flush()</span></tt></a> is also needed if the object is pending (hasn&#8217;t been INSERTed yet),
+or if the relationship is many-to-one prior to 0.6.5:</p>
+<div class="highlight-python"><pre>Session.expire(o, ['foo'])
+
+Session.flush()
+
+assert o.foo is &lt;Foo object with id 7&gt;</pre>
+</div>
+<p>Where above, expiring the attribute triggers a lazy load on the next access of <tt class="docutils literal"><span class="pre">o.foo</span></tt>.</p>
+<p>The object does not &#8220;autoflush&#8221; on access of <tt class="docutils literal"><span class="pre">o.foo</span></tt> if the object is pending, since
+it is usually desirable that a pending object doesn&#8217;t autoflush prematurely and/or
+excessively, while its state is still being populated.</p>
+<p>Also see the recipe <a class="reference external" href="http://www.sqlalchemy.org/trac/wiki/UsageRecipes/ExpireRelationshipOnFKChange">ExpireRelationshipOnFKChange</a>, which features a mechanism to actually achieve this behavior to a reasonable degree in simple situations.</p>
+</div>
+<div class="section" id="is-there-a-way-to-automagically-have-only-unique-keywords-or-other-kinds-of-objects-without-doing-a-query-for-the-keyword-and-getting-a-reference-to-the-row-containing-that-keyword">
+<h3>Is there a way to automagically have only unique keywords (or other kinds of objects) without doing a query for the keyword and getting a reference to the row containing that keyword?<a class="headerlink" href="#is-there-a-way-to-automagically-have-only-unique-keywords-or-other-kinds-of-objects-without-doing-a-query-for-the-keyword-and-getting-a-reference-to-the-row-containing-that-keyword" title="Permalink to this headline">¶</a></h3>
+<p>When people read the many-to-many example in the docs, they get hit with the
+fact that if you create the same <tt class="docutils literal"><span class="pre">Keyword</span></tt> twice, it gets put in the DB twice.
+Which is somewhat inconvenient.</p>
+<p>This <a class="reference external" href="http://www.sqlalchemy.org/trac/wiki/UsageRecipes/UniqueObject">UniqueObject</a> recipe was created to address this issue.</p>
+</div>
+</div>
+</div>
+
+    </div>
+
+</div>
+
+<div id="docs-bottom-navigation" class="docs-navigation-links">
+
+    <div id="docs-copyright">
+        &copy; <a href="copyright.html">Copyright</a> 2007-2013, the SQLAlchemy authors and contributors.
+        Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2b1.
+    </div>
+</div>
+
+</div>
+
+        
+    </body>
+</html>
+
+
