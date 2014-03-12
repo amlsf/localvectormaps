@@ -1,0 +1,19 @@
+{% extends 'master.html' %}
+{% block body %}
+
+{% for wallpost in wallposts %}
+    <div>Author's Name: {{wallpost.username}}; Wall Post:{{wallpost.content}}; Created: {{wallpost.created}}</div>
+{% endfor %}
+
+
+<!-- If user is logged in, will allow to post to wall with submit form
+ -->
+ {% if session.get("user_id") %}
+<form class = "post_wall" method = "POST"> 
+<input type="text" class="form-control" placeholder="enter wall post here" name="content">
+<input type="submit" class="btn btn-lg btn-primary btn-block" value="Submit">
+</form>
+{% endif %}
+
+
+{% endblock %}

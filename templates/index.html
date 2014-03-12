@@ -1,14 +1,17 @@
-{% extends 'base.html' %}
+{% extends 'master.html' %}
 {% block body %}
-{% for post in posts %}
-<div class="post">
-    <h2><a href="{{url_for("view_post", id=post.id)}}">{{post.title}}</a></h2>
-    <p>
-        {{post.body | markdown}}
-    </p>
-</div>
-{% else %}
-No posts here!
-<a href="{{url_for("new_post")}}">New post</a>
-{% endfor %}
+
+            <form class="signin" method="POST">
+                <h2 class="signin-heading">Please sign in</h2>
+               <ul>
+                {% for message in get_flashed_messages() %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+                </ul>
+                <input type="text" class="form-control" placeholder="Useremail!!!" name="useremail">
+                <input type="password" class="form-control" placeholder="Password" name="password">
+                Not a user? <a href="{{ url_for("register") }}">Register</a> a new account
+                <input type="submit" class="btn btn-lg btn-primary btn-block" value="Submit">
+                <a href="/clear">Logout</a> 
+                </form>
 {% endblock %}

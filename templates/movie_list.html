@@ -1,0 +1,14 @@
+{% extends 'master.html' %}
+{% block body %}
+
+<html>
+
+{% for movie in movie_list %}
+<h3> <small><a href="{{ url_for('movie_ratings', movie_id=movie.movie_id) }}">Movie {{ movie.movie_id }}, User {{ movie.title }}, Released Date {{movie.released}}</a></small> </h3>
+{% endfor %}
+
+</html>
+
+{% endblock %}
+
+

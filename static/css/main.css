@@ -1,0 +1,25 @@
+h2 {
+    color: red;
+}
+
+body {
+    background-color: #eee;
+}
+
+/*Narrow the columns, makes 330px wide, add margin on top 50px,
+ auto tells to fill left and right as much as possible to center form
+*/form.signin {
+    width: 330px;
+    margin: 50px auto;
+}
+
+/* Add margins to input elements to separate visaually */
+/*Only inside form with class of signin if input tag with class form-control*/
+form.signin input.form-control {
+    margin-bottom: 5px;
+}
+
+/*Move button*/
+form.signin input.btn {
+    margin-top: 15px;
+}
