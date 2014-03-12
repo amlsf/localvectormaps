@@ -1,9 +1,8 @@
-{% extends 'master.html' %}
+{% extends "base.html" %}
 {% block body %}
-            <form class="signin">
-                <h2 class="signin-heading">Login to your account</h2>
-                <input type="text" class="form-control" placeholder="Username" name="username">
-                <input type="password" class="form-control" placeholder="Password" name="password">
-                <input type="submit" class="btn btn-lg btn-primary btn-block" value="Submit">
-            </form>
+<form method="post">
+    <input type="text" name="email" placeholder="Email"><br>
+    <input type="password" name="password" placeholder="Password"><br>
+    <input type="submit">
+</form>
 {% endblock %}
