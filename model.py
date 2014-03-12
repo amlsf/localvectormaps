@@ -1,3 +1,11 @@
+# import sqlalchemy
+# engine = sqlalchemy.create_engine('mysql://user:password@server') # connect to server
+# engine.execute("CREATE DATABASE dbname") #create db
+# engine.execute("USE dbname") # select new db
+# use the new db
+# continue with your work...
+
+
 import config
 import bcrypt
 from datetime import datetime
