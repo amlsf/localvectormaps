@@ -10,65 +10,52 @@ from sqlalchemy.orm import sessionmaker, scoped_session, relationship, backref
 
 from flask.ext.login import UserMixin
 
-engine = create_engine(config.DB_URI, echo=False) 
-session = scoped_session(sessionmaker(bind=engine,
-                         autocommit = False,
-                         autoflush = False))
-
 Base = declarative_base()
-Base.query = session.query_property()
+# Base.query = session.query_property()
 
-class User(Base, UserMixin):
-    __tablename__ = "users" 
-    id = Column(Integer, primary_key=True)
-    email = Column(String(64), nullable=False)
-    password = Column(String(64), nullable=False)
-    salt = Column(String(64), nullable=False)
-
-    posts = relationship("Post", uselist=True)
-
-    def set_password(self, password):
-        # self.salt = bcrypt.gensalt()
-        password = password.encode("utf-8")
-        self.password = hash(password)
-
-# ORIGINAL
-    # def set_password(self, password):
-    #     self.salt = bcrypt.gensalt()
-    #     password = password.encode("utf-8")
-    #     self.password = bcrypt.hashpw(password, self.salt)
-
-
-    def authenticate(self, password):
-        password = password.encode("utf-8")
-        return hash(password) == self.password
-
-#ORIGINAL
-  # def authenticate(self, password):
-  #       password = password.encode("utf-8")
-  #       return bcrypt.hashpw(password, self.salt.encode("utf-8")) == self.password        
-
-class Post(Base):
-    __tablename__ = "posts"
+class Listings(Base):
+    __tablename__ = "listings"
     
     id = Column(Integer, primary_key=True)
-    title = Column(String(64), nullable=False)
-    body = Column(Text, nullable=False)
-    created_at = Column(DateTime, nullable=False, default=datetime.now)
-    posted_at = Column(DateTime, nullable=True, default=None)
-    user_id = Column(Integer, ForeignKey("users.id"))
+    list_date = Column(DateTime, nullable=False)
+    pending_date = Column(DateTime, nullable=True)
+    close_escrow_date = Column(DateTime, nullable=True)
+    listing_status = Column(String(15), nullable=False)
+    list_price = Column(Integer, nullable=False)
+    sell_price = Column(Integer, nullable=True)
+    property_type = Column(String(64), nullable=False)
+    bathrooms_count = Column(Integer, nullable=True)
+    bedrooms_count = Column(Integer, nullable=True)
+    living_sq_ft = Column(Integer, nullable=True)
+    lot_size = Column(Integer, nullable=True)
+    address = Column(String(64), nullable=True)
+    street_name = Column(String(64), nullable=True)
+    street_suffix = Column(String(64), nullable=True)
+    street_number = Column(Integer, nullable=True)
+    county_name = Column(String(64), nullable=True)
+    postal_code = Column(Integer, nullable=True)
+    city_name = Column(String(64), nullable=True)
 
-    user = relationship("User")
+def connect():
+    global engine
+    global Session
 
+    engine = create_engine("sqlite:///listings.db", echo=False)
+    Session = sessionmaker(bind=engine)
+
+    return Session()
 
 def create_tables():
     Base.metadata.create_all(engine)
-    u = User(email="test@test.com")
-    u.set_password("unicorn")
-    session.add(u)
-    p = Post(title="This is a test post", body="This is the body of a test post.")
-    u.posts.append(p)
-    session.commit()
+
+
+def main(session):
+    pass
 
 if __name__ == "__main__":
-    create_tables()
+    session = connect()
+    session = Session()
+    # create_tables()
+
+    main()
+
