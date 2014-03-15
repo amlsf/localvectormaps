@@ -155,8 +155,8 @@ def load_slist(session):
     f.close()
 
 def main(session):
-    # load_alist(session)
-    load_slist(session)
+    load_alist(session)
+    # load_slist(session)
 
 if __name__ == "__main__":
     s = model.connect()
