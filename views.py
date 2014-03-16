@@ -34,6 +34,7 @@ def index():
 def activelistings():
     active_listings = model.session.query(model.Listings).filter_by(listing_status="Active").all()
     return render_template("heatmap.html", active_listings = active_listings)
+    # return "[{\"address\": \"drive\"}]" #This is JSON array, turns to JS syntax, use with AJAX stuff in main.js
 
 # @app.route("/medianactive")
 

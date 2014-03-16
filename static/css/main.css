@@ -1,0 +1,25 @@
+
+/*Must specify or size else assumed 0x0pixels */
+
+      html { height: 100% }
+      body { height: 100%; width: 50%; margin-left: 500px; padding: 0px }
+/*      #map-canvas { height: 75% }
+*/
+      #map-canvas {
+        height: 90%;
+        width: 75%;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 2px
+      }
+/*This formats the button panel for the heat map functions */
+      #panel {
+        position: absolute;
+        top: 20px;
+        left: 50%;
+        margin-left: -180px;
+        z-index: 5;
+        background-color: #fff;
+        padding: 5px;
+        border: 1px solid #999;
+      }
