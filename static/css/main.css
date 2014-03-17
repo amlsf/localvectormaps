@@ -1,16 +1,18 @@
 
 /*Must specify or size else assumed 0x0pixels */
 
-      html { height: 100% }
-      body { height: 100%; width: 50%; margin-left: 500px; padding: 0px }
-/*      #map-canvas { height: 75% }
-*/
+      html { height: 75%; }
+      body { height: 75%; 
+            width: 50%; 
+            margin-right: auto; 
+            margin-left: auto; 
+            padding: 100px }
       #map-canvas {
-        height: 90%;
-        width: 75%;
+        height: 75%;
+        width: 50%;
         margin-left: auto;
         margin-right: auto;
-        padding: 2px
+        padding: 100px
       }
 /*This formats the button panel for the heat map functions */
       #panel {
@@ -22,4 +24,16 @@
         background-color: #fff;
         padding: 5px;
         border: 1px solid #999;
+      }
+
+/*This formats the property options panel for the heat map functions */
+      .propertyoptions {
+/*        position: absolute;
+        top: 20px;
+        left: 50%;
+        margin-left: -180px;
+        z-index: 5;
+        background-color: #fff;
+        padding: 5px;
+        border: 1px solid #999;*/
       }

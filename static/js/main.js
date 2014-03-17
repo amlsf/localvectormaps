@@ -31,16 +31,47 @@ function initialize() {
   map = new google.maps.Map(document.getElementById("map-canvas"),
       mapOptions);
 
+  var bermudaTriangle;
+
+  // Define the LatLng coordinates for the polygon's path.
+  var triangleCoords = [
+    new google.maps.LatLng(37.774252, -122.190262),
+    new google.maps.LatLng(37.466465, -122.118292),
+    new google.maps.LatLng(37.321384, -122.75737),
+    new google.maps.LatLng(37.774252, -122.190262)
+  ];
+
+  // Construct the polygon.
+  bermudaTriangle = new google.maps.Polygon({
+    paths: triangleCoords,
+    strokeColor: '#000000',
+    strokeOpacity: 0.8,
+    strokeWeight: 2,
+    fillColor: '#000000',
+    fillOpacity: 0.35
+  });
+
+  bermudaTriangle.setMap(map);
+
+
+
+
+
+
+
+
+
+
 
 
 // just input this directly into ajax
 // CENTER MARKER & CLICK ZOOM marker to center of map, zooms when clicked
-  var marker = new google.maps.Marker({
-    position: map.getCenter(),
-    map: map,
-    title: 'Click to zoom'
+  // var marker = new google.maps.Marker({
+  //   position: map.getCenter(),
+  //   map: map,
+  //   title: 'Click to zoom'
     // animation:google.maps.Animation.BOUNCE
-  });
+  // });
 
 // 3 seconds after the center of the map has changed, pan back to the
 // marker.
@@ -51,10 +82,10 @@ function initialize() {
   // });
 
 // TODO Howcome I don't need to set the marker here? marker.setMap()
-  google.maps.event.addListener(marker, 'click', function() {
-    map.setZoom(200);
-    // map.setCenter(marker.getPosition());
-  });
+  // google.maps.event.addListener(marker, 'click', function() {
+  //   map.setZoom(200);
+  //   // map.setCenter(marker.getPosition());
+  // });
 
 
 
@@ -70,7 +101,11 @@ function initialize() {
   }
 
 
-// TODO What is this? The following code instructs the application to load the Maps API after the page has fully loaded (using window.onload) and write the Maps JavaScript API into a <script> tag within the page. Additionally, we instruct the API to only execute the initialize() function after the API has fully loaded by passing callback=initialize to the Maps API bootstrap:
+// TODO What is this? The following code instructs the application to load the Maps 
+// API after the page has fully loaded (using window.onload) and write the Maps 
+// JavaScript API into a <script> tag within the page. Additionally, we instruct the
+// API to only execute the initialize() function after the API has fully loaded by
+// passing callback=initialize to the Maps API bootstrap:
 function loadScript() {
   var script = document.createElement('script');
   script.type = 'text/javascript';

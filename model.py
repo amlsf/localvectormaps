@@ -41,5 +41,13 @@ class Listings(Base):
     postal_code = Column(Integer, nullable=True)
     city_name = Column(String(64), nullable=True)
 
+# class Polygons(Base):
+#     __tablename__ = "polygons"
+    
+#     region = neighborhood, city, zip, blocks? 
+#     vertice_num =
+#     longitude =
+#     latitude =  
+
 def create_tables():
     Base.metadata.create_all(engine)
