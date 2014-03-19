@@ -2,3 +2,8 @@
 env
 .*.swp
 *.db
+test/*
+test/
+env/
+flask/
+data/

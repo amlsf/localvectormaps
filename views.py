@@ -40,6 +40,11 @@ def activelistings():
     # some_json=some_json
     return render_template("heatmap.html", active_listings = active_listings)
 
+@app.route("/leaflet")
+def leaflet():
+    active_listings = model.session.query(model.Listings).filter_by(listing_status="Active").all()
+    activelatlong = [[l.latitude, l.longitude] for l in active_listings]
+    return render_template("leaflet.html", activelatlong = activelatlong)
 
 
 
