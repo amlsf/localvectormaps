@@ -14,6 +14,9 @@
         margin-right: auto;
         padding: 100px
       }
+        #map-canvas img {
+        max-width: none
+      }
 /*This formats the button panel for the heat map functions */
       #panel {
         position: absolute;
