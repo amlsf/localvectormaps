@@ -8,6 +8,8 @@ import model
 app = Flask(__name__)
 app.config.from_object(config)
 
+model.session = model.connect()
+
 # Stuff to make login easier
 # login_manager = LoginManager()
 # login_manager.init_app(app)
@@ -28,32 +30,33 @@ app.secret_key = "secretkey"
 @app.route("/")
 def index():
     # active_listings = model.session.query(model.Listings).filter_by(listing_status="Active").all()
-    return render_template("heatmap.html")
+    return render_template("heatmap.html", active_listings = [])
 
 @app.route("/activelistings")
 def activelistings():
     active_listings = model.session.query(model.Listings).filter_by(listing_status="Active").all()
+    # some_json = '{"liz" : "is tired"}'
+    # # json = JSON.dumps([x.to_json() for x in activelistings])
+    # some_json=some_json
     return render_template("heatmap.html", active_listings = active_listings)
+
+
+
+
+# @app.route("/medianprices")
+# def medianprices(grouping, activeornot):
+#     active_listings = model.session.query(model.Listings).filter_by(listing_status="Active").all()
+#     return render_template("heatmap.html", active_listings = active_listings)
+
+# select all median prices by grouping type, active vs. not active
+
+
+
+
     # return "[{\"address\": \"drive\"}]" #This is JSON array, turns to JS syntax, use with AJAX stuff in main.js
-
-# @app.route("/medianactive")
-
-
-# @app.route("/mediansold")
-#     def medianprice(pricetype, ) 
 
 
 # @app.route("/medianpricechange")
-
-
-#Calcs needed (functions):
-#1) View active listings as markers and display info as listings (ajax to certain region in map frame)
-#2) Get median ACTIVE LISTING prices by various groupings (display summary table of stats)
-#3) Get median SOLD SALES prices (not listing) by various groupings & time periods (display summary table of stats)
-#4) can get change % later from #3?
-
-#A) Grouping various metrics by [property type, bed/bath count], [living_sq ft range, PRICE RANGE], [city, count, neighborhood, zip]
-# TODO can I put these all as arguments in the same function? how do this efficiently? 
 
 
 # @app.route("/post/<int:id>")

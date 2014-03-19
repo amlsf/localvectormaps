@@ -11,12 +11,16 @@ from sqlalchemy.orm import sessionmaker, scoped_session, relationship, backref
 from flask.ext.login import UserMixin
 
 
-engine = create_engine("sqlite:///listings.db", echo=False)
-Session = sessionmaker(bind=engine)
-session = Session()
+global engine
+global Session
 
 Base = declarative_base()
 # Base.query = session.query_property()
+
+def connect():
+    engine = create_engine("sqlite:///listings.db", echo=False)
+    Session = sessionmaker(bind=engine)
+    return Session()
 
 class Listings(Base):
     __tablename__ = "listings"
@@ -40,8 +44,12 @@ class Listings(Base):
     county_name = Column(String(64), nullable=True)
     postal_code = Column(Integer, nullable=True)
     city_name = Column(String(64), nullable=True)
+    full_address = Column(String(64), nullable= True)
+    latitude = Column(Integer, nullable=True)
+    longitude = Column(Integer, nullable=True)
+    # neighborhood
 
-# class Polygons(Base):
+# class Vertices(Base):
 #     __tablename__ = "polygons"
     
 #     region = neighborhood, city, zip, blocks? 
@@ -49,5 +57,22 @@ class Listings(Base):
 #     longitude =
 #     latitude =  
 
+    # def to_json(self):
+    #     self_dict =  {
+    #             "address" : self.address,
+
+    #         }
+
+    #     return JSON.dumps(self_dict)
+
+
 def create_tables():
     Base.metadata.create_all(engine)
+
+
+if __name__ == "__main__":
+    # create_tables()
+    session = connect()
+    # session = Session()
+
+    main()

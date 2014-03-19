@@ -1,6 +1,5 @@
 // initialize variables outside funciton so can use them universally 
-var map, pointArray, heatmap;
-
+var map, pointArray, heatmap, geocoder;
 
 // Heat map data
 var taxiData = [
@@ -15,13 +14,15 @@ var taxiData = [
   ];
 
 
+
 // <!--start  Asyncronously loading the API,  -->
 // <!-- start create JS object literal to hold number of map properties
 //  -->
 function initialize() {
+  // CREATE MAP
   var mapOptions = {
   // Centers on Sydney
-    center: new google.maps.LatLng(37.774546, -122.433523),
+    center: new google.maps.LatLng(37.785067, -122.473021),
     zoom: 13,  
     // mapTypeId:google.maps.MapTypeId.ROADMAP
     // mapTypeId: google.maps.MapTypeId.SATELLITE
@@ -31,6 +32,23 @@ function initialize() {
   map = new google.maps.Map(document.getElementById("map-canvas"),
       mapOptions);
 
+
+  // GEOCODER & CREATE MARKERS for codeAddress() in toolbar
+  geocoder = new google.maps.Geocoder();
+
+
+  // CREATE sample MARKER at 14th Ave
+  var myLatlng = new google.maps.LatLng(37.785067, -122.473021);
+
+  var samplemarker = new google.maps.Marker({
+    position:myLatlng,
+    map: map,
+    title:"Hello World!"
+  });
+
+  // samplemarker.setMap(map);
+
+  // CREATE sample POLYGON OVERLAY
   var bermudaTriangle;
 
   // Define the LatLng coordinates for the polygon's path.
@@ -56,68 +74,56 @@ function initialize() {
 
 
 
-
-
-
-
-
-
-
-
-// just input this directly into ajax
-// CENTER MARKER & CLICK ZOOM marker to center of map, zooms when clicked
-  // var marker = new google.maps.Marker({
-  //   position: map.getCenter(),
-  //   map: map,
-  //   title: 'Click to zoom'
-    // animation:google.maps.Animation.BOUNCE
-  // });
-
-// 3 seconds after the center of the map has changed, pan back to the
-// marker.
-  // google.maps.event.addListener(map, 'center_changed', function() {
-  //   window.setTimeout(function() {
-  //     map.panTo(marker.getPosition());
-  //   }, 3000);
-  // });
-
-// TODO Howcome I don't need to set the marker here? marker.setMap()
-  // google.maps.event.addListener(marker, 'click', function() {
-  //   map.setZoom(200);
-  //   // map.setCenter(marker.getPosition());
-  // });
-
-
-
-
-  // HEATMAP input the array data into some variable that makes it an array? 
+  // CREATE HEATMAP input the array data into some variable that makes it an array? 
   pointArray = new google.maps.MVCArray(taxiData);
   // instantiate heatmap visualization object with arrayg
   heatmap = new google.maps.visualization.HeatmapLayer({
     data: pointArray
   });
-// set map on the map
+// set heatmap on the map
     heatmap.setMap(map);
-  }
+
+// This is pulling function from heatmap.html file so that function runs after map instantiated. This calls makeMarkers()
+    drawMarkers();
+
+} // END Initializer
 
 
-// TODO What is this? The following code instructs the application to load the Maps 
-// API after the page has fully loaded (using window.onload) and write the Maps 
-// JavaScript API into a <script> tag within the page. Additionally, we instruct the
-// API to only execute the initialize() function after the API has fully loaded by
-// passing callback=initialize to the Maps API bootstrap:
-function loadScript() {
-  var script = document.createElement('script');
-  script.type = 'text/javascript';
-  script.src = 'https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&' +
-      'callback=initialize';
-  document.body.appendChild(script);
+
+
+// GEOCODE for search bar and set marker on the map
+function codeAddress() {
+  var address = document.getElementById('address').value;
+  geocoder.geocode( { 'address': address}, function(results, status) {
+    if (status == google.maps.GeocoderStatus.OK) {
+      map.setCenter(results[0].geometry.location);
+      var marker = new google.maps.Marker({
+          map: map,
+          position: results[0].geometry.location
+      });
+    } else {
+      alert('Geocode was not successful for the following reason: ' + status);
+    }
+  });
 }
 
-// window.onload = loadScript;
+  // CREATE MARKERS function for active listings, called in heatmap.html
+var markers = [];
+function makeMarkers(latitude, longitude) {
+  var myLatlng = new google.maps.LatLng(latitude, longitude);
 
+  var marker = new google.maps.Marker({
+    position:myLatlng,
+    map: map
+  });
 
-// HEATMAP BUTTONS Create a bunch of buttons that let you do stuff
+  // console.log(marker);
+
+  markers.push(marker);
+  marker.setMap(map);
+}
+
+// CREATE HEATMAP BUTTONS Create a bunch of buttons that let you do stuff
 function toggleHeatmap() {
   heatmap.setMap(heatmap.getMap() ? null : map);
 }
@@ -152,27 +158,5 @@ function changeOpacity() {
 
 
 
-// EVENT LISTENER to load map after page has loaded. What is this??? 
+// EVENT LISTENER to load map after page has loaded.
 google.maps.event.addDomListener(window, 'load', initialize);
-
-// Example of how to use ajax
-// $.ajax({
-//   url: "/activelistings",
-//   success: function(data){
-//   console.log(data) 
-//   }
-// });
-
-// $.ajax({
-//   url: "/activelistings",
-//   success: function(data){
-//     var listings = JSON.parse(data);
-//     for (var i = 0; i < listings.length; i++) {
-//       var elt = document.createElement("div");
-//       elt.textContent = listings[i].address;
-//       document.body.appendChild(elt);
-//     }
-//   }
-// });
-
-

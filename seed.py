@@ -8,8 +8,8 @@ from decimal import *
 
 # loads active data file
 def load_alist(session):
-    with open("data/active_data1.txt") as f:
-        reader = csv.reader(f, delimiter = "\t")
+    with open("data/datasplice.csv") as f:
+        reader = csv.reader(f, delimiter = ",")
         counter = 0
 # skips header row
         for row in reader:
@@ -20,7 +20,7 @@ def load_alist(session):
 # unpacks row into tuple 
             list_date, pending_date, close_escrow_date, listing_status, list_price, sell_price, property_type, \
             bathrooms_count, bedrooms_count, living_sq_ft, lot_size, address, street_name, street_suffix, \
-            street_number, county_name, postal_code, city_name = row
+            street_number, county_name, postal_code, city_name, full_address, latitude, longitude = row
 
 # checks for blanks and inputs None if blank
             if list_date == '': 
@@ -52,9 +52,14 @@ def load_alist(session):
             else: 
                 living_sq_ft = int(float(living_sq_ft)) 
 
-            list_price = int(list_price)
+            if list_price == '':
+                list_price = float(list_price)
+
+            # list_price = int(list_price)
             bathrooms_count = float(bathrooms_count) 
             bedrooms_count = int(bedrooms_count) 
+            latitude = float(latitude)
+            longitude = float(longitude)
 
 # populates rows in database
             u = model.Listings(list_date = listing_date, 
@@ -74,7 +79,10 @@ def load_alist(session):
                 street_number = street_number,
                 county_name = county_name,
                 postal_code = postal_code,
-                city_name = city_name)
+                city_name = city_name, 
+                full_address = full_address,
+                latitude = latitude,
+                longitude = longitude)
             session.add(u)
 
     session.commit()
@@ -155,7 +163,7 @@ def load_slist(session):
     f.close()
 
 def main(session):
-    load_alist(session)
+    # load_alist(session)
     # load_slist(session)
 
 if __name__ == "__main__":

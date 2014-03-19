@@ -1,7 +1,7 @@
 
 /*Must specify or size else assumed 0x0pixels */
 
-      html { height: 75%; }
+      html { height: 100%; }
       body { height: 75%; 
             width: 50%; 
             margin-right: auto; 
@@ -17,6 +17,7 @@
 /*This formats the button panel for the heat map functions */
       #panel {
         position: absolute;
+/*        position absolute puts at the top*/
         top: 20px;
         left: 50%;
         margin-left: -180px;
@@ -28,12 +29,22 @@
 
 /*This formats the property options panel for the heat map functions */
       .propertyoptions {
-/*        position: absolute;
         top: 20px;
-        left: 50%;
+/*        left: 50%;
         margin-left: -180px;
+        z-index: 5;*/        
+        background-color: #fff;
+        padding: 5px;
+        padding-top: 10px;
+/*        border: 1px solid #999;*/
+      }
+     #addresssearchpanel {
+        position: absolute;
+        top: 5px;
+/*        left: 50%;
+*/        margin-left: -180px;
         z-index: 5;
         background-color: #fff;
         padding: 5px;
-        border: 1px solid #999;*/
+        border: 1px solid #999;
       }
