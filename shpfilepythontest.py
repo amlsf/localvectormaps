@@ -17,16 +17,16 @@ zillow = shapefile.Reader("data/maps/tl_2013_us_zcta510zipcodes/tl_2013_us_zcta5
 # prints out database attributes
 print zillow.fields
 
-shapes = zillow.shapes()
-shapeRecs = zillow.shapeRecords()
+# shapes = zillow.shapes()
+# shapeRecs = zillow.shapeRecords()
 
 # print len(shapes)
 
 # print "This is the number of records: %s" % len(shapeRecs)
-print shapeRecs[0].record  # calls the 1st record as a list
+# print shapeRecs[0].record  # calls the 1st record as a list
 # print shapeRecs[1].record 
 # print shapes[0].parts
-print shapeRecs[0].shape.points
+# print shapeRecs[0].shape.points
 
 
 # print shapeRecs[0].shape.points #returns all the points of the shape

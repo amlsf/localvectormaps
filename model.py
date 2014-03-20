@@ -46,18 +46,22 @@ class Listings(Base):
     lot_size = Column(Integer, nullable=True)
     address = Column(String(64), nullable=True)
     street_name = Column(String(64), nullable=True)
-    street_suffix = Column(String(64), nullable=True)
-    street_number = Column(Integer, nullable=True)
+    street_suffix = Column(String(15), nullable=True)
+    street_number = Column(String(64), nullable=True)
     county_name = Column(String(64), nullable=True)
-    postal_code = Column(Integer, nullable=True)
+    postal_code = Column(String(15), nullable=True)
     city_name = Column(String(64), nullable=True)
+    neighborhood = Column(String(64), nullable=True)
+    mls_id = Column(String(64), nullable=True)
+    description = Column(String(1000), nullable=True)
+    parcel_number = Column(String(15), nullable=True)
+    state = Column(String(15), nullable= True)
     full_address = Column(String(64), nullable= True)
     latitude = Column(Integer, nullable=True)
     longitude = Column(Integer, nullable=True)
-    # neighborhood
-    # mls id
-    # Parcel 
-    # description
+    county_id = Column(Integer, nullable=True)
+    zip_id = Column(Integer, nullable=True)
+    bg_id = Column(Integer, nullable=True)
 
 class Neighborhoods(Base):
     __tablename__ = "neighborhoods"
@@ -90,19 +94,18 @@ class Zipcodes(Base):
     __tablename__ = "zipcodes"
     
     id = Column(Integer, primary_key=True)   
-    zcta = Column(String(15), nullable=True)
-    geoid = Column(String(15), nullable=True)
-    classfp = Column(String(15), nullable=True)
-    mtfcc = Column(String(15), nullable=True)
-    funcstat = Column(String(15), nullable=True)
-    aland = Column(String(15), nullable=True)
-    awater = Column(String(15), nullable=True)
-    intptlat = Column(String(15), nullable=True)
-    intptlon = Column(String(15), nullable=True)
+    zcta = Column(String(100), nullable=True)
+    geoid = Column(String(100), nullable=True)
+    classfp = Column(String(100), nullable=True)
+    mtfcc = Column(String(100), nullable=True)
+    # funcstat = Column(String(15), nullable=True)
+    # aland = Column(String(15), nullable=True)
+    # awater = Column(String(15), nullable=True)
+    # intptlat = Column(String(15), nullable=True)
+    # intptlon = Column(String(15), nullable=True)
     polygon_count = Column(Integer, nullable=False)
     polypoint_starts = Column(String(10000), nullable=False)
     coordinates = Column(String(10000), nullable=False) 
-
 
 
 class Blockgroups(Base):
