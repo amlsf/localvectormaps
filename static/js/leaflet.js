@@ -1,4 +1,4 @@
-mapid = 125438; 
+mapid = 125542; 
 // TODO: set as env var
 apikey = "99d055cec8794a33b9e2cb09553e3506"
 
@@ -11,7 +11,7 @@ L.tileLayer('http://{s}.tile.cloudmade.com/'+apikey+'/'+mapid+'/256/{z}/{x}/{y}.
 
 
 var initLeaflet = function (active_listings) {
-    // addActiveMarkers(active_listings);
+    addActiveMarkers(active_listings);
     addPolygon(active_listings.slice(0,3));
 }
 
