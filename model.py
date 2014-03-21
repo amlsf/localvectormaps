@@ -138,8 +138,8 @@ class Blockgroups(Base):
 
 
 if __name__ == "__main__":
-    # create_tables()
-    session = connect()
+    create_tables()
+    # session = connect()
 
 
     # session = Session()
