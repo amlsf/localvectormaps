@@ -1,4 +1,4 @@
-mapid = 125542; 
+mapid = 125674; 
 // TODO: set as env var
 apikey = "99d055cec8794a33b9e2cb09553e3506"
 
@@ -24,3 +24,4 @@ function addActiveMarkers(active_listings) {
 function addPolygon(points) {
     L.polygon(points).addTo(map);
 }
+

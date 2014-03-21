@@ -6,7 +6,6 @@
 
 <div id="map"></div>
 
-
 <script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
 <script src="/static/js/leaflet.js"></script>
 
@@ -14,11 +13,15 @@
 
 
 {% block script %}
-    <script type="text/javascript">
-    $(document).ready(function(){
-        initLeaflet({{activelatlong}});
-    });
-    </script>
+<script type="text/javascript">
+    // $(document).ready(function(){
+    //     initLeaflet({{activelatlong}});
+    // });
 
-{% endblock %}
+    // $.getJSON("bayarea-zips.geo.json", function(zips) {
+    // L.geoJson(zips).addTo(map);
+    // });
+</script>
 
+<!-- {% endblock %}
+ -->

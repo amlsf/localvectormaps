@@ -183,24 +183,24 @@ def load_slist(session):
 def load_neighborhoods(session):
 
     shpfile = shapefile.Reader("data/maps/ZillowNeighborhoods-CA/ZillowNeighborhoods-CA.shp")
-    shapes = shpfile.shapes()
-    shapeRecs = shpfile.shapeRecords()
 
-    # for every shape 
-    for x in range(len(shapeRecs)):
-        for y in range(len(shapeRecs[x].shape.points)):
-            shapeRecs[x].shape.points[y] = list(shapeRecs[x].shape.points[y])
+    for (i, y) in zip(shpfile.iterShapes(), shpfile.iterRecords()):
+        for x in range(len(i.points)):
+            i.points[x] = list(i.points[x])
+        # print i.points
 
-        u = model.Neighborhoods(state = shapeRecs[x].record[0],
-            county = shapeRecs[x].record[1],
-            city = shapeRecs[x].record[2],
-            neighborhood = shapeRecs[x].record[3],
-            neighborhood_id = shapeRecs[x].record[4],
-            polygon_count = len(shapes[x].parts), # if it is a multipolygon will be >1
-            polypoint_starts = json.dumps(list(shapes[x].parts)), # this returns a list of list position for start of each multipolygon
+        u = model.Neighborhoods(state = y[0],
+            county = y[1],
+            city = y[2],
+            neighborhood = y[3],
+            neighborhood_id = y[4],
+            polygon_count = len(i.parts), # if it is a multipolygon will be >1
+            polypoint_starts = json.dumps(list(i.parts)), # this returns a list of list position for start of each multipolygon
             #need to use json.loads(sqlalchemyobject.coordinates) to get back as list
 # WARNING - these coordinates are backwards - longitude then lat (not latlong)
-            coordinates = json.dumps(list(shapeRecs[x].shape.points))) # this returns a list of all coordinates
+            coordinates = json.dumps(list(i.points)) # this returns a list of all coordinates
+            )
+
         session.add(u)
 
     session.commit()
@@ -209,7 +209,7 @@ def load_counties(session):
     # 3221 records or something (the more dense version had a more like 34xx)
 
     shpfile = shapefile.Reader("data/maps/gz_2010_us_050_00_500k/gz_2010_us_050_00_500k.shp")
-    shapes = shpfile.shapes()
+    # shapes = shpfile.shapes()
     shapeRecs = shpfile.shapeRecords()
 
 # for every shape 
@@ -227,9 +227,10 @@ def load_counties(session):
             name = shapeRecs[x].record[3].decode("latin-1"),
             lsad = shapeRecs[x].record[4].decode("latin-1"), # Legal/Statistical area descriptor
             censusarea = unicode(shapeRecs[x].record[5]),
-            polygon_count = len(shapes[x].parts), # if it is a multipolygon will be >1
-            polypoint_starts = json.dumps(list(shapes[x].parts)), # this returns a list of list position for start of each multipolygon
+            polygon_count = len(shapeRecs[x].shape.parts), # if it is a multipolygon will be >1
+            polypoint_starts = json.dumps(list(shapeRecs[x].shape.parts)), # this returns a list of list position for start of each multipolygon
             #need to use json.loads(sqlalchemyobject.coordinates) to get back as list
+# WARNING - these coordinates are backwards - longitude then lat (not latlong)
             coordinates = json.dumps(list(shapeRecs[x].shape.points))) # this returns a list of all coordinates
         session.add(u)
 
@@ -238,25 +239,21 @@ def load_counties(session):
 def load_zips(session):
 
     shpfile = shapefile.Reader("data/maps/tl_2013_us_zcta510zipcodes/tl_2013_us_zcta510.shp")
-    shapes = shpfile.shapes()
-    shapeRecs = shpfile.shapeRecords()
 
-    for x in range(len(shapeRecs)):
-        for y in range(len(shapeRecs[x].shape.points)):
-            shapeRecs[x].shape.points[y] = list(shapeRecs[x].shape.points[y])
+    for (i, y) in zip(shpfile.iterShapes(), shpfile.iterRecords()):
+        for x in range(len(i.points)):
+            i.points[x] = list(i.points[x])
+        # print i.points
 
-    # for x in range(10):
-    #     for y in range(len(shapeRecs[x].shape.points)):
-    #         shapeRecs[x].shape.points[y] = list(shapeRecs[x].shape.points[y])
-
-        u = model.Zipcodes(zcta = shapeRecs[x].record[0].decode("latin-1"),
-            geoid = shapeRecs[x].record[1].decode("latin-1"),
-            classfp = shapeRecs[x].record[2].decode("latin-1"),
-            mtfccc = shapeRecs[x].record[3].decode("latin-1"),
-            polygon_count = len(shapes[x].parts), # if it is a multipolygon will be >1
-            polypoint_starts = json.dumps(list(shapes[x].parts)), # this returns a list of list position for start of each multipolygon
+        u = model.Zipcodes(zcta = y[0].decode("latin-1"),
+            geoid = y[1].decode("latin-1"),
+            classfp = y[2].decode("latin-1"),
+            mtfccc = y[3].decode("latin-1"),
+            polygon_count = len(i.parts), # if it is a multipolygon will be >1
+            polypoint_starts = json.dumps(list(i.parts)), # this returns a list of list position for start of each multipolygon
             #need to use json.loads(sqlalchemyobject.coordinates) to get back as list
-            coordinates = json.dumps(list(shapeRecs[x].shape.points))) # this returns a list of all coordinates
+# WARNING - these coordinates are backwards - longitude then lat (not latlong)
+            coordinates = json.dumps(list(i.points))) # this returns a list of all coordinates
 
         session.add(u)
 
@@ -266,7 +263,7 @@ def load_blockgroups(session):
     # 23203 records
 
     shpfile = shapefile.Reader("data/maps/gz_2010_06_150_00_500kblockgroups/gz_2010_06_150_00_500k.shp")
-    shapes = shpfile.shapes()
+    # shapes = shpfile.shapes()
     shapeRecs = shpfile.shapeRecords()
 
     for x in range(len(shapeRecs)):
@@ -285,24 +282,33 @@ def load_blockgroups(session):
             name = shapeRecs[x].record[5].decode("latin-1"),
             lsad = shapeRecs[x].record[6].decode("latin-1"),
             censusarea = unicode(shapeRecs[x].record[5]),
-            polygon_count = len(shapes[x].parts), # if it is a multipolygon will be >1
-            polypoint_starts = json.dumps(list(shapes[x].parts)), # this returns a list of list position for start of each multipolygon
+            polygon_count = len(shapeRecs[x].shape.parts), # if it is a multipolygon will be >1
+            polypoint_starts = json.dumps(list(shapeRecs[x].shape.parts)), # this returns a list of list position for start of each multipolygon
             #need to use json.loads(sqlalchemyobject.coordinates) to get back as list
+# WARNING - these coordinates are backwards - longitude then lat (not latlong)
             coordinates = json.dumps(list(shapeRecs[x].shape.points))) # this returns a list of all coordinates
         session.add(u)
 
     session.commit()
 
 
+# def points_in_polygon(session):
+
+
+
+
+
+
+
 
 def main(session):
-    # load_alist(session) # TODO need to get more accurate geocoding? 
-    # load_slist(session) # TODO need to get latlong
+    # load_alist(session) # TODO check accuracy of existing geocoding? 
+    # load_slist(session) # TODO need to get latlong, more automated method
 
-# TODO Check this once loaded against the txt files I have, check on shapescape
+# TODO Check this once loaded against the txt files I have (shape-escape)
     # load_neighborhoods(session)
     # load_counties(session) 
-    load_zips(session) # TODO Having problems here!! Try running overnight, otherwise write script for geoJSON
+    load_zips(session)
     # load_blockgroups(session)
 
 if __name__ == "__main__":
