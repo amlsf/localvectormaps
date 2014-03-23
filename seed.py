@@ -383,17 +383,15 @@ def load_blockgroups(session):
 
 def main(session):
     # load_alist(session)
+# TODO run slist again and then run all the polygon tests again
     load_slist(session)
-# TODO run slist again
 
 # TODO Check this once loaded against the geojson files I have
     # load_neighborhoods(session)
     # load_counties(session) 
     # load_blockgroups(session)
 
-# TODO THIS IS GOING TO TAKE A LONG TIME, hope it works!
     # load_zips(session)
-
 
 if __name__ == "__main__":
     s = model.connect()

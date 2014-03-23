@@ -1,18 +1,22 @@
 {% extends 'master.html' %}
-{% block body %}
 
+{% block head %}
 <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" />
 <link href="/static/css/leaflet.css" rel="stylesheet">
+{% endblock %}
 
+
+{% block body %}
 <div id="map"></div>
-
-<script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
-<script src="/static/js/leaflet.js"></script>
-
 {% endblock %}
 
 
 {% block script %}
+<script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
+<script src ="/static/js/countyqgisCAonly.js"></script>
+<script src ="/static/js/qgisblockgroups.js"></script>
+<script src="/static/js/leaflet.js"></script>
+
 <script type="text/javascript">
     $(document).ready(function(){
         initLeaflet({{activelatlong}});
@@ -23,5 +27,5 @@
     // });
 </script>
 
-<!-- {% endblock %}
- -->
+{% endblock %}
+

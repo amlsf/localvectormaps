@@ -59,10 +59,12 @@ class Listings(Base):
     full_address = Column(String(64), nullable= True)
     latitude = Column(Integer, nullable=True)
     longitude = Column(Integer, nullable=True)
+    # nb_id = Column(Integer, nullable=True)
     county_id = Column(Integer, nullable=True)
     zip_id = Column(Integer, nullable=True)
     bg_id = Column(Integer, nullable=True)
 
+    
 class Neighborhoods(Base):
     __tablename__ = "neighborhoods"
     
@@ -88,7 +90,8 @@ class Counties(Base):
     censusarea = Column(String(50), nullable=False)
     polygon_count = Column(Integer, nullable=False)
     polypoint_starts = Column(String(10000), nullable=False)
-    coordinates = Column(String(10000), nullable=False) 
+    coordinates = Column(String(10000), nullable=False)
+    # color = Column(String(15), nullable = False) #not going to use column in future
 
 class Zipcodes(Base):
     __tablename__ = "zipcodes"
@@ -122,7 +125,8 @@ class Blockgroups(Base):
     censusarea = Column(String(15), nullable=True)
     polygon_count = Column(Integer, nullable=False)
     polypoint_starts = Column(String(10000), nullable=False)
-    coordinates = Column(String(10000), nullable=False) 
+    coordinates = Column(String(10000), nullable=False)
+    color = Column(String(16), nullable=True)    
 
 
 # class Vertices(Base):

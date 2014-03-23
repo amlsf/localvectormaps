@@ -46,6 +46,13 @@ def leaflet():
     activelatlong = [[l.latitude, l.longitude] for l in active_listings]
     return render_template("leaflet.html", activelatlong = activelatlong)
 
+# @app.route("/heatmap")
+# def leaflet():
+#     active_listings = model.session.query(model.Listings).filter_by(listing_status="Active").all()
+#     activelatlong = [[l.latitude, l.longitude] for l in active_listings]
+#     return render_template("leaflet.html", activelatlong = activelatlong)
+
+
 
 
 # @app.route("/medianprices")
