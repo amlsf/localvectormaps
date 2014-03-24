@@ -21,12 +21,14 @@ def connect():
     global Session
 
     engine = create_engine("sqlite:///listings.db", echo=False)
+    # engine = create_engine("os.environ.get("DATABASE_URL")", echo=False)
     Session = sessionmaker(bind=engine)
 
     return Session()
 
 def create_tables():
     engine = create_engine("sqlite:///listings.db", echo=False)
+    # engine = create_engine("os.environ.get("DATABASE_URL")", echo=False)
     Base.metadata.create_all(engine)
 
 class Listings(Base):
@@ -64,7 +66,7 @@ class Listings(Base):
     zip_id = Column(Integer, nullable=True)
     bg_id = Column(Integer, nullable=True)
 
-    
+
 class Neighborhoods(Base):
     __tablename__ = "neighborhoods"
     
@@ -126,7 +128,7 @@ class Blockgroups(Base):
     polygon_count = Column(Integer, nullable=False)
     polypoint_starts = Column(String(10000), nullable=False)
     coordinates = Column(String(10000), nullable=False)
-    color = Column(String(16), nullable=True)    
+    # color = Column(String(16), nullable=True)    
 
 
 # class Vertices(Base):

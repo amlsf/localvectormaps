@@ -184,54 +184,54 @@ def point_in_blockgroups(session):
     session.commit()
 
 
-def point_in_zips(session):
-    listings = session.query(model.Listings).all()
-    regions = session.query(model.Zipcodes).all()
+# def point_in_zips(session):
+#     listings = session.query(model.Listings).all()
+#     regions = session.query(model.Zipcodes).all()
 
-# JSON dump everything
-    for polygon in regions:
-        polygon.coordinates = json.loads(polygon.coordinates)
-        polygon.polypoint_starts = json.loads(polygon.polypoint_starts)
+# # JSON dump everything
+#     for polygon in regions:
+#         polygon.coordinates = json.loads(polygon.coordinates)
+#         polygon.polypoint_starts = json.loads(polygon.polypoint_starts)
 
-# Loop through each house in the listings
-    for house in listings:
-        breaker = 0
-# With each house, loop through each (neighborhood), county, zip, block group to see if it's in the polygon
-        for polygon in regions:
-            if breaker == 1:
-                break
-            # if it is a multipolygon
-            if polygon.polygon_count > 1:
-                i = 0
-                # loop through each polygon in multipolygon and take slice of coordinates using polypoint_starts list
-                for s in range(len(polygon.polypoint_starts)):
-                    i += 1
-                    # if it's the last polygon, pull slice through rest of list so not out of index range
-                    if i == len(polygon.polypoint_starts):
-                        if point_inside_polygon(house.longitude,house.latitude,polygon.coordinates[polygon.polypoint_starts[s]:]):
-                            house.zip_id = polygon.id
-                            breaker = 1
-                            print "multipolygon, last one in the list. house_id: %r, house zip: %r :::: house zcta zip_id: %r" % (house.id, house.postal_code, house.zip_id)
-                    else:  
-                        if point_inside_polygon(house.longitude,house.latitude,polygon.coordinates[polygon.polypoint_starts[s]:polygon.polypoint_starts[s+1]]):
-                            house.zip_id = polygon.id
-                            breaker = 1
-                            print "multipolygon, SOMEWHERE in the list. house_id: %r, house zip: %r :::: house zcta zip_id: %r" % (house.id, house.postal_code, house.zip_id)
-            # for regular polygons: 
-            else: 
-                if point_inside_polygon(house.longitude, house.latitude, polygon.coordinates):
-                    house.zip_id = polygon.id
-                    breaker = 1
-                    print "single polygon. house_id: %r, house zip: %r :::: house zcta zip_id: %r" % (house.id, house.postal_code, house.zip_id)
+# # Loop through each house in the listings
+#     for house in listings:
+#         breaker = 0
+# # With each house, loop through each (neighborhood), county, zip, block group to see if it's in the polygon
+#         for polygon in regions:
+#             if breaker == 1:
+#                 break
+#             # if it is a multipolygon
+#             if polygon.polygon_count > 1:
+#                 i = 0
+#                 # loop through each polygon in multipolygon and take slice of coordinates using polypoint_starts list
+#                 for s in range(len(polygon.polypoint_starts)):
+#                     i += 1
+#                     # if it's the last polygon, pull slice through rest of list so not out of index range
+#                     if i == len(polygon.polypoint_starts):
+#                         if point_inside_polygon(house.longitude,house.latitude,polygon.coordinates[polygon.polypoint_starts[s]:]):
+#                             house.zip_id = polygon.id
+#                             breaker = 1
+#                             print "multipolygon, last one in the list. house_id: %r, house zip: %r :::: house zcta zip_id: %r" % (house.id, house.postal_code, house.zip_id)
+#                     else:  
+#                         if point_inside_polygon(house.longitude,house.latitude,polygon.coordinates[polygon.polypoint_starts[s]:polygon.polypoint_starts[s+1]]):
+#                             house.zip_id = polygon.id
+#                             breaker = 1
+#                             print "multipolygon, SOMEWHERE in the list. house_id: %r, house zip: %r :::: house zcta zip_id: %r" % (house.id, house.postal_code, house.zip_id)
+#             # for regular polygons: 
+#             else: 
+#                 if point_inside_polygon(house.longitude, house.latitude, polygon.coordinates):
+#                     house.zip_id = polygon.id
+#                     breaker = 1
+#                     print "single polygon. house_id: %r, house zip: %r :::: house zcta zip_id: %r" % (house.id, house.postal_code, house.zip_id)
 
-        if not house.zip_id:
-            print "region not found!"
+#         if not house.zip_id:
+#             print "region not found!"
 
-# Cancel any changes to regions with JSON dumps so database doesn't freak out
-    for polygon in regions:
-        session.expire(polygon)
+# # Cancel any changes to regions with JSON dumps so database doesn't freak out
+#     for polygon in regions:
+#         session.expire(polygon)
 
-    session.commit()
+#     session.commit()
 
 def main(session):
 # Don't need to use
