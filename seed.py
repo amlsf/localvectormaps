@@ -336,7 +336,7 @@ def load_zips(session):
         u = model.Zipcodes(zcta = y[0].decode("latin-1"),
             geoid = y[1].decode("latin-1"),
             classfp = y[2].decode("latin-1"),
-            mtfcc = y[3].decode("latin-1"),
+            # mtfcc = y[3].decode("latin-1"),
             polygon_count = len(i.parts), # if it is a multipolygon will be >1
 # iterates through to convert each item to a "real" list so it can then be converted to JSON
             polypoint_starts = json.dumps(list(i.parts)), # this returns a list of position for start of each multipolygon

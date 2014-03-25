@@ -18,10 +18,10 @@ var map = L.map('map').setView([37.785067, -122.473021], 13);
 
 var initLeaflet = function (active_listings) {
     addBaseMap();
-    // addActiveMarkers(active_listings);
+    addActiveMarkers(active_listings);
     // addPolygon(active_listings.slice(0,3));
-    // addCounties();
-    addBlockGroups();
+    addCounties();
+    // addBlockGroups();
 }
 
 function addBaseMap() {
@@ -48,6 +48,7 @@ function addCounties(){
 function addBlockGroups(){
     L.geoJson(blockgroups).addTo(map);
 }
+
 
 // function medianColor() {
 //     (max - min)/4

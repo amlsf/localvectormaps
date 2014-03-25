@@ -8,6 +8,9 @@ import model
 app = Flask(__name__)
 app.config.from_object(config)
 
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/[YOURDBNAME]'
+# db = SQLALchemy(app)
+
 model.session = model.connect()
 
 # Stuff to make login easier
@@ -43,8 +46,11 @@ def activelistings():
 @app.route("/leaflet")
 def leaflet():
     active_listings = model.session.query(model.Listings).filter_by(listing_status="Active").all()
-    activelatlong = [[l.latitude, l.longitude] for l in active_listings]
-    return render_template("leaflet.html", activelatlong = activelatlong)
+    activelatlong = [[l.latitude, l.longitude, l.list_price] for l in active_listings]
+    # return render_template("leafletdemo.html", activelatlong = activelatlong)
+    return render_template("leaflet_heatmaptest.html", activelatlong = activelatlong)
+    # return render_template("leaflet.html", activelatlong = activelatlong)
+
 
 # @app.route("/heatmap")
 # def leaflet():

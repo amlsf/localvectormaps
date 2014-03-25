@@ -102,7 +102,7 @@ class Zipcodes(Base):
     zcta = Column(String(100), nullable=True)
     geoid = Column(String(100), nullable=True)
     classfp = Column(String(100), nullable=True)
-    mtfcc = Column(String(100), nullable=True)
+    # mtfcc = Column(String(100), nullable=True)
     # funcstat = Column(String(15), nullable=True)
     # aland = Column(String(15), nullable=True)
     # awater = Column(String(15), nullable=True)

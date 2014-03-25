@@ -7,3 +7,5 @@ test/
 env/
 flask/
 data/
+.env
+heatmap.js/
