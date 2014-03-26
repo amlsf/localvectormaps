@@ -2,7 +2,7 @@
 /*Must specify or size else assumed 0x0pixels */
 
       html { height: 100%; }
-      body { height: 75%; 
+      body { height: 100%; 
             width: 100%; 
             margin-right: auto; 
             margin-left: auto; 

@@ -63,7 +63,7 @@ function initialize() {
     title:"Hello World!"
   });
 
-  // samplemarker.setMap(map);
+  samplemarker.setMap(map);
 
   // CREATE sample POLYGON OVERLAY
   var bermudaTriangle;

@@ -7,22 +7,34 @@ import json
 # Polygon is a list of (x,y) pairs.
 # NOTE make sure in long-lat order according to database
 
-# TODO check if this is catching concave polygons - read Ray Casting algorithm
+# this is catching concave polygons - read Ray Casting algorithm
+# TODO look at Keunwoo's notes
 def point_inside_polygon(x,y,poly):
 
     n = len(poly)
     inside =False
 
     p1x,p1y = poly[0]
+# TODO: don't need n+1, goes an extra time around
     for i in range(n+1):
+# modulus function makes it wrap around at end after iterating through points of polygon sequentially
         p2x,p2y = poly[i % n]
+# Case 0: check if ray from point crosses bounding box of polygon line, otherwise ignore
         if y > min(p1y,p2y):
             if y <= max(p1y,p2y):
                 if x <= max(p1x,p2x):
+# counting number of times x-axis ray from point crosses polygon lines in positive direction (odd # times means inside, even outside)
+    # any polygon lines that the ray doesn't cross are ignored 
+
+# detecting if it's hortizontal (parallel) so that the x ray never crosses
                     if p1y != p2y:
                         xinters = (y-p1y)*(p2x-p1x)/(p2y-p1y)+p1x
+
+#TODO bug here, if first line in the polygon is horizontal, this xinters never gets set and would throw an error, otherwise it's comparing to a random xinters
                     if p1x == p2x or x <= xinters:
+# flipping back and forth between even and odd number of crossings for whole polygon:
                         inside = not inside
+# advances to next point
         p1x,p1y = p2x,p2y
 
     return inside
@@ -237,7 +249,7 @@ def main(session):
 # Don't need to use
     # point_in_neighborhood(session)
 
-#TODO just run counties (in case names not normalized) and blockgroups, use sql query to match up zipcodes
+#TODO just run counties (in case names not normalized in BD) and blockgroups, use sql query to match up zipcodes
     point_in_counties(session) 
     # point_in_blockgroups(session)
 

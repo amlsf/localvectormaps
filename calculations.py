@@ -3,11 +3,13 @@ import re
 import sqlite3
 import json
 
-def county_activemedian():
-    region = session.query(model.Counties).all()
+#TODO faster to do this within the database? How do with SQL alchemy? 
+
+def county_activemedian(session):
+    regions = session.query(model.Counties).all()
 
     for region in regions:
-        houses = model.session.query(model.Listings).filter_by(county_id=region.id, listing_status="Active").all()
+        houses = session.query(model.Listings).filter_by(county_id=region.id, listing_status="Active").all()
         prices = []
         for houseprice in houses:
             prices.append(houseprice.list_price)
@@ -18,18 +20,15 @@ def county_activemedian():
             print "length is 0, median is %r" % median
         elif length % 2 == 0:
             median = (prices[length/2-1] + prices[length/2])/2
-            print "length is even, median is %r" % median
+            print "length is even, median for county %r is %r" % (region.name, median)
         else:
             median = prices[length/2]
-            print "length is odd, median is %r" % median
-
-        # region.color = median
-    # session.commit()
+            print "length is odd, median for county %r is %r" % (region.name, median)
 
 
 # finds the median active house price for each block group and inserts into color column of block group table
 #TODO look into insertion sort algorithm to speed up? 
-def blockgroups_activemedian:()
+def blockgroups_activemedian(session):
     regions = session.query(model.Blockgroups).all()
 
     for region in regions:
@@ -56,9 +55,10 @@ def blockgroups_activemedian:()
 
 
 def main(session):
-    # point_in_counties(session) 
-
+    county_activemedian(session)
 
 if __name__ == "__main__":
     s = model.connect()
     main(s)
+
+

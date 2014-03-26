@@ -301,6 +301,7 @@ def load_counties(session):
     shapeRecs = shpfile.shapeRecords()
 
 # iterates through to convert each item to a "real" list so it can then be converted to JSON    for x in range(len(shapeRecs)):
+    for x in range(len(shapeRecs)):
         for y in range(len(shapeRecs[x].shape.points)):
             shapeRecs[x].shape.points[y] = list(shapeRecs[x].shape.points[y])
 
@@ -323,6 +324,10 @@ def load_counties(session):
         session.add(u)
 
     session.commit()
+
+#TODO put in check to make sure geoid are unique and print error if not
+    # select count(distinct c.geoid) from counties c;
+    # select count(*) from counties;
 
 def load_zips(session):
 
@@ -384,14 +389,17 @@ def load_blockgroups(session):
 def main(session):
     # load_alist(session)
 # TODO run slist again and then run all the polygon tests again
-    load_slist(session)
+    # load_slist(session)
 
-# TODO Check this once loaded against the geojson files I have
     # load_neighborhoods(session)
+
+# TODO Delete from counties where State not '06'
     # load_counties(session) 
     # load_blockgroups(session)
 
-    # load_zips(session)
+# TODO Delete from counties where zcta not between 90001 - 96162 inclusive
+# TODO got an ERROR when I tried to run this
+    load_zips(session)
 
 if __name__ == "__main__":
     s = model.connect()

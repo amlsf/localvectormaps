@@ -4,6 +4,8 @@ from flaskext.markdown import Markdown
 import config
 import forms
 import model
+import modelsql
+import calculations
 
 app = Flask(__name__)
 app.config.from_object(config)
@@ -37,7 +39,7 @@ def index():
 
 @app.route("/activelistings")
 def activelistings():
-    active_listings = model.session.query(model.Listings).filter_by(listing_status="Active").all()
+    active_listings = model.session.query(model.Listings).filter_by(listing_status='Active').all()
     # some_json = '{"liz" : "is tired"}'
     # # json = JSON.dumps([x.to_json() for x in activelistings])
     # some_json=some_json
@@ -45,11 +47,20 @@ def activelistings():
 
 @app.route("/leaflet")
 def leaflet():
-    active_listings = model.session.query(model.Listings).filter_by(listing_status="Active").all()
+    active_listings = model.session.query(model.Listings).filter_by(listing_status='Active').all()
     activelatlong = [[l.latitude, l.longitude, l.list_price] for l in active_listings]
-    # return render_template("leafletdemo.html", activelatlong = activelatlong)
-    return render_template("leaflet_heatmaptest.html", activelatlong = activelatlong)
+    return render_template("leaflet.html", activelatlong=activelatlong)
     # return render_template("leaflet.html", activelatlong = activelatlong)
+    # return render_template("leafletdemo.html", activelatlong = activelatlong)
+
+@app.route("/heatcolors")
+def heatcolors():
+    modelsql.connect_to_db()
+
+
+    active_listings = model.session.query(model.Listings).filter_by(listing_status='Active').all()
+    activelatlong = [[l.latitude, l.longitude, l.list_price] for l in active_listings]
+    return render_template("leaflet.html", activelatlong=activelatlong)
 
 
 # @app.route("/heatmap")
