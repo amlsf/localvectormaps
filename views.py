@@ -37,6 +37,7 @@ def index():
     # active_listings = model.session.query(model.Listings).filter_by(listing_status="Active").all()
     return render_template("heatmap.html", active_listings = [])
 
+# Method 1: using Jinja to send data to client through referencing inline HTML
 @app.route("/activelistings")
 def activelistings():
     active_listings = model.session.query(model.Listings).filter_by(listing_status='Active').all()
@@ -53,14 +54,20 @@ def leaflet():
     # return render_template("leaflet.html", activelatlong = activelatlong)
     # return render_template("leafletdemo.html", activelatlong = activelatlong)
 
-@app.route("/heatcolors")
-def heatcolors():
-    modelsql.connect_to_db()
+# Method 2: using script source tags to send over data to client side
+@app.route("/geoidpricessrc")
+def geoidprices():
+    # modelsql.connect_to_db()
+    
+    pricemedian = "var geoidPrices = " + calculations.county_activemedian(model.session) + ";"
 
+    return pricemedian
+    # render_template("leaflet.html", activelatlong=activelatlong)
 
-    active_listings = model.session.query(model.Listings).filter_by(listing_status='Active').all()
-    activelatlong = [[l.latitude, l.longitude, l.list_price] for l in active_listings]
-    return render_template("leaflet.html", activelatlong=activelatlong)
+# Method 3: using ajax to send data to client
+@app.route("/geoidpricesajax")
+def geoidpricesajax():    
+    return calculations.county_activemedian(model.session)
 
 
 # @app.route("/heatmap")

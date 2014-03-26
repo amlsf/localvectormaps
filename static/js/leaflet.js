@@ -4,17 +4,13 @@ apikey = "99d055cec8794a33b9e2cb09553e3506"
 
 var map = L.map('map').setView([37.785067, -122.473021], 7);
 
-// var max = ;
-
-// var min = ;
-
-// var colorDict = {
-//     1: "#F1917C",
-//     2: "#F18064",
-//     3: "#D67159",
-//     4: "#D65E3A"
-// }
-
+// initialized when /geoidpricesajax result is available
+var geoIdPrices = null;
+var geoIdPricesMax = null;
+var geoIdPricesMin = null;
+var maxPrice = null;
+var minPrice = null;
+var blocks = null;
 
 var initLeaflet = function (active_listings) {
     addBaseMap();
@@ -22,7 +18,22 @@ var initLeaflet = function (active_listings) {
     // addPolygon(active_listings.slice(0,3));
     // addCounties();
     // addBlockGroups();
-    heatColors();
+    // fetch geoid price info
+
+// .done is a callback, submits function and waits for callback
+  $.ajax({
+    url: "/geoidpricesajax",
+  })
+// pulls "data" from the data returned in the path /geoidpricesajax
+    .done(function( data ) {
+// extra careful with browser issues
+      if ( console && console.log ) {
+// takes JSON data and converts it JS objects 
+        var geoIdPrices = $.parseJSON(data);
+// call heatColors AFTEr stuff above has loaded
+        heatColors();
+      }
+    });
 }
 
 function addBaseMap() {
@@ -52,10 +63,21 @@ function addBlockGroups(){
 }
 
 
-function getColor(price) {
-    return price > 1000 ? '#800026' :
-           price > 500  ? '#BD0026' :
-           price > 200  ? '#E31A1C' :
+function getLevel(price) {
+  var prices = [];
+  for key in geoIdPrices:
+    prices.push(geoIdPrices[key]);
+  maxPrice = Math.max.apply(Math, prices);
+  minPrice = Math.max.apply(Math, prices);
+  blocks = (maxPrice - minPrice)/4;
+  level = (price - minPrice)/blocks
+}
+
+
+function getColor(level) {
+    return level > 3 ? '#800026' :
+           level > 2  ? '#BD0026' :
+           level > 1  ? '#E31A1C' :
            // d > 100  ? '#FC4E2A' :
            // d > 50   ? '#FD8D3C' :
            // d > 20   ? '#FEB24C' :
@@ -64,9 +86,13 @@ function getColor(price) {
 }
 
 
-function style(feature) {
+var style = function(feature) {
+// TODO this references my geojson, actually wouldn't I change it to the variable name.dictkey.dictkey? 
+    var geoId = feature.properties.GEO_ID;
+
     return {
-        fillColor: getColor(feature.properties.density),
+    // replace median with geoIdPrices[geoId]
+        fillColor: getColor(geoIdPrices[geoId]),
         weight: 2,
         opacity: 1,
         color: 'white',
@@ -75,7 +101,7 @@ function style(feature) {
     };
 }
 
-function heatColors(){
+function heatColors() {
     L.geoJson(counties, {style: style}).addTo(map);
 }
 

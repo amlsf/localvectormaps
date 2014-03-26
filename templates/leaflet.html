@@ -12,6 +12,8 @@
 
 
 {% block script %}
+<!-- This makes variable now available anywhere in html page from /geoidpricessrce route -->
+<!-- <script src="/geoidpricessrc"></script> -->
 <script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
 <script src="/static/js/leaflet.js"></script>
 <script src ="/static/js/countyqgisCAonly.js"></script>
@@ -20,6 +22,7 @@
 <script type="text/javascript">
     
     $(document).ready(function(){
+        // console.log(geoidPrices);
         initLeaflet({{activelatlong}});
     });
 
