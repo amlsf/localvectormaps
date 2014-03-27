@@ -1,0 +1,36 @@
+<script type="text/javascript" src="/static/js/jquery-2.0.3.min.js"></script>
+
+<INPUT TYPE="Checkbox" NAME="mybox">Show Active Listings<br>
+<script>
+
+var mybox = document.querySelector('input[name=mybox]');
+mybox.addEventListener('change', function(event) {
+    console.log(mybox.checked);
+})
+
+</script>
+
+<INPUT TYPE="Checkbox" id="myboxid">Show Active Listings (byid)<br>
+<script>
+
+var myboxid = document.querySelector('#myboxid');
+myboxid.addEventListener('change', function(event) {
+    console.log('myboxid: ' + myboxid.checked);
+})
+
+</script>
+
+
+<INPUT TYPE="Checkbox" NAME="box2" CHECKED>Show Active Listings (jquery)<br>
+<script>
+
+$(document).ready(function() {
+
+    $('input[name=box2]').change(function(event) {
+        console.log('jquery: ' + event.target.checked);
+        console.log(event);
+    });
+
+});
+
+</script>

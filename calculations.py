@@ -17,19 +17,21 @@ def county_activemedian(session):
         # blocks = (max(prices) - min(prices))/4
         prices.sort()
         length = len(prices)
+# TODO Change this so median is made to be null? So that when finding minprice in price list, ignores counties with no houses?
         if length == 0:
             median = 0 
             # print "length is 0, median is %r" % median
             medians[region.geoid] = median
         elif length % 2 == 0:
-            median = (prices[length/2-1] + prices[length/2])/2
+            median = float(prices[length/2-1]) + prices[length/2]/2
             # print "length is even, median for county %r is %r" % (region.name, median)
             medians[region.geoid] = median
         else:
             median = prices[length/2]
             # print "length is odd, median for county %r is %r" % (region.name, median)
             medians[region.geoid] = median
- 
+
+    print medians; 
     return json.dumps(medians)
 
 # finds the median active house price for each block group and inserts into color column of block group table

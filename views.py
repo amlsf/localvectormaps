@@ -32,12 +32,14 @@ app.secret_key = "secretkey"
 # # Adding markdown capability to the app
 # Markdown(app)
 
+# This is google maps API
 @app.route("/")
 def index():
     # active_listings = model.session.query(model.Listings).filter_by(listing_status="Active").all()
     return render_template("heatmap.html", active_listings = [])
 
 # Method 1: using Jinja to send data to client through referencing inline HTML
+# This is google maps API shows active listings and a random polygon
 @app.route("/activelistings")
 def activelistings():
     active_listings = model.session.query(model.Listings).filter_by(listing_status='Active').all()
@@ -55,6 +57,7 @@ def leaflet():
     # return render_template("leafletdemo.html", activelatlong = activelatlong)
 
 # Method 2: using script source tags to send over data to client side
+# this just prints the geojson to the page
 @app.route("/geoidpricessrc")
 def geoidprices():
     # modelsql.connect_to_db()
@@ -65,9 +68,15 @@ def geoidprices():
     # render_template("leaflet.html", activelatlong=activelatlong)
 
 # Method 3: using ajax to send data to client
+# this just prints the geojson to the page
 @app.route("/geoidpricesajax")
 def geoidpricesajax():    
     return calculations.county_activemedian(model.session)
+
+
+@app.route("/play")
+def play():
+    return render_template("button.html")
 
 
 # @app.route("/heatmap")

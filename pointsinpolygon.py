@@ -1,3 +1,5 @@
+# TODO change so inputting geoid of region (isntead of autoncrement id) into listings table - easier to reference
+
 import model
 import re
 import sqlite3
