@@ -12,3 +12,5 @@ gunicorn==18.0
 itsdangerous==0.23
 pycparser==2.10
 wsgiref==0.1.2
+psycopg2==2.5.1
+
