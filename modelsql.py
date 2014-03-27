@@ -8,6 +8,7 @@ CONN = None
 
 def connect_to_db():
     global DB, CONN
+# TODO need to change this connection string? 
     CONN = psycopg2.connect("dbname=postgres user=postgres password=ratcatdog1")
     DB = CONN.cursor()
 
