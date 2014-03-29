@@ -1,6 +1,9 @@
 <script type="text/javascript" src="/static/js/jquery-2.0.3.min.js"></script>
 
 <INPUT TYPE="Checkbox" NAME="mybox">Show Active Listings<br>
+
+<!--  METHOD 1: This is without jquery, without calling id
+ -->
 <script>
 
 var mybox = document.querySelector('input[name=mybox]');
@@ -10,6 +13,7 @@ mybox.addEventListener('change', function(event) {
 
 </script>
 
+<!-- METHOD 2: This is calling by ID without jquery -->
 <INPUT TYPE="Checkbox" id="myboxid">Show Active Listings (byid)<br>
 <script>
 
@@ -21,12 +25,13 @@ myboxid.addEventListener('change', function(event) {
 </script>
 
 
-<INPUT TYPE="Checkbox" NAME="box2" CHECKED>Show Active Listings (jquery)<br>
+<!-- METHOD 3: This is the jquery method -->
+<INPUT TYPE="Checkbox" NAME="active" CHECKED>Show Active Listings (jquery)<br>
 <script>
 
 $(document).ready(function() {
 
-    $('input[name=box2]').change(function(event) {
+    $('input[name=active]').change(function(event) {
         console.log('jquery: ' + event.target.checked);
         console.log(event);
     });

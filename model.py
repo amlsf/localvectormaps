@@ -1,3 +1,5 @@
+#TODO move postgres password to environment
+
 import config
 import os
 # import bcrypt
@@ -22,19 +24,21 @@ def connect():
     global engine
     global Session
 
-    # engine = create_engine("postgresql+psycopg2://postgres:ratcatdog1@localhost/postgres", echo=False)
-    # engine = create_engine("sqlite:///listings.db", echo=False)
+    engine = create_engine("postgresql+psycopg2://postgres:ratcatdog1@localhost/postgres", echo=False)
 # Use this for heroku
-    engine = create_engine(os.environ.get("DATABASE_URL"), echo=False)
+    # engine = create_engine(os.environ.get("DATABASE_URL"), echo=False)
+    # engine = create_engine("sqlite:///listings.db", echo=False)
+
     Session = sessionmaker(bind=engine)
 
     return Session()
 
 def create_tables():
-    # engine = create_engine("postgresql+psycopg2://postgres:ratcatdog1@localhost/postgres", echo=False)
-    # engine = create_engine("sqlite:///listings.db", echo=False)
+    engine = create_engine("postgresql+psycopg2://postgres:ratcatdog1@localhost/postgres", echo=False)
 # Use this for heroku
-    engine = create_engine(os.environ.get("DATABASE_URL"), echo=False)
+    # engine = create_engine(os.environ.get("DATABASE_URL"), echo=False)
+    # engine = create_engine("sqlite:///listings.db", echo=False)
+
     Base.metadata.create_all(engine)
 
 class Listings(Base):

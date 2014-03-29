@@ -7,7 +7,17 @@
 
 
 {% block body %}
-<INPUT TYPE="Checkbox" NAME="box2">Show Active Listings (jquery)<br>
+<INPUT TYPE="Checkbox" NAME="active">Show Active Listings (jquery)<br>
+<INPUT TYPE="Checkbox" CHECKED NAME="toggleheat">Toggle Heat Map<br>
+
+<div id="metricspanel">
+<!-- Other Metrics: PSF, valuation, rental price, sophisticated logic -->
+<!-- TODO What is this value id for? --> 
+  <INPUT TYPE="Radio" CHECKED Name="metric" ID="SP">Sales Price
+  <INPUT TYPE="Radio" Name="metric" ID="SPS">Sales PSF
+  <INPUT TYPE="Radio" Name="metric" ID="SPSC">Sales PSF Comparison
+</div>
+
 
 <div id="map"></div>
 {% endblock %}
@@ -25,7 +35,7 @@
     
     $(document).ready(function(){
         // console.log(geoidPrices);
-        initLeaflet({{activelatlong}});
+        initLeaflet();
     });
 
 </script>

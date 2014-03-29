@@ -6,6 +6,7 @@ import forms
 import model
 import modelsql
 import calculations
+import json
 
 app = Flask(__name__)
 app.config.from_object(config)
@@ -38,7 +39,8 @@ def index():
     # active_listings = model.session.query(model.Listings).filter_by(listing_status="Active").all()
     return render_template("heatmap.html", active_listings = [])
 
-# Method 1: using Jinja to send data to client through referencing inline HTML
+# This is google maps API
+# METHOD 1: using Jinja to send data to client through referencing inline HTML
 # This is google maps API shows active listings and a random polygon
 @app.route("/activelistings")
 def activelistings():
@@ -48,16 +50,23 @@ def activelistings():
     # some_json=some_json
     return render_template("heatmap.html", active_listings = active_listings)
 
+# leaflet API
 @app.route("/leaflet")
 def leaflet():
-    active_listings = model.session.query(model.Listings).filter_by(listing_status='Active').all()
-    activelatlong = [[l.latitude, l.longitude, l.list_price] for l in active_listings]
-    return render_template("leaflet.html", activelatlong=activelatlong)
+    return render_template("leaflet.html")
     # return render_template("leaflet.html", activelatlong = activelatlong)
     # return render_template("leafletdemo.html", activelatlong = activelatlong)
 
-# Method 2: using script source tags to send over data to client side
+# returns active listings longlat for making active listings markers
+@app.route("/leafactivelistings")
+def leafactive():
+    active_listings = model.session.query(model.Listings).filter_by(listing_status='Active').all()
+    activelatlong = [[l.latitude, l.longitude] for l in active_listings]
+    return json.dumps(activelatlong)
+
+# METHOD 2: using script source tags to send over data to client side
 # this just prints the geojson to the page
+# not using this
 @app.route("/geoidpricessrc")
 def geoidprices():
     # modelsql.connect_to_db()
@@ -67,13 +76,23 @@ def geoidprices():
     return pricemedian
     # render_template("leaflet.html", activelatlong=activelatlong)
 
-# Method 3: using ajax to send data to client
-# this just prints the geojson to the page
+# METHOD 3: using ajax to send data to client
+# TODO how did we get this to print to the page agian? # this just prints the geojson to the page
+# retuns JSON dictionary of geoid:medianprice per region
 @app.route("/geoidpricesajax")
 def geoidpricesajax():    
     return calculations.county_activemedian(model.session)
 
+@app.route("/psf")
+def psf():
+    return calculations.county_psf(model.session)
 
+
+
+
+
+
+# Experimental route
 @app.route("/play")
 def play():
     return render_template("button.html")
