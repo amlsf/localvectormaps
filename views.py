@@ -50,6 +50,8 @@ def activelistings():
     # some_json=some_json
     return render_template("heatmap.html", active_listings = active_listings)
 
+
+
 # leaflet API
 @app.route("/leaflet")
 def leaflet():
@@ -66,7 +68,7 @@ def leafactive():
 
 # METHOD 2: using script source tags to send over data to client side
 # this just prints the geojson to the page
-# not using this
+# NOT using this
 @app.route("/geoidpricessrc")
 def geoidprices():
     # modelsql.connect_to_db()

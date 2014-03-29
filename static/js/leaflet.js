@@ -1,3 +1,6 @@
+//TODO: factor out code so not so many global variables
+// TODO maybe use leaflet layer controls http://leafletjs.com/examples/layers-control.html
+
 mapid = 125674;
 // TODO: set as env var
 apikey = "99d055cec8794a33b9e2cb09553e3506";
@@ -13,67 +16,26 @@ var geoIdPricesMin = null;
 // var blocks = null;
 var blocks = null;
 var heatLayer;
+
+// route variables for radio button selections
 var geoidpricesajax = "/geoidpricesajax";
+var psf = "/psf";
 
 var initLeaflet = function (active_listings) {
     addBaseMap();
-    // addActiveMarkers(active_listings);
-    // addPolygon(active_listings.slice(0,3));
+    showHeatMap(counties, geoidpricesajax);
     // addCounties();
     // addBlockGroups();
-    showHeatMap(counties, geoidpricesajax);
+
     toggleHeatMap(counties);
     showActive();
-
     selectMetric();
 };
 
 
-function selectMetric(){
-  $('#SP, #SPS, #SPSC').change(function(){
-  if ($("#SP").is(":checked")) {
-    console.log("you clicked SP");
-  } else if ($("#SPS").is(":checked")) {
-    console.log("you clicked SPS");
-  } else if ($("#SPSC").is(":checked")) {
-    console.log("you clicked SPSC");
-  }
-  });
-}
-
-//   $('#SPS').change(function(event){
-//     if (event.target.checked){
-//     console.log("you printed SPS");
-//     } else {
-//       console.log("you're awesome");
-//     }
-//   });
-// }
-
-//   $('input[name=active]').change(function(event) {
-//     if (event.target.checked) {
-//   // this disables checkbox
-//       event.target.disabled = true;
-// // TODO put spinner bar in here? 
-//     // $('#imgid').show()
-//       // console.log('disabled checkbox');
-//       $.ajax({
-//         url: "/leafactivelistings",
-//       }).done(function(data) {
-//         prices = $.parseJSON(data);
-//         createMarkers(prices);
-//         // addActiveMarkers(prices);
-//         event.target.disabled = false;
-//         // $('#imgid').hide()
-//       });
-//     } else {
-//       map.removeLayer(markers);
-//     }
-//   });
-// }
 
 
-
+// SECTION lays base map and region geojson layers
 function addBaseMap() {
     L.tileLayer('http://{s}.tile.cloudmade.com/'+apikey+'/'+mapid+'/256/{z}/{x}/{y}.png', {
     attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
@@ -92,6 +54,7 @@ function addBlockGroups(){
 
 
 
+// SECTION creates active listing markers
 var markers = new L.FeatureGroup();
 
 function createMarkers(active_listings) {
@@ -103,22 +66,12 @@ function createMarkers(active_listings) {
   map.addLayer(markers);
 }
 
-// function addActiveMarkers(active_listings) {
-//     for (i = 0; i < active_listings.length; i++) {
-//         L.marker(active_listings[i]).addTo(map);
-//         break;
-//         // add some sort of qualifier here
-//     }
-// }
-// function addPolygon(points) {
-//     L.polygon(points).addTo(map);
-// }
-
 // TODO QUESTION: note to self: 'event' is when the input[] "active" .changes (.target is the object)
 // TODO why doesn't a .click() or .toggle() work?
 // TODO why is this removing the map? (works when just add one marker)
 // TODO make this go faster (special layer or cluster circles-show more markers as zoom in-view only) (see Rhonda's emails)
 // TODO schedule deferred exeecution with setTimeout function at 0 ms of adding gmarkers before re-enabling form and removing spinner?
+// Toggle checkbox to display active listings
 function showActive() {
   $('input[name=active]').change(function(event) {
     if (event.target.checked) {
@@ -143,8 +96,10 @@ function showActive() {
 }
 
 
-
+// SECTION Adds/removes colors the choropleth map
 // get max and min price in region and $ amount per block level, called in getLevel()
+// geoIdPrices is a global variable that is defined in ajax call in showHeatMap() function 
+// remove the counties with nothing so not calculated in min price
 function getBlocks() {
   var prices = [];
   for (var key in geoIdPrices) {
@@ -167,18 +122,13 @@ function getBlocks() {
 
 // use the blocks to determine the particular house price color level, called in style fxn with getColor()
 function getLevel(price) {
-    // console.log(blocks.maxPrice);
-    // console.log(blocks.minPrice);
-    // console.log(blocks.blocks);
     blocks = getBlocks();
     level = (price - blocks.minPrice)/blocks.blocks;
-    // console.log(level);
-    // console.log("geoId is :" )
-    // console.log("median price is")
     return level;
 }
 
 // dicts of color levels, called in style function with getLevel()
+// This is shorthand notation ? is "if" then do what's before colon:, else do whatever is after 
 function getColor(level) {
     return level > 3 ? '#800026' :
            level > 2  ? '#BD0026' :
@@ -216,10 +166,12 @@ var style = function(feature) {
 
 // this iterates through style function and matches geoid from counties geojson to style dict (same as style() if had done other notation in setting up style function)
 function heatColors(region) {
-    heatLayer = L.geoJson(region, {style: style}).addTo(map);
+    heatLayer = L.geoJson(region, {
+      style: style,
+// This is from user interaction section for hover and click in
+      onEachFeature: onEachFeature
+    }).addTo(map);
 }
-
-
 
 function showHeatMap(region, urli) {
       $.ajax({
@@ -238,16 +190,132 @@ function showHeatMap(region, urli) {
     });
 }
 
+// toggle checkbox to show and remove heatmap layer
 // TODO change this to a toggle button like Gmaps one with abbreviated notation
 // TODO why is the disabled not working when toggling heatmap back on? 
 function toggleHeatMap(region) {
   $('input[name=toggleheat]').change(function(event){
     if (event.target.checked) {
-        event.target.disabled = true;
-        heatColors(region);
-        event.target.disabled = false;
-        } else {
-          map.removeLayer(heatLayer);
+      event.target.disabled = true;
+      heatColors(region);
+      event.target.disabled = false;
+    } else {
+      map.removeLayer(heatLayer);
     }
   });
 }
+
+
+// SECTION User interaction - hover and click in to region
+// highlight and bring to front e.target (action for mouseover)
+function highlightFeature(e) {
+    var layer = e.target;
+
+    layer.setStyle({
+        weight: 5,
+        color: '#666',
+        dashArray: '',
+        fillOpacity: 0.7
+    });
+// IE and Opera have issues with bringToFront on mouseover
+    if (!L.Browser.ie && !L.Browser.opera) {
+        layer.bringToFront();
+    }
+// for mousehover pop-up info (see section in info pop-ups)
+    info.update(layer.feature.properties);
+}
+
+// reset to default colors (action for mouseout)
+function resetHighlight(e) {
+    heatLayer.resetStyle(e.target);
+// for mousehover pop-up info to remove (see section in info pop-ups)
+    info.update();
+}
+
+// click listener that zooms to the state
+function zoomToFeature(e) {
+    map.fitBounds(e.target.getBounds());
+}
+
+// used in heatColors() fxn
+function onEachFeature(feature, layer) {
+    layer.on({
+        mouseover: highlightFeature,
+        mouseout: resetHighlight,
+        click: zoomToFeature
+    });
+}
+
+
+
+// SECTION show info pop-ups on mouse hover
+var info = L.control();
+
+info.onAdd = function (map) {
+    this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+    this.update();
+    return this._div;
+};
+
+// method that will update the control based on feature properties passed (tied to user interaction onEachFeature() highlight and reset features)
+info.update = function (props) {
+    this._div.innerHTML = '<h4>Median Value</h4>' +  (props ?
+        '<b>' + props.NAME + '</b><br />' + props.GEO_ID + ' name / geoid'
+        : 'Hover over a region');
+};
+
+info.addTo(map);
+
+
+
+// SECTION Legend
+var legend = L.control({position: 'bottomright'});
+
+legend.onAdd = function (map) {
+
+    var div = L.DomUtil.create('div', 'info legend'),
+        grades = [0, 1, 2, 3, 4],
+        labels = [];
+
+    // loop through our density intervals and generate a label with a colored square for each interval
+    for (var i = 0; i < grades.length; i++) {
+        div.innerHTML +=
+            '<i style="background:' + getColor(grades[i]) + '"></i> ' +
+            grades[i] + (grades[i - 1] ? '&ndash;' + grades[i + 1] + '<br>': '<br>');
+
+            // '<i style="background:' + getColor(grades[i]) + '"></i> ' +
+            // grades[i] + (grades[i - 1]
+            //              ? '<br>'
+            //              : (condition ? true : '&ndash;' + grades[i + 1] + '<br>'));
+    }
+
+    return div;
+};
+
+legend.addTo(map);
+
+
+
+
+
+
+// SECTION select metrics to view on choropleth map
+function selectMetric(){
+  $('#SP, #SPS, #SPSC').change(function(){
+    if ($('input[name=toggleheat]').is(":checked")){
+      if ($("#SP").is(":checked")) {
+        console.log("you clicked SP");
+        map.removeLayer(heatLayer);
+        showHeatMap(counties,geoidpricesajax);
+      } else if ($("#SPS").is(":checked")) {
+        console.log("you clicked SPS");
+        map.removeLayer(heatLayer);
+        showHeatMap(counties,psf);
+      } else if ($("#SPSC").is(":checked")) {
+        console.log("you clicked SPSC");
+      }
+    }
+  });
+}
+
+

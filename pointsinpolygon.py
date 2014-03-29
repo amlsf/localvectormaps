@@ -100,6 +100,7 @@ def point_in_neighborhood(session):
 
 
 # TODO: run again and check print statements - howcome multipolygons always last one in list? check howcome all region id's identified are in ~200-300 range - because all those there out of all of US file? 
+#   can check against county_name and counties.name and just manually input if blank
 def point_in_counties(session):
     listings = session.query(model.Listings).all()
     regions = session.query(model.Counties).all()
