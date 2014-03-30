@@ -4,6 +4,19 @@ import sqlite3
 import json
 import numpy
 
+# # TODO How to tie the region and region_id? use some sort of dictionary?
+# def sales_price(session, region, region_id, time1, time2):
+#     regions = session.query(REGION).all()
+#     houses = session.query(model.Listings).filter_by(REGION_ID=region.id, listing_status !="Active").all()
+
+
+# def sales_psf(session, region, time):
+#     pass
+
+# def comp_sales_psf(session, region, time):
+#     pass
+
+
 # TODO change this from active listings to sold listings
 # TODO try doing median calculations all in Database with SQL alchemy? How do with SQL alchemy and feed to JSON? 
 def county_activemedian(session):

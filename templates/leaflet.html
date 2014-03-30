@@ -3,6 +3,7 @@
 {% block head %}
 <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" />
 <link href="/static/css/leaflet.css" rel="stylesheet">
+
 {% endblock %}
 
 
@@ -17,10 +18,11 @@
     <INPUT TYPE="Radio" Name="metric" ID="SPS">Sales PSF
     <INPUT TYPE="Radio" Name="metric" ID="SPSC">Sales PSF Comparison
 
-    <p>
+
+<!--     <p>
       <label for="year">Year-on-year comparison:</label>
       <input type="text" id="year" style="border:0; color:#f6931f; font-weight:bold;" readonly>
-    </p>
+    </p> -->
     <div id="slider-range"></div>
 </div>
 
@@ -37,6 +39,7 @@
 <script src="/static/js/leaflet.js"></script>
 <script src ="/static/js/countyqgisCAonly.js"></script>
 <script src ="/static/js/qgisblockgroups.js"></script>
+
 
 <script type="text/javascript">
     

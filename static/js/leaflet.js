@@ -1,5 +1,7 @@
 //TODO: factor out code so not so many global variables
 // TODO maybe use leaflet layer controls http://leafletjs.com/examples/layers-control.html
+//TODO How to organize when there are so many f-ing dependencies????
+// Gotta speed up the layering of geoJSON - too slow! Maybe change to county, subcounty, zips (no BG, census tracts?)
 
 mapid = 125674;
 // TODO: set as env var
@@ -20,9 +22,13 @@ var heatLayer;
 // route variables for radio button selections
 var geoidpricesajax = "/geoidpricesajax";
 var psf = "/psf";
-var geochanges = "/geochanges"
+var geochanges = "/geochanges";
 
 var initLeaflet = function (active_listings) {
+
+    // var metric_route = geoidpricesajax;
+    // var region = counties;
+
     addBaseMap();
     showHeatMap(counties, geoidpricesajax);
     // addCounties();
@@ -31,6 +37,19 @@ var initLeaflet = function (active_listings) {
     toggleHeatMap(counties);
     showActive();
     selectMetric();
+
+
+//////////////////////Zoom function
+    map.on("zoomend",function(e){
+      console.log( "zoom level is " + map.getZoom());
+      var zoom = map.getZoom();
+      if (zoom < 10) {
+        showHeatMap(counties, geoidpricesajax);
+      } else if (zoom < 12) {
+        map.removeLayer(heatLayer);
+        addBlockGroups();
+      }
+    });
 };
 
 
@@ -69,6 +88,7 @@ function createMarkers(active_listings) {
   }
   map.addLayer(markers);
 }
+
 
 // TODO QUESTION: note to self: 'event' is when the input[] "active" .changes (.target is the object)
 // TODO why doesn't a .click() or .toggle() work?
@@ -320,13 +340,21 @@ function selectMetric(){
       if ($("#SP").is(":checked")) {
         console.log("you clicked SP");
         map.removeLayer(heatLayer);
-        showHeatMap(counties,geoidpricesajax);
+        showHeatMap(counties, geoidpricesajax);
       } else if ($("#SPS").is(":checked")) {
         console.log("you clicked SPS");
         map.removeLayer(heatLayer);
         showHeatMap(counties,psf);
       } else if ($("#SPSC").is(":checked")) {
         console.log("you clicked SPSC");
+        map.removeLayer(heatLayer);
+
+// TODO trying to just get the slider bar and label to show when click on SPSC, need to also remove when not clicked
+    // var sliderLabel =
+    //   "<p><label for='year'>Year-on-year comparison:</label><input type='text' id='year' style='border:0; color:#f6931f; font-weight:bold;'' readonly></p>";
+
+    // $('#slider-range').prepend(sliderLabel);
+
       }
     }
   });
@@ -339,8 +367,11 @@ function selectMetric(){
 
 // TODO Make this work - make sure only works/shows when "Sales PSF Comparison" is checked
 //  Think I need to make it somehow clear when it changes again
-// TODO make this slider work for sales price and sales PSF ranges too?
+// TODO make this slider work for sales price and sales PSF ranges too? (But sthg needs to look diff since would be inclusive whereas this is just YoY)
 // TODO understand what's happening here
+// TODO get it so that the first view that shows is the 2007-2013 range upon click of radio button
+  // make so doesn't show when toggle heatmap button unchcked, remove this document ready stuff and put it in a function and attach event handler
+
 // This is the double slider for % change
  $(function() {
     $( "#slider-range" ).slider({
@@ -381,7 +412,6 @@ function growthChange(baseyear, compyear, urli, region) {
       // console.log(data);
     });
 }
-
 
 // function showHeatMap(region, urli) {
 //       $.ajax({
