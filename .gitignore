@@ -10,3 +10,5 @@ data/
 .env
 heatmap.js/
 Ddayschedule.xlsx
+research/
+*.xlsx

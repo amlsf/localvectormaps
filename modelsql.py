@@ -1,4 +1,5 @@
 # put this in front of every route before calling function
+# TODO just use sqlalchemy text 
 # model.connect_to_db()
 
 import psycopg2

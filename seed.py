@@ -1,4 +1,5 @@
 # For loading data into the database once it's been set up and tables created from model.py
+# TODO Look into auto-geocoding data with Sarah's ruby script?
 import model
 import csv
 import datetime

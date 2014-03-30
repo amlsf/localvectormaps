@@ -20,6 +20,7 @@ var heatLayer;
 // route variables for radio button selections
 var geoidpricesajax = "/geoidpricesajax";
 var psf = "/psf";
+var geochanges = "/geochanges"
 
 var initLeaflet = function (active_listings) {
     addBaseMap();
@@ -33,7 +34,8 @@ var initLeaflet = function (active_listings) {
 };
 
 
-
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
 
 // SECTION lays base map and region geojson layers
 function addBaseMap() {
@@ -52,6 +54,8 @@ function addBlockGroups(){
     L.geoJson(blockgroups).addTo(map);
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 // SECTION creates active listing markers
@@ -95,8 +99,11 @@ function showActive() {
   });
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
 
 // SECTION Adds/removes colors the choropleth map
+
 // get max and min price in region and $ amount per block level, called in getLevel()
 // geoIdPrices is a global variable that is defined in ajax call in showHeatMap() function 
 // remove the counties with nothing so not calculated in min price
@@ -205,6 +212,9 @@ function toggleHeatMap(region) {
   });
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 // SECTION User interaction - hover and click in to region
 // highlight and bring to front e.target (action for mouseover)
@@ -246,6 +256,8 @@ function onEachFeature(feature, layer) {
     });
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 // SECTION show info pop-ups on mouse hover
@@ -266,6 +278,8 @@ info.update = function (props) {
 
 info.addTo(map);
 
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 // SECTION Legend
@@ -295,8 +309,8 @@ legend.onAdd = function (map) {
 legend.addTo(map);
 
 
-
-
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 // SECTION select metrics to view on choropleth map
@@ -319,3 +333,69 @@ function selectMetric(){
 }
 
 
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+// TODO Make this work - make sure only works/shows when "Sales PSF Comparison" is checked
+//  Think I need to make it somehow clear when it changes again
+// TODO make this slider work for sales price and sales PSF ranges too?
+// TODO understand what's happening here
+// This is the double slider for % change
+ $(function() {
+    $( "#slider-range" ).slider({
+      range: true,
+      min: 2006,
+      max: 2013,
+      // default values
+      values: [ 2007, 2013 ],
+      // TODO: this pulls the values from the slider and puts it on the label, what's below?
+      slide: function( event, ui ) {
+        $( "#year" ).val( "" + ui.values[ 0 ] + " - " + ui.values[ 1 ] );
+      },
+      // when anything changes, run the function growthChange()
+      change: function(event, ui) {
+        growthChange(ui.values[ 0 ], ui.values[ 1 ], geochanges, counties);
+      }
+      // ,
+      //   stop: function(event, ui) {
+      //       // when the user stopped changing the slider
+      //       $.POST("to.php",{first_value:ui.values[0], second_value:ui.values[1]},function(data){},'json');
+      // }      
+    });
+// TODO don't understand what this does, something else the function does. Is this actually what marks on label?
+    $( "#year" ).val( "" + $( "#slider-range" ).slider( "values", 0 ) +
+      " - " + $( "#slider-range" ).slider( "values", 1 ) );
+  });
+
+
+function growthChange(baseyear, compyear, urli, region) {
+      $.ajax({
+      url: urli,
+      type: "POST",
+      contentType: "application/json",
+      data: JSON.stringify({"baseyear":baseyear, "compyear":compyear})
+      }).done(function(data){
+        geoIdPrices = $.parseJSON(data);
+        heatColors(region);
+      // console.log(data);
+    });
+}
+
+
+// function showHeatMap(region, urli) {
+//       $.ajax({
+// // pulls "data" from the data returned in the path /geoidpricesajax
+//       url: urli,
+// // .done is a callback, submits function and waits for callback
+//       }).done(function(data){
+// // extra careful with browser issues
+//       if (console && console.log ) {
+// // takes JSON data and converts it JS objects 
+//         geoIdPrices = $.parseJSON(data);
+// // call heatColors AFTER stuff above has loaded
+//       // console.log(geoIdPrices)
+//         heatColors(region);
+//       }
+//     });
+// }

@@ -1,4 +1,6 @@
 #TODO move postgres password to environment
+# TODO add relations
+# Change region ids to use US census burea geoids
 
 import config
 import os
@@ -8,6 +10,7 @@ from datetime import datetime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine, ForeignKey
 from sqlalchemy import Column, Integer, String, DateTime, Text
+from sqlalchemy.sql import text, func
 from sqlalchemy.dialects.postgresql import FLOAT, DOUBLE_PRECISION, VARCHAR
 
 from sqlalchemy.orm import sessionmaker, scoped_session, relationship, backref

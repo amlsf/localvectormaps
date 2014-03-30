@@ -4,7 +4,6 @@ from flaskext.markdown import Markdown
 import config
 import forms
 import model
-import modelsql
 import calculations
 import json
 
@@ -90,6 +89,17 @@ def psf():
     return calculations.county_psf(model.session)
 
 
+
+
+@app.route("/geochanges", methods=['PUT','POST'])
+def geochanges():
+    body = request.json
+    # print request.json
+    baseyear = body["baseyear"]
+    # print baseyear
+    compyear = body["compyear"]
+    # print compyear
+    return calculations.range_comp(model.session, baseyear, compyear)
 
 
 
