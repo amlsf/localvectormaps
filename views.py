@@ -62,20 +62,22 @@ def leaflet():
 @app.route("/leafactivelistings")
 def leafactive():
     active_listings = model.session.query(model.Listings).filter_by(listing_status='Active').all()
-    activelatlong = [[l.latitude, l.longitude] for l in active_listings]
+    activelatlong = [{'latitude': l.latitude, 'longitude': l.longitude, 'address': l.address, \
+        } for l in active_listings]
     return json.dumps(activelatlong)
 
+# NOT using this
 # METHOD 2: using script source tags to send over data to client side
 # this just prints the geojson to the page
-# NOT using this
-@app.route("/geoidpricessrc")
-def geoidprices():
-    # modelsql.connect_to_db()
+# @app.route("/geoidpricessrc")
+# def geoidprices():
+#     # modelsql.connect_to_db()
     
-    pricemedian = "var geoidPrices = " + calculations.county_activemedian(model.session) + ";"
+#     pricemedian = "var geoidPrices = " + calculations.county_activemedian(model.session) + ";"
 
-    return pricemedian
-    # render_template("leaflet.html", activelatlong=activelatlong)
+#     return pricemedian
+#     # render_template("leaflet.html", activelatlong=activelatlong)
+
 
 # METHOD 3: using ajax to send data to client
 # TODO how did we get this to print to the page agian? # this just prints the geojson to the page
@@ -103,7 +105,7 @@ def geochanges():
     except ValueError, err:
         print 'Error: ' + err
         return
-    
+
     return calculations.range_comp(model.session, baseyear, compyear)
 
 

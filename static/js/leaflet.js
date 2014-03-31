@@ -7,7 +7,7 @@ mapid = 125674;
 // TODO: set as env var
 apikey = "99d055cec8794a33b9e2cb09553e3506";
 
-var map = L.map('map').setView([37.785067, -122.473021], 7);
+var map = L.map('map').setView([36.685067, -121.73021], 9);
 
 
                 // var map = new L.Map('map', {
@@ -51,16 +51,17 @@ var initLeaflet = function (active_listings) {
     // var region = counties;
 
     addBaseMap();
-    showHeatMap(counties, geoidpricesajax);
+    // showHeatMap(zips, geoidpricesajax);
     // addCounties();
+    addZips();
     // addBlockGroups();
 
 // controls: 
-    toggleHeatMap(counties);
-    showActive();
-    selectMetric();
+    // toggleHeatMap(zips);
+    // showActive();
+    // selectMetric();
 
-    setupSlider();
+    // setupSlider();
     // setupMinSlider();
 };
 
@@ -82,6 +83,10 @@ function addCounties(){
 }
 
 // add zipcodes function
+function addZips(){
+    L.geoJson(zips).addTo(map);
+}
+
 
 // function addBlockGroups(){
 //     L.geoJson(blockgroups).addTo(map);
@@ -92,7 +97,7 @@ function addCounties(){
     //   console.log( "zoom level is " + map.getZoom());
     //   var zoom = map.getZoom();
     //   if (zoom < 10) {
-    //     showHeatMap(counties, geoidpricesajax);
+    //     showHeatMap(zips, geoidpricesajax);
     //   } else if (zoom < 12) {
     //     map.removeLayer(heatLayer);
     //     addBlockGroups();
@@ -378,25 +383,22 @@ function selectMetric(){
         map.removeLayer(heatLayer);
         $("#year-slider").addClass("is-nodisplay");
         $("#slider-range").hide();
-        showHeatMap(counties, geoidpricesajax);
+        showHeatMap(zips, geoidpricesajax);
       } else if ($("#SPS").is(":checked")) {
         console.log("you clicked SPS");
         map.removeLayer(heatLayer);
         $("#slider-range").hide();
         $("#year-slider").addClass("is-nodisplay");
-        showHeatMap(counties,psf);
+        showHeatMap(zips,psf);
       } else if ($("#SPSC").is(":checked")) {
         console.log("you clicked SPSC");
         map.removeLayer(heatLayer);
         $("#year-slider").removeClass("is-nodisplay");
         $("#slider-range").show();
-
 // TODO trying to just get the slider bar and label to show when click on SPSC, need to also remove when not clicked
     // var sliderLabel =
     //   "<p><label for='year'>Year-on-year comparison:</label><input type='text' id='year' style='border:0; color:#f6931f; font-weight:bold;'' readonly></p>";
-
     // $('#slider-range').prepend(sliderLabel);
-
       }
     }
   });
@@ -428,11 +430,11 @@ function setupSlider() {
       },
       // when anything changes, run the function growthChange()
       // change: function(event, ui) {
-      //   growthChange(ui.values[ 0 ], ui.values[ 1 ], geochanges, counties);
+      //   growthChange(ui.values[ 0 ], ui.values[ 1 ], geochanges, zips);
       // },
         stop: function(event, ui) {
             // when the user lets go and stops changing the slider
-          growthChange(ui.values[ 0 ], ui.values[ 1 ], geochanges, counties);
+          growthChange(ui.values[ 0 ], ui.values[ 1 ], geochanges, zips);
       }
     });
   // Setting up slider before any user action based on default values
@@ -452,7 +454,7 @@ function setupMinSlider() {
       },
       stop: function( event, ui ) {
             // when the user lets go and stops changing the slider
-          growthChange(ui.values[ 0 ], ui.values[ 1 ], geochanges, counties);
+          growthChange(ui.values[ 0 ], ui.values[ 1 ], geochanges, zips);
       }
     });
     $( "#comp-year" ).val( "" + $( "#slider" ).slider( "value" ) );
