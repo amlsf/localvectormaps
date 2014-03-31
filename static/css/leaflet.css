@@ -37,7 +37,7 @@ body{
     opacity: 0.7;
 }
 
-#slider-range {
+#slider-range, #slider {
     width: 10%;
 }
 

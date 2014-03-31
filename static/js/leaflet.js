@@ -51,16 +51,17 @@ var initLeaflet = function (active_listings) {
     // var region = counties;
 
     addBaseMap();
-    // showHeatMap(counties, geoidpricesajax);
+    showHeatMap(counties, geoidpricesajax);
     // addCounties();
     // addBlockGroups();
 
-    // toggleHeatMap(counties);
+// controls: 
+    toggleHeatMap(counties);
     showActive();
-    // selectMetric();
-    // setupSlider();
+    selectMetric();
 
-
+    setupSlider();
+    // setupMinSlider();
 };
 
 
@@ -110,9 +111,17 @@ var markers = new L.MarkerClusterGroup();
 
 function createMarkers(active_listings) {
     for (i = 0; i < active_listings.length; i++) {
-      var marker = L.marker(new L.LatLng(active_listings[i][0], active_listings[i][1]));
+      var lat = active_listings[i][0];
+      var longi = active_listings[i][1];
+      var marker = L.marker(new L.LatLng(lat, longi), {
+        whatever: lat,
+        whatever2: longi
+      });
+      marker.bindPopup(
+        "<b>Name:</b> " + lat + "<br>" +
+        "<b>Email:</b> " + longi
+        );
       markers.addLayer(marker);
-      // break;
   }
   map.addLayer(markers);
 }
@@ -299,7 +308,7 @@ function onEachFeature(feature, layer) {
     layer.on({
         mouseover: highlightFeature,
         mouseout: resetHighlight,
-        click: zoomToFeature
+        // click: zoomToFeature
     });
 }
 
@@ -396,7 +405,7 @@ function selectMetric(){
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////
-
+// Section - Recovery Growth % Change
 
 // TODO Make this work - make sure only works/shows when "Sales PSF Comparison" is checked
 //  Think I need to make it somehow clear when it changes again
@@ -422,7 +431,7 @@ function setupSlider() {
       //   growthChange(ui.values[ 0 ], ui.values[ 1 ], geochanges, counties);
       // },
         stop: function(event, ui) {
-            // when the user stopped changing the slider
+            // when the user lets go and stops changing the slider
           growthChange(ui.values[ 0 ], ui.values[ 1 ], geochanges, counties);
       }
     });
@@ -432,6 +441,22 @@ function setupSlider() {
   $("#slider-range").hide();
 }
 
+function setupMinSlider() {
+    $( "#slider" ).slider({
+      value:2013,
+      min: 2009,
+      max: 2013,
+      step: 1,
+      slide: function( event, ui ) {
+        $( "#comp-year" ).val( "" + ui.value );
+      },
+      stop: function( event, ui ) {
+            // when the user lets go and stops changing the slider
+          growthChange(ui.values[ 0 ], ui.values[ 1 ], geochanges, counties);
+      }
+    });
+    $( "#comp-year" ).val( "" + $( "#slider" ).slider( "value" ) );
+  }
 
 function growthChange(baseyear, compyear, urli, region) {
       $.ajax({
@@ -446,33 +471,3 @@ function growthChange(baseyear, compyear, urli, region) {
     });
 }
 
-// function showHeatMap(region, urli) {
-//       $.ajax({
-// // pulls "data" from the data returned in the path /geoidpricesajax
-//       url: urli,
-// // .done is a callback, submits function and waits for callback
-//       }).done(function(data){
-// // extra careful with browser issues
-//       if (console && console.log ) {
-// // takes JSON data and converts it JS objects 
-//         geoIdPrices = $.parseJSON(data);
-// // call heatColors AFTER stuff above has loaded
-//       // console.log(geoIdPrices)
-//         heatColors(region);
-//       }
-//     });
-// }
-
-
-// function minBar() {
-//     $( "#slider" ).slider({
-//       value:100,
-//       min: 0,
-//       max: 500,
-//       step: 50,
-//       slide: function( event, ui ) {
-//         $( "#amount" ).val( "$" + ui.value );
-//       }
-//     });
-//     $( "#amount" ).val( "$" + $( "#slider" ).slider( "value" ) );
-//   }

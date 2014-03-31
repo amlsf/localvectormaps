@@ -48,6 +48,7 @@ class Listings(Base):
     __tablename__ = "listings"
 
 # only 5 counties
+# only sold data for the first half of 2013
     id = Column(Integer, primary_key=True)
     list_date = Column(DateTime, nullable=False)
     pending_date = Column(DateTime, nullable=True)
