@@ -93,12 +93,17 @@ def psf():
 
 @app.route("/geochanges", methods=['PUT','POST'])
 def geochanges():
-    body = request.json
-    # print request.json
-    baseyear = body["baseyear"]
-    # print baseyear
-    compyear = body["compyear"]
-    # print compyear
+    try:
+        body = request.json
+        # print request.json
+        baseyear = int(body["baseyear"])
+        # print baseyear
+        compyear = int(body["compyear"])
+        # print compyear
+    except ValueError, err:
+        print 'Error: ' + err
+        return
+    
     return calculations.range_comp(model.session, baseyear, compyear)
 
 

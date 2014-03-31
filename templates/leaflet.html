@@ -1,8 +1,14 @@
 {% extends 'master.html' %}
 
 {% block head %}
+<!-- leaflet css sheet -->
 <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" />
+<!-- my css sheet -->
 <link href="/static/css/leaflet.css" rel="stylesheet">
+
+<!-- MarkerCluster plugin -->
+<link rel="stylesheet" href="/static/css/MarkerCluster.css">
+<link rel="stylesheet" href="/static/css/MarkerCluster.Default.css">
 
 {% endblock %}
 
@@ -19,11 +25,11 @@
     <INPUT TYPE="Radio" Name="metric" ID="SPSC">Sales PSF Comparison
 
 
-<!--     <p>
+    <p class="is-nodisplay" id="year-slider">
       <label for="year">Year-on-year comparison:</label>
       <input type="text" id="year" style="border:0; color:#f6931f; font-weight:bold;" readonly>
-    </p> -->
-    <div id="slider-range"></div>
+        <div id="slider-range"></div>
+    </p>
 </div>
 
 
@@ -33,13 +39,21 @@
 
 
 {% block script %}
-<!-- This makes variable now available anywhere in html page from /geoidpricessrce route -->
+<!-- This makes variable now available anywhere in html page from /geoidpricessrce route, one non-AJAX METHOD -->
 <!-- <script src="/geoidpricessrc"></script> -->
-<script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
-<script src="/static/js/leaflet.js"></script>
-<script src ="/static/js/countyqgisCAonly.js"></script>
-<script src ="/static/js/qgisblockgroups.js"></script>
 
+<!-- leaflet API -->
+<script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
+
+<!-- MarkerCluster plugin -->
+<script src="../static/js/leaflet.markercluster.js"></script>
+
+<!-- GeoJSON shape files -->
+<script src ="/static/js/countyqgisCAonly.js"></script>
+<!-- <script src ="/static/js/qgisblockgroups.js"></script> -->
+
+<!-- my JS -->
+<script src="/static/js/leaflet.js"></script>
 
 <script type="text/javascript">
     

@@ -16,7 +16,6 @@ import numpy
 # def comp_sales_psf(session, region, time):
 #     pass
 
-
 # TODO change this from active listings to sold listings
 # TODO try doing median calculations all in Database with SQL alchemy? How do with SQL alchemy and feed to JSON? 
 def county_activemedian(session):

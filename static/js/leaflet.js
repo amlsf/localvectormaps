@@ -9,6 +9,27 @@ apikey = "99d055cec8794a33b9e2cb09553e3506";
 
 var map = L.map('map').setView([37.785067, -122.473021], 7);
 
+
+                // var map = new L.Map('map', {
+                //     zoomControl: false,
+                //     center: new L.LatLng(37.75042,-122.489),
+                //     zoom: 12,
+                //     layers: [baseLayer, heatmapLayer]
+                // });
+                // new L.Control.Zoom({
+                //     position: 'topright'
+                // }).addTo(map);
+
+             // var baseLayer = L.tileLayer(
+             //        'http://{s}.tile.cloudmade.com/38be25219f7c4b6f8953354a1b2e583f/82651/256/{z}/{x}/{y}.png', 
+             //        {
+             //            attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
+             //            maxZoom: 18
+             //        }
+             //    );
+
+              // var heatmapLayer = L.TileLayer.heatMap({
+
 // initialized when /geoidpricesajax result is available
 var geoIdPrices = null;
 var geoIdPricesMax = null;
@@ -30,26 +51,16 @@ var initLeaflet = function (active_listings) {
     // var region = counties;
 
     addBaseMap();
-    showHeatMap(counties, geoidpricesajax);
+    // showHeatMap(counties, geoidpricesajax);
     // addCounties();
     // addBlockGroups();
 
-    toggleHeatMap(counties);
+    // toggleHeatMap(counties);
     showActive();
-    selectMetric();
+    // selectMetric();
+    // setupSlider();
 
 
-//////////////////////Zoom function
-    map.on("zoomend",function(e){
-      console.log( "zoom level is " + map.getZoom());
-      var zoom = map.getZoom();
-      if (zoom < 10) {
-        showHeatMap(counties, geoidpricesajax);
-      } else if (zoom < 12) {
-        map.removeLayer(heatLayer);
-        addBlockGroups();
-      }
-    });
 };
 
 
@@ -69,22 +80,39 @@ function addCounties(){
     L.geoJson(counties).addTo(map);
 }
 
-function addBlockGroups(){
-    L.geoJson(blockgroups).addTo(map);
-}
+// add zipcodes function
+
+// function addBlockGroups(){
+//     L.geoJson(blockgroups).addTo(map);
+// }
+
+//////////////////////Zoom function
+    // map.on("zoomend",function(e){
+    //   console.log( "zoom level is " + map.getZoom());
+    //   var zoom = map.getZoom();
+    //   if (zoom < 10) {
+    //     showHeatMap(counties, geoidpricesajax);
+    //   } else if (zoom < 12) {
+    //     map.removeLayer(heatLayer);
+    //     addBlockGroups();
+    //   }
+    // });
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 // SECTION creates active listing markers
-var markers = new L.FeatureGroup();
+// var markers = new L.FeatureGroup();
+
+var markers = new L.MarkerClusterGroup();
 
 function createMarkers(active_listings) {
     for (i = 0; i < active_listings.length; i++) {
-      var marker = L.marker(active_listings[i]);
+      var marker = L.marker(new L.LatLng(active_listings[i][0], active_listings[i][1]));
       markers.addLayer(marker);
-      break;
+      // break;
   }
   map.addLayer(markers);
 }
@@ -236,8 +264,7 @@ function toggleHeatMap(region) {
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-// SECTION User interaction - hover and click in to region
-// highlight and bring to front e.target (action for mouseover)
+// SECTION User interaction - hover to highlight and click in to region and to front e.target (action for mouseover)
 function highlightFeature(e) {
     var layer = e.target;
 
@@ -340,14 +367,20 @@ function selectMetric(){
       if ($("#SP").is(":checked")) {
         console.log("you clicked SP");
         map.removeLayer(heatLayer);
+        $("#year-slider").addClass("is-nodisplay");
+        $("#slider-range").hide();
         showHeatMap(counties, geoidpricesajax);
       } else if ($("#SPS").is(":checked")) {
         console.log("you clicked SPS");
         map.removeLayer(heatLayer);
+        $("#slider-range").hide();
+        $("#year-slider").addClass("is-nodisplay");
         showHeatMap(counties,psf);
       } else if ($("#SPSC").is(":checked")) {
         console.log("you clicked SPSC");
         map.removeLayer(heatLayer);
+        $("#year-slider").removeClass("is-nodisplay");
+        $("#slider-range").show();
 
 // TODO trying to just get the slider bar and label to show when click on SPSC, need to also remove when not clicked
     // var sliderLabel =
@@ -373,11 +406,11 @@ function selectMetric(){
   // make so doesn't show when toggle heatmap button unchcked, remove this document ready stuff and put it in a function and attach event handler
 
 // This is the double slider for % change
- $(function() {
-    $( "#slider-range" ).slider({
-      range: true,
-      min: 2006,
-      max: 2013,
+function setupSlider() {
+  $( "#slider-range" ).slider({
+    range: true,
+    min: 2006,
+    max: 2013,
       // default values
       values: [ 2007, 2013 ],
       // TODO: this pulls the values from the slider and puts it on the label, what's below?
@@ -385,19 +418,19 @@ function selectMetric(){
         $( "#year" ).val( "" + ui.values[ 0 ] + " - " + ui.values[ 1 ] );
       },
       // when anything changes, run the function growthChange()
-      change: function(event, ui) {
-        growthChange(ui.values[ 0 ], ui.values[ 1 ], geochanges, counties);
+      // change: function(event, ui) {
+      //   growthChange(ui.values[ 0 ], ui.values[ 1 ], geochanges, counties);
+      // },
+        stop: function(event, ui) {
+            // when the user stopped changing the slider
+          growthChange(ui.values[ 0 ], ui.values[ 1 ], geochanges, counties);
       }
-      // ,
-      //   stop: function(event, ui) {
-      //       // when the user stopped changing the slider
-      //       $.POST("to.php",{first_value:ui.values[0], second_value:ui.values[1]},function(data){},'json');
-      // }      
     });
-// TODO don't understand what this does, something else the function does. Is this actually what marks on label?
-    $( "#year" ).val( "" + $( "#slider-range" ).slider( "values", 0 ) +
-      " - " + $( "#slider-range" ).slider( "values", 1 ) );
-  });
+  // Setting up slider before any user action based on default values
+  $( "#year" ).val( "" + $( "#slider-range" ).slider( "values", 0 ) +
+    " - " + $( "#slider-range" ).slider( "values", 1 ) );
+  $("#slider-range").hide();
+}
 
 
 function growthChange(baseyear, compyear, urli, region) {
@@ -429,3 +462,17 @@ function growthChange(baseyear, compyear, urli, region) {
 //       }
 //     });
 // }
+
+
+// function minBar() {
+//     $( "#slider" ).slider({
+//       value:100,
+//       min: 0,
+//       max: 500,
+//       step: 50,
+//       slide: function( event, ui ) {
+//         $( "#amount" ).val( "$" + ui.value );
+//       }
+//     });
+//     $( "#amount" ).val( "$" + $( "#slider" ).slider( "value" ) );
+//   }

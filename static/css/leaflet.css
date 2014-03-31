@@ -40,3 +40,7 @@ body{
 #slider-range {
     width: 10%;
 }
+
+.is-nodisplay {
+    display:none;
+}
