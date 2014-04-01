@@ -32,11 +32,10 @@ var map = L.map('map').setView([36.685067, -121.73021], 9);
 
 // initialized when /geoidpricesajax result is available
 var geoIdPrices = null;
-var geoIdPricesMax = null;
-var geoIdPricesMin = null;
-// var maxPrice = null;
-// var minPrice = null;
-// var blocks = null;
+// var geoIdPricesMax = null;
+// var geoIdPricesMin = null;
+var maxPrice = null;
+var minPrice = null;
 var blocks = null;
 var heatLayer;
 
@@ -51,17 +50,18 @@ var initLeaflet = function (active_listings) {
     // var region = counties;
 
     addBaseMap();
-    // showHeatMap(zips, geoidpricesajax);
+    showHeatMap(zips, geoidpricesajax);
+
     // addCounties();
-    addZips();
+    // addZips();
     // addBlockGroups();
 
 // controls: 
-    // toggleHeatMap(zips);
-    // showActive();
-    // selectMetric();
+    toggleHeatMap(zips);
+    showActive();
+    selectMetric();
 
-    // setupSlider();
+    setupSlider();
     // setupMinSlider();
 };
 
@@ -116,15 +116,40 @@ var markers = new L.MarkerClusterGroup();
 
 function createMarkers(active_listings) {
     for (i = 0; i < active_listings.length; i++) {
-      var lat = active_listings[i][0];
-      var longi = active_listings[i][1];
+      var lat = active_listings[i]['latitude'];
+      var longi = active_listings[i]['longitude'];
+      var address = active_listings[i]['address'];
+      var list_price = active_listings[i]['list_price'];
+      var city = active_listings[i]['city'];
+      var postal_code = active_listings[i]['postal_code'];
+      var county = active_listings[i]['county'];
+      var bedrooms = active_listings[i]['bedrooms'];
+      var bathrooms = active_listings[i]['bathrooms'];
+      var squarefeet = active_listings[i]['squarefeet'];
+      var mls_id = active_listings[i]['mls_id'];
+      var description = active_listings[i]['description'];
+      var url = active_listings[i]['url'];
+      var psf = list_price / squarefeet;
       var marker = L.marker(new L.LatLng(lat, longi), {
-        whatever: lat,
-        whatever2: longi
+        address: address,
+        city: city,
+        postal_code: postal_code,
+        county:county,
+        list_price: list_price,
+        psf: psf,
+        bedrooms:bedrooms,
+        bathrooms:bathrooms,
+        squarefeet:squarefeet,
+        description:description,
+        mls_id:mls_id
       });
+// TODO: bind url somehow here? 
       marker.bindPopup(
-        "<b>Name:</b> " + lat + "<br>" +
-        "<b>Email:</b> " + longi
+        "<b>Address:</b> " + address + ", " + city + ", " + postal_code + ", " + county + " County <br>" +
+        "<b>Ask Price/PSF:</b> " + list_price + " / " + psf + "<br>" +
+        "<b>Bedrooms:</b> " + bedrooms + ", " + "<b> Bathrooms:</b> " + bathrooms + ", " + "<b>SF:</b> " + squarefeet + "<br>" +
+        description + "<br>" +
+        "<b>MLS listing number:</b> " + mls_id
         );
       markers.addLayer(marker);
   }
@@ -178,7 +203,7 @@ function getBlocks() {
   }
     maxPrice = Math.max.apply(Math, prices);
     minPrice = Math.min.apply(Math, prices);
-    blocks = (maxPrice - minPrice)/4;
+    blocks = (maxPrice - minPrice)/8;
     // console.log("price list is" + prices);
     // console.log("maxprice is " + maxPrice);
     // console.log("minprice is " + minPrice);
@@ -199,14 +224,14 @@ function getLevel(price) {
 // dicts of color levels, called in style function with getLevel()
 // This is shorthand notation ? is "if" then do what's before colon:, else do whatever is after 
 function getColor(level) {
-    return level > 3 ? '#800026' :
-           level > 2  ? '#BD0026' :
-           level > 1  ? '#E31A1C' :
-           // d > 100  ? '#FC4E2A' :
-           // d > 50   ? '#FD8D3C' :
-           // d > 20   ? '#FEB24C' :
-           // d > 10   ? '#FED976' :
-           level > 0 ? '#FFEDA0':
+    return level > 7 ? '#800026' :
+           level > 6  ? '#BD0026' :
+           level > 5  ? '#E31A1C' :
+           level > 4  ? '#FC4E2A' :
+           level > 3  ? '#FD8D3C' :
+           level > 2  ? '#FEB24C' :
+           level > 1  ? '#FED976' :
+           level > 0  ? '#FFEDA0':
                       '#FFFFFF';
 }
 // var colorDict = {
@@ -220,7 +245,7 @@ function getColor(level) {
 // This is used in heatColors(), iterates through counties by geoID in heatColors and pulls geoID
 var style = function(feature) {
 // TODO check: this references my geojson, actually wouldn't I change it to the variable name.dictkey.dictkey?
-    var geoId = feature.properties.GEO_ID;
+    var geoId = feature.properties.GEOID10;
     // console.log(geoIdPrices);
     return {
     // replace median with geoIdPrices[geoId]
@@ -313,7 +338,7 @@ function onEachFeature(feature, layer) {
     layer.on({
         mouseover: highlightFeature,
         mouseout: resetHighlight,
-        // click: zoomToFeature
+        click: zoomToFeature
     });
 }
 
@@ -333,7 +358,7 @@ info.onAdd = function (map) {
 // method that will update the control based on feature properties passed (tied to user interaction onEachFeature() highlight and reset features)
 info.update = function (props) {
     this._div.innerHTML = '<h4>Median Value</h4>' +  (props ?
-        '<b>' + props.NAME + '</b><br />' + props.GEO_ID + ' name / geoid'
+        '<b>' + props.ZCTA5CE10 + '</b><br />' + props.GEOID10 + ' name / geoid'
         : 'Hover over a region');
 };
 
@@ -349,20 +374,18 @@ var legend = L.control({position: 'bottomright'});
 legend.onAdd = function (map) {
 
     var div = L.DomUtil.create('div', 'info legend'),
-        grades = [0, 1, 2, 3, 4],
+        grades = [0, 1, 2, 3, 4, 5, 6, 7],
         labels = [];
 
     // loop through our density intervals and generate a label with a colored square for each interval
     for (var i = 0; i < grades.length; i++) {
         div.innerHTML +=
             '<i style="background:' + getColor(grades[i]) + '"></i> ' +
-            grades[i] + (grades[i - 1] ? '&ndash;' + grades[i + 1] + '<br>': '<br>');
-
-            // '<i style="background:' + getColor(grades[i]) + '"></i> ' +
-            // grades[i] + (grades[i - 1]
-            //              ? '<br>'
-            //              : (condition ? true : '&ndash;' + grades[i + 1] + '<br>'));
+            ((grades[i]*blocks)+minPrice) + (grades[i - 1] ? '&ndash;' + ((grades[i + 1]*blocks)+minPrice) + '<br>': '<br>');
     }
+    console.log(blocks);
+    console.log(minPrice);
+    // (grades[i] * blocks) + minPrice
 
     return div;
 };
@@ -395,6 +418,8 @@ function selectMetric(){
         map.removeLayer(heatLayer);
         $("#year-slider").removeClass("is-nodisplay");
         $("#slider-range").show();
+        growthChange(2009, 2013, geochanges, zips);
+
 // TODO trying to just get the slider bar and label to show when click on SPSC, need to also remove when not clicked
     // var sliderLabel =
     //   "<p><label for='year'>Year-on-year comparison:</label><input type='text' id='year' style='border:0; color:#f6931f; font-weight:bold;'' readonly></p>";
@@ -420,10 +445,10 @@ function selectMetric(){
 function setupSlider() {
   $( "#slider-range" ).slider({
     range: true,
-    min: 2006,
+    min: 2009,
     max: 2013,
       // default values
-      values: [ 2007, 2013 ],
+      values: [ 2009, 2013 ],
       // TODO: this pulls the values from the slider and puts it on the label, what's below?
       slide: function( event, ui ) {
         $( "#year" ).val( "" + ui.values[ 0 ] + " - " + ui.values[ 1 ] );
@@ -432,15 +457,17 @@ function setupSlider() {
       // change: function(event, ui) {
       //   growthChange(ui.values[ 0 ], ui.values[ 1 ], geochanges, zips);
       // },
-        stop: function(event, ui) {
+      stop: function(event, ui) {
             // when the user lets go and stops changing the slider
-          growthChange(ui.values[ 0 ], ui.values[ 1 ], geochanges, zips);
+        map.removeLayer(heatLayer);
+        growthChange(ui.values[ 0 ], ui.values[ 1 ], geochanges, zips);
       }
     });
   // Setting up slider before any user action based on default values
   $( "#year" ).val( "" + $( "#slider-range" ).slider( "values", 0 ) +
     " - " + $( "#slider-range" ).slider( "values", 1 ) );
   $("#slider-range").hide();
+// Don't need to remove layer, already setup in selectMetric()
 }
 
 function setupMinSlider() {

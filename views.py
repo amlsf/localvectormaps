@@ -62,9 +62,15 @@ def leaflet():
 @app.route("/leafactivelistings")
 def leafactive():
     active_listings = model.session.query(model.Listings).filter_by(listing_status='Active').all()
-    activelatlong = [{'latitude': l.latitude, 'longitude': l.longitude, 'address': l.address, \
-        } for l in active_listings]
+    activelatlong = [
+        {'latitude': l.latitude, 'longitude': l.longitude, 'list_price': l.list_price, \
+        'bathrooms': l.bathrooms_count, 'bedrooms': l.bedrooms_count, 'squarefeet': l.living_sq_ft, \
+        'address': l.address, 'city': l.city_name, 'postal_code': l.postal_code, 'county': l.county_name, \
+        'neighborhood': l.neighborhood, 'mls_id': l.mls_id, 'description': l.description, 'url': l.property_url} \
+        for l in active_listings
+        ]
     return json.dumps(activelatlong)
+    # print json.dumps(activelatlong)
 
 # NOT using this
 # METHOD 2: using script source tags to send over data to client side
@@ -84,29 +90,26 @@ def leafactive():
 # retuns JSON dictionary of geoid:medianprice per region
 @app.route("/geoidpricesajax")
 def geoidpricesajax():    
-    return calculations.county_activemedian(model.session)
+    return calculations.sp_median_byzip(model.session)
 
 @app.route("/psf")
 def psf():
-    return calculations.county_psf(model.session)
-
-
+    return calculations.psf_median_byzip(model.session)
 
 
 @app.route("/geochanges", methods=['PUT','POST'])
 def geochanges():
-    try:
-        body = request.json
-        # print request.json
-        baseyear = int(body["baseyear"])
-        # print baseyear
-        compyear = int(body["compyear"])
+    # try:
+    body = request.json
+    # print request.json
+    baseyear = int(body["baseyear"])
+    # print baseyear
+    compyear = int(body["compyear"])
         # print compyear
-    except ValueError, err:
-        print 'Error: ' + err
-        return
-
-    return calculations.range_comp(model.session, baseyear, compyear)
+    # except ValueError, err:
+    #     print 'Error: ' + err
+    #     return
+    return calculations.psf_median_comp(model.session, baseyear, compyear)
 
 
 
@@ -191,6 +194,8 @@ def play():
 #     login_user(user)
 #     return redirect(request.args.get("next", url_for("index")))
 
+
+leafactive()
 
 if __name__ == "__main__":
     app.run(debug=True)

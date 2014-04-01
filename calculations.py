@@ -5,16 +5,60 @@ import json
 import numpy
 
 # # TODO How to tie the region and region_id? use some sort of dictionary?
-# def sales_price(session, region, region_id, time1, time2):
-#     regions = session.query(REGION).all()
-#     houses = session.query(model.Listings).filter_by(REGION_ID=region.id, listing_status !="Active").all()
 
+def sp_median_byzip(session):
+    regions = session.query(model.Zipcodes).all()
+    medians = {}
+    for region in regions:
+        # print region.geoid
+        medians[region.geoid] = region.median_sales_price
+    return json.dumps(medians)
 
-# def sales_psf(session, region, time):
-#     pass
+def psf_median_byzip(session):
+    regions = session.query(model.Zipcodes).all()
+    medians = {}
+    for region in regions:
+        # print region.geoid
+        medians[region.geoid] = region.median_sales_psf
+    return json.dumps(medians)
 
-# def comp_sales_psf(session, region, time):
-#     pass
+def psf_median_comp(session, year1, year2):
+    regions = session.query(model.Zipcodes).all()
+    growth = {}
+# TODO do this more efficiently
+    for region in regions:
+        if year1 == 2009:
+            base_median = region.median_sales_psf_2009       
+        elif year1 == 2010:
+            base_median = region.median_sales_psf_2010
+        elif year1 == 2011:
+            base_median = region.median_sales_psf_2011
+        elif year1 == 2012:
+            base_median = region.median_sales_psf_2012
+        elif  year1 == 2013:
+            base_median = region.median_sales_psf_2013
+
+        if year2 == 2009:
+            comp_median = region.median_sales_psf_2009       
+        elif year2 == 2010:
+            comp_median = region.median_sales_psf_2010
+        elif year2 == 2011:
+            comp_median = region.median_sales_psf_2011
+        elif year2 == 2012:
+            comp_median = region.median_sales_psf_2012
+        elif  year2 == 2013:
+            comp_median = region.median_sales_psf_2013
+
+        if base_median == 0:
+            growth[region.geoid] = 0
+        else: 
+            growth[region.geoid] = (float(comp_median)/base_median) - 1
+
+        # print "regionid is %r" % region.zcta
+        # print "base_year median %r" % base_median
+        # print "comp_year median %r" % comp_median 
+
+    return json.dumps(growth)
 
 # TODO change this from active listings to sold listings
 # TODO try doing median calculations all in Database with SQL alchemy? How do with SQL alchemy and feed to JSON? 
@@ -112,6 +156,7 @@ def range_comp(session, baseyear, compyear):
 # finds the median active house price for each block group and inserts into color column of block group table
 # TODO look into insertion sort algorithm to speed up? 
 # TODO change this from active listings to sold listings
+
 # def blockgroups_activemedian(session):
 #     regions = session.query(model.Blockgroups).all()
 
@@ -139,6 +184,10 @@ def range_comp(session, baseyear, compyear):
 
 
 def main(session):
+    # sp_median_byzip(session)
+    # psf_median_byzip(session)
+    psf_median_comp(session, 2009, 2012)
+    
     # county_activemedian(session)
     # county_psf(session)
     # range_comp(session, 2011, 2013)
