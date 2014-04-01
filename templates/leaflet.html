@@ -14,34 +14,31 @@
 
 
 {% block body %}
-<div id="metricspanel" class="controls">
-    <INPUT TYPE="Checkbox" NAME="active">Show Active Listings (jquery)<br>
-    <INPUT TYPE="Checkbox" CHECKED NAME="toggleheat">Toggle Heat Map<br>
 
-<!-- Other Metrics: PSF, valuation, rental price, sophisticated logic -->
-<!-- TODO What is this value id for? --> 
-    <INPUT TYPE="Radio" CHECKED Name="metric" ID="SP">Sales Price
-    <INPUT TYPE="Radio" Name="metric" ID="SPS">Sales PSF
-    <INPUT TYPE="Radio" Name="metric" ID="SPSC">Sales PSF Comparison
+    <div id="metricspanel" class="controls">
+        <INPUT TYPE="Checkbox" NAME="active">Show Active Listings (jquery)<br>
+        <INPUT TYPE="Checkbox" CHECKED NAME="toggleheat">Toggle Heat Map<br>
 
+    <!-- Other Metrics: PSF, valuation, rental price, sophisticated logic -->
+    <!-- TODO What is this value id for? --> 
+        <INPUT TYPE="Radio" CHECKED Name="metric" ID="SP">Sales Price
+        <INPUT TYPE="Radio" Name="metric" ID="SPS">Sales PSF
+        <INPUT TYPE="Radio" Name="metric" ID="SPSC">Sales PSF Comparison
 
-    <p class="is-nodisplay" id="year-slider">
-      <label for="year">Year-on-year comparison:</label>
-      <input type="text" id="year" style="border:0; color:#f6931f; font-weight:bold;" readonly>
-        <div id="slider-range"></div>
-    </p>
-
-
-    <p class="is-nodisplay" id="min-slider">
-      <label for="comp-year">Comparison Year (over 2009 Crash):</label>
-      <input type="text" id="comp-year" style="border:0; color:#f6931f; font-weight:bold;">
-        <div id="slider"></div>
-    </p>
-
-</div>
-
+        <p class="is-nodisplay" id="year-slider">
+          <label for="year">Year-on-year comparison:</label>
+          <input type="text" id="year" style="border:0; color:#f6931f; font-weight:bold;" readonly>
+            <div id="slider-range"></div>
+        </p>
+    <!--     <p class="is-nodisplay" id="min-slider">
+          <label for="comp-year">Comparison Year (over 2009 Crash):</label>
+          <input type="text" id="comp-year" style="border:0; color:#f6931f; font-weight:bold;">
+            <div id="slider"></div>
+        </p> -->
+    </div>
 
 <div id="map"></div>
+
 {% endblock %}
 
 

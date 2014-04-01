@@ -1,5 +1,5 @@
 //TODO: factor out code so not so many global variables
-// TODO maybe use leaflet layer controls http://leafletjs.com/examples/layers-control.html
+//TODO maybe use leaflet layer controls http://leafletjs.com/examples/layers-control.html
 //TODO How to organize when there are so many f-ing dependencies????
 // Gotta speed up the layering of geoJSON - too slow! Maybe change to county, subcounty, zips (no BG, census tracts?)
 
@@ -34,10 +34,11 @@ var map = L.map('map').setView([36.685067, -121.73021], 9);
 var geoIdPrices = null;
 // var geoIdPricesMax = null;
 // var geoIdPricesMin = null;
-var maxPrice = null;
-var minPrice = null;
-var blocks = null;
+// var maxPrice = null;
+// var minPrice = null;
+// var blocks = null;
 var heatLayer;
+var legend;
 
 // route variables for radio button selections
 var geoidpricesajax = "/geoidpricesajax";
@@ -109,7 +110,7 @@ function addZips(){
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-// SECTION creates active listing markers
+// SECTION creates active listing markers with details pop-ups
 // var markers = new L.FeatureGroup();
 
 var markers = new L.MarkerClusterGroup();
@@ -141,11 +142,12 @@ function createMarkers(active_listings) {
         bathrooms:bathrooms,
         squarefeet:squarefeet,
         description:description,
-        mls_id:mls_id
+        mls_id:mls_id,
+        url:url
       });
 // TODO: bind url somehow here? 
       marker.bindPopup(
-        "<b>Address:</b> " + address + ", " + city + ", " + postal_code + ", " + county + " County <br>" +
+        "<b>Address:</b> " + "<a href='" + url + "'>" + address + ", " + city + ", " + postal_code + ", " + county + " County  </a> <br>"  +
         "<b>Ask Price/PSF:</b> " + list_price + " / " + psf + "<br>" +
         "<b>Bedrooms:</b> " + bedrooms + ", " + "<b> Bathrooms:</b> " + bathrooms + ", " + "<b>SF:</b> " + squarefeet + "<br>" +
         description + "<br>" +
@@ -157,12 +159,11 @@ function createMarkers(active_listings) {
 }
 
 
-// TODO QUESTION: note to self: 'event' is when the input[] "active" .changes (.target is the object)
-// TODO why doesn't a .click() or .toggle() work?
-// TODO why is this removing the map? (works when just add one marker)
-// TODO make this go faster (special layer or cluster circles-show more markers as zoom in-view only) (see Rhonda's emails)
-// TODO schedule deferred exeecution with setTimeout function at 0 ms of adding gmarkers before re-enabling form and removing spinner?
 // Toggle checkbox to display active listings
+// QUESTIONS 
+// note to self: 'event' is when the input[] "active" .changes (.target is the object)
+// why doesn't a .click() or .toggle() work?
+// schedule deferred exeecution with setTimeout function at 0 ms of adding gmarkers before re-enabling form and removing spinner?
 function showActive() {
   $('input[name=active]').change(function(event) {
     if (event.target.checked) {
@@ -189,21 +190,22 @@ function showActive() {
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
-// SECTION Adds/removes colors the choropleth map
+// SECTION Adds/removes colors on the choropleth map
 
 // get max and min price in region and $ amount per block level, called in getLevel()
 // geoIdPrices is a global variable that is defined in ajax call in showHeatMap() function 
 // remove the counties with nothing so not calculated in min price
 function getBlocks() {
   var prices = [];
+  console.log(geoIdPrices);
   for (var key in geoIdPrices) {
       if (geoIdPrices[key] !== 0) {
       prices.push(geoIdPrices[key]);
       }
   }
-    maxPrice = Math.max.apply(Math, prices);
-    minPrice = Math.min.apply(Math, prices);
-    blocks = (maxPrice - minPrice)/8;
+    var maxPrice = Math.max.apply(Math, prices);
+    var minPrice = Math.min.apply(Math, prices);
+    var blocks = (maxPrice - minPrice)/8;
     // console.log("price list is" + prices);
     // console.log("maxprice is " + maxPrice);
     // console.log("minprice is " + minPrice);
@@ -214,10 +216,11 @@ function getBlocks() {
     };
 }
 
-// use the blocks to determine the particular house price color level, called in style fxn with getColor()
+// use the $ blocks to determine the particular house price color level, called in style fxn with getColor()
 function getLevel(price) {
-    blocks = getBlocks();
-    level = (price - blocks.minPrice)/blocks.blocks;
+    // console.log(blocks);
+    var blocks = getBlocks();
+    var level = (price - blocks.minPrice)/blocks.blocks;
     return level;
 }
 
@@ -232,7 +235,7 @@ function getColor(level) {
            level > 2  ? '#FEB24C' :
            level > 1  ? '#FED976' :
            level > 0  ? '#FFEDA0':
-                      '#FFFFFF';
+                      'rgba(0,0,0,0)';
 }
 // var colorDict = {
 //     1: "#F1917C",
@@ -280,6 +283,8 @@ function showHeatMap(region, urli) {
 // call heatColors AFTER stuff above has loaded
       // console.log(geoIdPrices)
         heatColors(region);
+        removeLegend();
+        createLegend();
       }
     });
 }
@@ -333,12 +338,14 @@ function zoomToFeature(e) {
     map.fitBounds(e.target.getBounds());
 }
 
+
+// TODO how to incorporate with click clusters and incorporate click out? 
 // used in heatColors() fxn
 function onEachFeature(feature, layer) {
     layer.on({
         mouseover: highlightFeature,
         mouseout: resetHighlight,
-        click: zoomToFeature
+        // click: zoomToFeature
     });
 }
 
@@ -367,30 +374,51 @@ info.addTo(map);
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
-
 // SECTION Legend
-var legend = L.control({position: 'bottomright'});
 
-legend.onAdd = function (map) {
+// helper function to make sure 
+// var legendCreated = false;
+function createLegend() {
+  // if (legendCreated){
+  //   return;
+  // }
 
-    var div = L.DomUtil.create('div', 'info legend'),
-        grades = [0, 1, 2, 3, 4, 5, 6, 7],
-        labels = [];
+  // legendCreated = true;
 
-    // loop through our density intervals and generate a label with a colored square for each interval
-    for (var i = 0; i < grades.length; i++) {
-        div.innerHTML +=
-            '<i style="background:' + getColor(grades[i]) + '"></i> ' +
-            ((grades[i]*blocks)+minPrice) + (grades[i - 1] ? '&ndash;' + ((grades[i + 1]*blocks)+minPrice) + '<br>': '<br>');
-    }
-    console.log(blocks);
-    console.log(minPrice);
-    // (grades[i] * blocks) + minPrice
+  legend = L.control({position: 'bottomright'});
 
-    return div;
-};
+  legend.onAdd = function (map) {
 
-legend.addTo(map);
+      var div = L.DomUtil.create('div', 'info legend'),
+          grades = [0, 1, 2, 3, 4, 5, 6, 7],
+          labels = [],
+          blocks = getBlocks();
+      // loop through our density intervals and generate a label with a colored square for each interval
+          console.log(blocks.blocks);
+          console.log(blocks.minPrice);
+          console.log(blocks.maxPrice);
+
+      for (var i = 0; i < grades.length; i++) {
+          // var bottom = minPrice;
+          // var upper = maxPrice;
+          // var level = blocks
+          div.innerHTML +=
+              '<i style="background:' + getColor(grades[i]) + '"></i> ' +
+              ((grades[i]*blocks.blocks)+blocks.minPrice) + (grades[i - 1] ? '&ndash;' + ((grades[i + 1]*blocks.blocks)+blocks.minPrice) + '<br>': '<br>');
+      }
+
+      return div;
+  };
+
+  legend.addTo(map);
+
+}
+
+function removeLegend() {
+  if (legend !== undefined) {
+    legend.removeFrom(map);
+  }
+}
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -470,23 +498,6 @@ function setupSlider() {
 // Don't need to remove layer, already setup in selectMetric()
 }
 
-function setupMinSlider() {
-    $( "#slider" ).slider({
-      value:2013,
-      min: 2009,
-      max: 2013,
-      step: 1,
-      slide: function( event, ui ) {
-        $( "#comp-year" ).val( "" + ui.value );
-      },
-      stop: function( event, ui ) {
-            // when the user lets go and stops changing the slider
-          growthChange(ui.values[ 0 ], ui.values[ 1 ], geochanges, zips);
-      }
-    });
-    $( "#comp-year" ).val( "" + $( "#slider" ).slider( "value" ) );
-  }
-
 function growthChange(baseyear, compyear, urli, region) {
       $.ajax({
       url: urli,
@@ -496,7 +507,27 @@ function growthChange(baseyear, compyear, urli, region) {
       }).done(function(data){
         geoIdPrices = $.parseJSON(data);
         heatColors(region);
+        removeLegend();
+        createLegend();
       // console.log(data);
     });
 }
+
+// function setupMinSlider() {
+//     $( "#slider" ).slider({
+//       value:2013,
+//       min: 2009,
+//       max: 2013,
+//       step: 1,
+//       slide: function( event, ui ) {
+//         $( "#comp-year" ).val( "" + ui.value );
+//       },
+//       stop: function( event, ui ) {
+//             // when the user lets go and stops changing the slider
+//           growthChange(ui.values[ 0 ], ui.values[ 1 ], geochanges, zips);
+//       }
+//     });
+//     $( "#comp-year" ).val( "" + $( "#slider" ).slider( "value" ) );
+//   }
+
 
