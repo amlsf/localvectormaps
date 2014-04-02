@@ -16,14 +16,14 @@
 {% block body %}
 
     <div id="metricspanel" class="controls">
-        <INPUT TYPE="Checkbox" NAME="active">Show Active Listings (jquery)<br>
-        <INPUT TYPE="Checkbox" CHECKED NAME="toggleheat">Toggle Heat Map<br>
+        <INPUT TYPE="Checkbox" NAME="active">Show Homes Currently For Sale<br>
+        <INPUT TYPE="Checkbox" CHECKED NAME="toggleheat">Show Heat Map<br>
 
     <!-- Other Metrics: PSF, valuation, rental price, sophisticated logic -->
     <!-- TODO What is this value id for? --> 
-        <INPUT TYPE="Radio" CHECKED Name="metric" ID="SP">Sales Price
-        <INPUT TYPE="Radio" Name="metric" ID="SPS">Sales PSF
-        <INPUT TYPE="Radio" Name="metric" ID="SPSC">Sales PSF Comparison
+        <INPUT TYPE="Radio" CHECKED Name="metric" ID="SP">Sales Price ($)
+        <INPUT TYPE="Radio" Name="metric" ID="SPS">Sales Price ($PSF)
+        <INPUT TYPE="Radio" Name="metric" ID="SPSC">Year over Year % Change (Sales $PSF) 
 
         <p class="is-nodisplay" id="year-slider">
           <label for="year">Year-on-year comparison:</label>

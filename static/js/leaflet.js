@@ -39,6 +39,7 @@ var geoIdPrices = null;
 // var blocks = null;
 var heatLayer;
 var legend;
+var tierCount = 6;
 
 // route variables for radio button selections
 var geoidpricesajax = "/geoidpricesajax";
@@ -195,48 +196,50 @@ function showActive() {
 // get max and min price in region and $ amount per block level, called in getLevel()
 // geoIdPrices is a global variable that is defined in ajax call in showHeatMap() function 
 // remove the counties with nothing so not calculated in min price
-function getBlocks() {
+function getLevelAmounts() {
   var prices = [];
-  console.log(geoIdPrices);
   for (var key in geoIdPrices) {
       if (geoIdPrices[key] !== 0) {
       prices.push(geoIdPrices[key]);
       }
   }
-    var maxPrice = Math.max.apply(Math, prices);
-    var minPrice = Math.min.apply(Math, prices);
-    var blocks = (maxPrice - minPrice)/8;
+    var maxAmount = Math.max.apply(Math, prices);
+    var minAmount = Math.min.apply(Math, prices);
+    var steps = (maxAmount - minAmount)/tierCount;
     // console.log("price list is" + prices);
-    // console.log("maxprice is " + maxPrice);
-    // console.log("minprice is " + minPrice);
-    // console.log("block amount is " + blocks);
-    return {maxPrice: maxPrice,
-      minPrice: minPrice,
-      blocks: blocks
+    // console.log("maxprice is " + maxAmount);
+    // console.log("minprice is " + minAmount);
+    // console.log("block amount is " + steps);
+    return {maxAmount: maxAmount,
+      minAmount: minAmount,
+      steps: steps
     };
 }
 
+
 // use the $ blocks to determine the particular house price color level, called in style fxn with getColor()
 function getLevel(price) {
-    // console.log(blocks);
-    var blocks = getBlocks();
-    var level = (price - blocks.minPrice)/blocks.blocks;
+    var steps = getLevelAmounts();
+    var level = (price - steps.minAmount)/steps.steps;
     return level;
 }
+
 
 // dicts of color levels, called in style function with getLevel()
 // This is shorthand notation ? is "if" then do what's before colon:, else do whatever is after 
 function getColor(level) {
-    return level > 7 ? '#800026' :
-           level > 6  ? '#BD0026' :
-           level > 5  ? '#E31A1C' :
-           level > 4  ? '#FC4E2A' :
-           level > 3  ? '#FD8D3C' :
-           level > 2  ? '#FEB24C' :
-           level > 1  ? '#FED976' :
-           level > 0  ? '#FFEDA0':
-                      'rgba(0,0,0,0)';
+    alpha = (level+1)/tierCount;
+
+    return 'rgba(255,0,0,' + alpha + ')';
+
+    // return level >= 5  ? 'rgba(255,0,0,1)' :
+           // level >= 4  ? 'rgba(255,0,0,0.8)' :
+           // level >= 3  ? 'rgba(255,0,0,0.6)' :
+           // level >= 2  ? 'rgba(255,0,0,0.4)' :
+           // level >= 1  ? 'rgba(0,255,0,0.2)' :
+           //            'rgba(0,0,255,1)';
 }
+
 // var colorDict = {
 //     1: "#F1917C",
 //     2: "#F18064",
@@ -297,9 +300,11 @@ function toggleHeatMap(region) {
     if (event.target.checked) {
       event.target.disabled = true;
       heatColors(region);
+      createLegend();
       event.target.disabled = false;
     } else {
       map.removeLayer(heatLayer);
+      removeLegend();
     }
   });
 }
@@ -345,11 +350,10 @@ function onEachFeature(feature, layer) {
     layer.on({
         mouseover: highlightFeature,
         mouseout: resetHighlight,
-        // click: zoomToFeature
+        click: zoomToFeature
     });
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -365,46 +369,72 @@ info.onAdd = function (map) {
 // method that will update the control based on feature properties passed (tied to user interaction onEachFeature() highlight and reset features)
 info.update = function (props) {
     this._div.innerHTML = '<h4>Median Value</h4>' +  (props ?
-        '<b>' + props.ZCTA5CE10 + '</b><br />' + props.GEOID10 + ' name / geoid'
-        : 'Hover over a region');
+        '<b>' + props.ZCTA5CE10 + '</b><br />' + props.GEOID10 + ' name / geoid':
+        'Hover over a region');
 };
 
 info.addTo(map);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////
 
 // SECTION Legend
 
-// helper function to make sure 
-// var legendCreated = false;
-function createLegend() {
-  // if (legendCreated){
-  //   return;
-  // }
+// Formats money
+Number.prototype.formatMoney = function(c, d, t){
+var n = this, 
+    c = isNaN(c = Math.abs(c)) ? 2 : c,
+    d = d == undefined ? "." : d,
+    t = t == undefined ? "," : t,
+    s = n < 0 ? "-" : "",
+    i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "",
+    j = (j = i.length) > 3 ? j % 3 : 0;
+   return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+ };
 
-  // legendCreated = true;
+function createLegend() {
 
   legend = L.control({position: 'bottomright'});
 
   legend.onAdd = function (map) {
 
       var div = L.DomUtil.create('div', 'info legend'),
-          grades = [0, 1, 2, 3, 4, 5, 6, 7],
+          // grades = [0, 1, 2, 3, 4, 5],
           labels = [],
-          blocks = getBlocks();
+          steps = getLevelAmounts(),
+          stepAmount = steps.steps,
+          minAmount = steps.minAmount,
+          maxAmount = steps.maxAmount;
       // loop through our density intervals and generate a label with a colored square for each interval
-          console.log(blocks.blocks);
-          console.log(blocks.minPrice);
-          console.log(blocks.maxPrice);
+          console.log(geoIdPrices);
+          console.log(maxAmount);
+          console.log(minAmount);
+          console.log(stepAmount);
 
-      for (var i = 0; i < grades.length; i++) {
-          // var bottom = minPrice;
-          // var upper = maxPrice;
-          // var level = blocks
-          div.innerHTML +=
-              '<i style="background:' + getColor(grades[i]) + '"></i> ' +
-              ((grades[i]*blocks.blocks)+blocks.minPrice) + (grades[i - 1] ? '&ndash;' + ((grades[i + 1]*blocks.blocks)+blocks.minPrice) + '<br>': '<br>');
+// Makes a different legend type if YoY Change % option is selected
+      if ($("#SPSC").is(":checked")) {
+        console.log("regenerating legend for SPSC");
+        for (var x = 0; x < tierCount; x++) {
+            div.innerHTML +=
+                '<i style="background:' + getColor(x) + '"></i> ' +
+                '$'+((x*stepAmount)+minAmount).formatMoney(0) +
+                  ( x+1 < tierCount ?
+                    ' +' + '<br>':
+                    '&ndash;' + '$' + maxAmount.formatMoney(0)
+                    // '&ndash;' + '$'+(((grades[x + 1]*stepAmount)+minAmount)).formatMoney(0) + '<br>':
+                    );
+        }
+// Makes a different legend type if overall $ price option selected 
+      } else {
+        for (var x = 0; x < tierCount; x++) {
+            div.innerHTML +=
+                '<i style="background:' + getColor(x) + '"></i> ' +
+                '$'+((x*stepAmount)+minAmount).formatMoney(0) +
+                  ( x+1 < tierCount ?
+                    ' +' + '<br>':
+                    '&ndash;' + '$' + maxAmount.formatMoney(0)
+                    // '&ndash;' + '$'+(((grades[x + 1]*stepAmount)+minAmount)).formatMoney(0) + '<br>':
+                    );
+        }
       }
 
       return div;
@@ -413,6 +443,7 @@ function createLegend() {
   legend.addTo(map);
 
 }
+
 
 function removeLegend() {
   if (legend !== undefined) {
@@ -430,28 +461,23 @@ function selectMetric(){
   $('#SP, #SPS, #SPSC').change(function(){
     if ($('input[name=toggleheat]').is(":checked")){
       if ($("#SP").is(":checked")) {
-        console.log("you clicked SP");
-        map.removeLayer(heatLayer);
-        $("#year-slider").addClass("is-nodisplay");
-        $("#slider-range").hide();
-        showHeatMap(zips, geoidpricesajax);
+          console.log("you clicked SP");
+          map.removeLayer(heatLayer);
+          $("#year-slider").addClass("is-nodisplay");
+          $("#slider-range").hide();
+          showHeatMap(zips, geoidpricesajax);
       } else if ($("#SPS").is(":checked")) {
-        console.log("you clicked SPS");
-        map.removeLayer(heatLayer);
-        $("#slider-range").hide();
-        $("#year-slider").addClass("is-nodisplay");
-        showHeatMap(zips,psf);
+          console.log("you clicked SPS");
+          map.removeLayer(heatLayer);
+          $("#slider-range").hide();
+          $("#year-slider").addClass("is-nodisplay");
+          showHeatMap(zips,psf);
       } else if ($("#SPSC").is(":checked")) {
-        console.log("you clicked SPSC");
-        map.removeLayer(heatLayer);
-        $("#year-slider").removeClass("is-nodisplay");
-        $("#slider-range").show();
-        growthChange(2009, 2013, geochanges, zips);
-
-// TODO trying to just get the slider bar and label to show when click on SPSC, need to also remove when not clicked
-    // var sliderLabel =
-    //   "<p><label for='year'>Year-on-year comparison:</label><input type='text' id='year' style='border:0; color:#f6931f; font-weight:bold;'' readonly></p>";
-    // $('#slider-range').prepend(sliderLabel);
+          console.log("you clicked SPSC");
+          map.removeLayer(heatLayer);
+          $("#year-slider").removeClass("is-nodisplay");
+          $("#slider-range").show();
+          growthChange(2009, 2013, geochanges, zips);
       }
     }
   });
