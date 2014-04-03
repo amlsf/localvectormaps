@@ -16,15 +16,54 @@
 {% block body %}
 
     <div id="metricspanel" class="controls">
-        <INPUT TYPE="Checkbox" NAME="active">Show Homes Currently For Sale<br>
-        <INPUT TYPE="Checkbox" CHECKED NAME="toggleheat">Show Heat Map<br>
+    
+        <h3>Amy's Thing - 5 County by Zipcode</h3>
 
+        <div>
+            <p class="col-sm-6 metricspanellabel">Show Homes For Sale</p>
+            <div class="btn-group toggle-active col-sm-6" data-toggle="buttons">
+                <label class="btn btn-default">
+                    <input type="radio" id="toggle-active-on">On</input>
+                </label>
+                <label class="btn btn-default active">
+                  <input type="radio" id='toggle-active-off'>Off</input>
+                </label>
+            </div>
+        </div>
+
+        <div class = "show-heat-row">
+            <p class="col-sm-6 metricspanellabel">Show Choropleth Map</p>
+            <div class="btn-group toggle-heat col-sm-6" data-toggle="buttons">
+                <label class="btn btn-default active">
+                    <input type="radio" id="toggle-heat-on">On</input>
+                </label>
+                <label class="btn btn-default">
+                  <input type="radio" id='toggle-heat-off'>Off</input>
+                </label>
+            </div>
+        </div>
+
+<!--         <INPUT TYPE="Checkbox" CHECKED NAME="toggleheat">Show Heat Map<br>
+ -->
     <!-- Other Metrics: PSF, valuation, rental price, sophisticated logic -->
     <!-- TODO What is this value id for? --> 
-    <div id="radio" class="is-nodisplay">
-        <INPUT TYPE="Radio" CHECKED Name="metric" ID="SP">Sale Price
-        <INPUT TYPE="Radio" Name="metric" ID="SPS">Sales Price/Sqft
-        <INPUT TYPE="Radio" Name="metric" ID="SPSC">Sales Price/Sqft % Change 
+    <div id="radio" class="is-nodisplay col-sm-12">
+        <div class = 'radio'>
+            <label>
+             <INPUT TYPE="Radio" CHECKED Name="metric" ID="SP">Sale Price
+            </label>
+        </div>
+        <div class = 'radio'>
+            <label>
+            <INPUT TYPE="Radio" Name="metric" ID="SPS">Sales Price/Sqft
+            </label>
+        </div>
+        <div class = 'radio'>
+            <label>
+            <INPUT TYPE="Radio" Name="metric" ID="SPSC">Sales Price/Sqft % Change 
+            </label>
+        </div>
+
     </div>
 
         <p class="is-nodisplay" id="year-slider">

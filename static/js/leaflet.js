@@ -40,12 +40,14 @@ var geoIdPrices = null;
 var heatLayer;
 var legend;
 var tierCount = 6;
-var currentMetric = null;
+var currentMetric = 'median_sales_price';
+var markers = null;
 
 // route variables for radio button selections
 var geoidpricesajax = "/geoidpricesajax";
 var psf = "/psf";
 var geochanges = "/geochanges";
+
 
 var initLeaflet = function () {
 
@@ -115,9 +117,9 @@ function addZips(){
 // SECTION creates active listing markers with details pop-ups
 // var markers = new L.FeatureGroup();
 
-var markers = new L.MarkerClusterGroup();
-
 function createMarkers(active_listings) {
+    console.log("createMarkers called:" + active_listings.length);
+    markers = new L.MarkerClusterGroup();
     for (i = 0; i < active_listings.length; i++) {
       var lat = active_listings[i]['latitude'];
       var longi = active_listings[i]['longitude'];
@@ -167,10 +169,11 @@ function createMarkers(active_listings) {
 // why doesn't a .click() or .toggle() work?
 // schedule deferred exeecution with setTimeout function at 0 ms of adding gmarkers before re-enabling form and removing spinner?
 function showActive() {
-  $('input[name=active]').change(function(event) {
-    if (event.target.checked) {
+  $('.toggle-active .btn').change(function(event) {
+    if ($(event.target).prop("id") === "toggle-active-on") {
   // this disables checkbox
-      event.target.disabled = true;
+      // $("#toggle-active-off").button("toggle");
+      // event.target.disabled = true;
 // TODO put spinner bar in here? 
     // $('#imgid').show()
       // console.log('disabled checkbox');
@@ -180,15 +183,42 @@ function showActive() {
         prices = $.parseJSON(data);
         createMarkers(prices);
         // addActiveMarkers(prices);
-        event.target.disabled = false;
+        // event.target.disabled = false;
         // $('#imgid').hide()
       });
     } else {
-      map.removeLayer(markers);
+      // $("#toggle-active-on").button("toggle");
+      if (markers !== null) {
+        map.removeLayer(markers);
+      }
     }
   });
 }
 
+
+
+// function showActive() {
+//   $('input[name=active]').change(function(event) {
+//     if (event.target.checked) {
+//   // this disables checkbox
+//       event.target.disabled = true;
+// // TODO put spinner bar in here? 
+//     // $('#imgid').show()
+//       // console.log('disabled checkbox');
+//       $.ajax({
+//         url: "/leafactivelistings",
+//       }).done(function(data) {
+//         prices = $.parseJSON(data);
+//         createMarkers(prices);
+//         // addActiveMarkers(prices);
+//         event.target.disabled = false;
+//         // $('#imgid').hide()
+//       });
+//     } else {
+//       map.removeLayer(markers);
+//     }
+//   });
+// }
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -323,22 +353,26 @@ function showHeatMap(region, urli, metric) {
 // TODO change this to a toggle button like Gmaps one with abbreviated notation
 // TODO why is the disabled not working when toggling heatmap back on? 
 function toggleHeatMap(region) {
-  $('input[name=toggleheat]').change(function(event){
+  $('.toggle-heat .btn').change(function(event){
 // if toggle button on, show radio button
-    if (event.target.checked) {
-      event.target.disabled = true;
-      $("#radio").removeClass("is-nodisplay");
-      heatColors(region,currentMetric);
-      createLegend();
+    if ($(event.target).prop("id") === "toggle-heat-on") {
+        $("#radio").removeClass("is-nodisplay");
+       if ($("#SPSC").is(":checked")) {
+          $("#year-slider").removeClass("is-nodisplay");
+          $("#slider-range").show();
+            currentMetric = 'change';
+            var values = $('#slider-range').slider('values');
+            growthChange(values[0], values[1], geochanges, zips, currentMetric);
+        } else {
+            heatColors(region,currentMetric);
+            createLegend();
+        }
 // if prices $ change checked at time of toggling, add back slider range
-     if ($("#SPSC").is(":checked")) {
-        $("#year-slider").removeClass("is-nodisplay");
-        $("#slider-range").show();
-      }
-      event.target.disabled = false;
-    }
+      // event.target.disabled = false;
+    } else {
+    // if (event.target.checked) {
+    //   event.target.disabled = true;
 // removes metrics options if heatmap toggle is unchecked along with layer and legend
-    else {
       $("#radio").addClass("is-nodisplay");
       map.removeLayer(heatLayer);
       removeLegend();
@@ -350,6 +384,62 @@ function toggleHeatMap(region) {
     }
   });
 }
+
+
+function showActive() {
+  $('.toggle-active .btn').change(function(event) {
+    if ($(event.target).prop("id") === "toggle-active-on") {
+  // this disables checkbox
+      // $("#toggle-active-off").button("toggle");
+      // event.target.disabled = true;
+// TODO put spinner bar in here? 
+    // $('#imgid').show()
+      // console.log('disabled checkbox');
+      $.ajax({
+        url: "/leafactivelistings",
+      }).done(function(data) {
+        prices = $.parseJSON(data);
+        createMarkers(prices);
+        // addActiveMarkers(prices);
+        // event.target.disabled = false;
+        // $('#imgid').hide()
+      });
+    } else {
+      // $("#toggle-active-on").button("toggle");
+      map.removeLayer(markers);
+    }
+  });
+}
+
+// function toggleHeatMap(region) {
+//   $('input[name=toggleheat]').change(function(event){
+// // if toggle button on, show radio button
+//     if (event.target.checked) {
+//       event.target.disabled = true;
+//       $("#radio").removeClass("is-nodisplay");
+//       heatColors(region,currentMetric);
+//       createLegend();
+// // if prices $ change checked at time of toggling, add back slider range
+//      if ($("#SPSC").is(":checked")) {
+//         $("#year-slider").removeClass("is-nodisplay");
+//         $("#slider-range").show();
+//       }
+//       event.target.disabled = false;
+//     }
+// // removes metrics options if heatmap toggle is unchecked along with layer and legend
+//     else {
+//       $("#radio").addClass("is-nodisplay");
+//       map.removeLayer(heatLayer);
+//       removeLegend();
+// // if sales price % change checked at time of toggling, removes slider range
+//      if ($("#SPSC").is(":checked")) {
+//         $("#year-slider").addClass("is-nodisplay");
+//         $("#slider-range").hide();
+//       }
+//     }
+//   });
+// }
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -446,7 +536,7 @@ function createLegend() {
       var div = L.DomUtil.create('div', 'info legend'),
           // grades = [0, 1, 2, 3, 4, 5],
           labels = [],
-          steps = getLevelAmounts(),
+          steps = getLevelAmounts(currentMetric),
           stepAmount = steps.steps,
           minAmount = steps.minAmount,
           maxAmount = steps.maxAmount;
@@ -509,7 +599,7 @@ function removeLegend() {
 // SECTION select metrics to view on choropleth map
 function selectMetric(){
   $('#SP, #SPS, #SPSC').change(function(){
-    if ($('input[name=toggleheat]').is(":checked")){
+    // if ($('.toggle-heat .btn.active input[type=radio]')[0].getAttribute('id') === "toggle-heat-on") {
       if ($("#SP").is(":checked")) {
           console.log("you clicked SP");
           map.removeLayer(heatLayer);
@@ -529,9 +619,11 @@ function selectMetric(){
           map.removeLayer(heatLayer);
           $("#year-slider").removeClass("is-nodisplay");
           $("#slider-range").show();
-          growthChange(2009, 2013, geochanges, zips);
+          currentMetric = 'change';
+          var values = $('#slider-range').slider('values');
+          growthChange(values[0], values[1], geochanges, zips, currentMetric);
       }
-    }
+    // }
   });
 }
 
@@ -566,7 +658,7 @@ function setupSlider() {
       stop: function(event, ui) {
             // when the user lets go and stops changing the slider
         map.removeLayer(heatLayer);
-        growthChange(ui.values[ 0 ], ui.values[ 1 ], geochanges, zips);
+        growthChange(ui.values[ 0 ], ui.values[ 1 ], geochanges, zips, currentMetric);
       }
     });
   // Setting up slider before any user action based on default values
@@ -576,7 +668,11 @@ function setupSlider() {
 // Don't need to remove layer, already setup in selectMetric()
 }
 
-function growthChange(baseyear, compyear, urli, region) {
+
+function growthChange(baseyear, compyear, urli, region, metric) {
+    console.log(baseyear);
+    console.log(compyear);
+
       $.ajax({
       url: urli,
       type: "POST",
@@ -584,7 +680,7 @@ function growthChange(baseyear, compyear, urli, region) {
       data: JSON.stringify({"baseyear":baseyear, "compyear":compyear})
       }).done(function(data){
         geoIdPrices = $.parseJSON(data);
-        heatColors(region, 'change');
+        heatColors(region, metric);
         removeLegend();
         createLegend();
       // console.log(data);
