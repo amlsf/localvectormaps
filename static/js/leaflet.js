@@ -40,19 +40,20 @@ var geoIdPrices = null;
 var heatLayer;
 var legend;
 var tierCount = 6;
+var currentMetric = null;
 
 // route variables for radio button selections
 var geoidpricesajax = "/geoidpricesajax";
 var psf = "/psf";
 var geochanges = "/geochanges";
 
-var initLeaflet = function (active_listings) {
+var initLeaflet = function () {
 
     // var metric_route = geoidpricesajax;
     // var region = counties;
 
     addBaseMap();
-    showHeatMap(zips, geoidpricesajax);
+    showHeatMap(zips, geoidpricesajax, 'median_sales_price');
 
     // addCounties();
     // addZips();
@@ -196,11 +197,11 @@ function showActive() {
 // get max and min price in region and $ amount per block level, called in getLevel()
 // geoIdPrices is a global variable that is defined in ajax call in showHeatMap() function 
 // remove the counties with nothing so not calculated in min price
-function getLevelAmounts() {
+function getLevelAmounts(metric) {
   var prices = [];
   for (var key in geoIdPrices) {
-      if (geoIdPrices[key] !== 0) {
-      prices.push(geoIdPrices[key]);
+      if (geoIdPrices[key][metric] !== 0) {
+      prices.push(geoIdPrices[key][metric]);
       }
   }
     var maxAmount = Math.max.apply(Math, prices);
@@ -218,9 +219,8 @@ function getLevelAmounts() {
 
 
 // use the $ blocks to determine the particular house price color level, called in style fxn with getColor()
-function getLevel(price) {
-    var steps = getLevelAmounts();
-    var level = (price - steps.minAmount)/steps.steps;
+function getLevel(levelAmounts, price) {
+    var level = (price - levelAmounts.minAmount)/levelAmounts.steps;
     return level;
 }
 
@@ -228,52 +228,73 @@ function getLevel(price) {
 // dicts of color levels, called in style function with getLevel()
 // This is shorthand notation ? is "if" then do what's before colon:, else do whatever is after 
 function getColor(level) {
-    alpha = (level+1)/tierCount;
+    // alpha = (level+1)/tierCount;
 
-    return 'rgba(255,0,0,' + alpha + ')';
-
-    // return level >= 5  ? 'rgba(255,0,0,1)' :
-           // level >= 4  ? 'rgba(255,0,0,0.8)' :
-           // level >= 3  ? 'rgba(255,0,0,0.6)' :
-           // level >= 2  ? 'rgba(255,0,0,0.4)' :
-           // level >= 1  ? 'rgba(0,255,0,0.2)' :
-           //            'rgba(0,0,255,1)';
+    // return 'rgba(255,0,0,' + alpha + ')';
+    return level >= 5  ? 'rgba(237,248,251,1)' :
+           level >= 4  ? 'rgba(2191,211,230,1)' :
+           level >= 3  ? 'rgba(158,188,218,1)' :
+           level >= 2  ? 'rgba(140,150,198,1)' :
+           level >= 1  ? 'rgba(136,86,167,1)' :
+                      'rgba(129,15,124,1)';
 }
 
-// var colorDict = {
-//     1: "#F1917C",
-//     2: "#F18064",
-//     3: "#D67159",
-//     4: "#D65E3A"
-// }
 
+var makeStyleFn = function(metric) {
+  var levelAmounts = getLevelAmounts(metric);
 
-// This is used in heatColors(), iterates through counties by geoID in heatColors and pulls geoID
-var style = function(feature) {
-// TODO check: this references my geojson, actually wouldn't I change it to the variable name.dictkey.dictkey?
-    var geoId = feature.properties.GEOID10;
-    // console.log(geoIdPrices);
-    return {
-    // replace median with geoIdPrices[geoId]
-        fillColor: getColor(getLevel(geoIdPrices[geoId])),
-        weight: 2,
-        opacity: 1,
-        color: 'white',
-        dashArray: '3',
-        fillOpacity: 0.7
-    };
+  // This is used in heatColors(), iterates through counties by geoID in heatColors and pulls geoID
+  return function(feature) {
+  // TODO check: this references my geojson, actually wouldn't I change it to the variable name.dictkey.dictkey?
+      var geoId = feature.properties.GEOID10;
+      var color = 'rgba(0,0,0,0)';
+      // console.log(geoIdPrices);
+      if (geoIdPrices[geoId][metric] !== null) {
+         color = getColor(getLevel(levelAmounts, geoIdPrices[geoId][metric]));
+      }
+      return {
+      // replace median with geoIdPrices[geoId]
+          fillColor: color,
+          weight: 2,
+          opacity: 1,
+          color: 'white',
+          dashArray: '3',
+          fillOpacity: 0.7
+      };
+  };
 };
 
+// // This is used in heatColors(), iterates through counties by geoID in heatColors and pulls geoID
+// var style = function(feature) {
+// // TODO check: this references my geojson, actually wouldn't I change it to the variable name.dictkey.dictkey?
+//     var geoId = feature.properties.GEOID10;
+//     var color = 'rgba(0,0,0,0)';
+//     // console.log(geoIdPrices);
+//     if (geoIdPrices[geoId]['median_sales_price'] !== null) {
+//        color = getColor(getLevel(geoIdPrices[geoId]['median_sales_price']));
+//     }
+//     return {
+//     // replace median with geoIdPrices[geoId]
+//         fillColor: color,
+//         weight: 2,
+//         opacity: 1,
+//         color: 'white',
+//         dashArray: '3',
+//         fillOpacity: 0.7
+//     };
+// };
+
 // this iterates through style function and matches geoid from counties geojson to style dict (same as style() if had done other notation in setting up style function)
-function heatColors(region) {
+function heatColors(region,metric) {
+    var styleFn = makeStyleFn(metric);
     heatLayer = L.geoJson(region, {
-      style: style,
+      style: styleFn,
 // This is from user interaction section for hover and click in
       onEachFeature: onEachFeature
     }).addTo(map);
 }
 
-function showHeatMap(region, urli) {
+function showHeatMap(region, urli, metric) {
       $.ajax({
 // pulls "data" from the data returned in the path /geoidpricesajax
       url: urli,
@@ -285,26 +306,47 @@ function showHeatMap(region, urli) {
         geoIdPrices = $.parseJSON(data);
 // call heatColors AFTER stuff above has loaded
       // console.log(geoIdPrices)
-        heatColors(region);
+        $("#radio").removeClass("is-nodisplay");
+        heatColors(region, metric);
         removeLegend();
         createLegend();
       }
     });
 }
 
+
+// function getMetricFromUI() {
+//   if 
+// }
+
 // toggle checkbox to show and remove heatmap layer
 // TODO change this to a toggle button like Gmaps one with abbreviated notation
 // TODO why is the disabled not working when toggling heatmap back on? 
 function toggleHeatMap(region) {
   $('input[name=toggleheat]').change(function(event){
+// if toggle button on, show radio button
     if (event.target.checked) {
       event.target.disabled = true;
-      heatColors(region);
+      $("#radio").removeClass("is-nodisplay");
+      heatColors(region,currentMetric);
       createLegend();
+// if prices $ change checked at time of toggling, add back slider range
+     if ($("#SPSC").is(":checked")) {
+        $("#year-slider").removeClass("is-nodisplay");
+        $("#slider-range").show();
+      }
       event.target.disabled = false;
-    } else {
+    }
+// removes metrics options if heatmap toggle is unchecked along with layer and legend
+    else {
+      $("#radio").addClass("is-nodisplay");
       map.removeLayer(heatLayer);
       removeLegend();
+// if sales price % change checked at time of toggling, removes slider range
+     if ($("#SPSC").is(":checked")) {
+        $("#year-slider").addClass("is-nodisplay");
+        $("#slider-range").hide();
+      }
     }
   });
 }
@@ -343,8 +385,8 @@ function zoomToFeature(e) {
     map.fitBounds(e.target.getBounds());
 }
 
+// TODO add a zoom out feature where double click takes you back to original default zoom level
 
-// TODO how to incorporate with click clusters and incorporate click out? 
 // used in heatColors() fxn
 function onEachFeature(feature, layer) {
     layer.on({
@@ -358,7 +400,7 @@ function onEachFeature(feature, layer) {
 
 
 // SECTION show info pop-ups on mouse hover
-var info = L.control();
+var info = L.control({position:'topleft'});
 
 info.onAdd = function (map) {
     this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
@@ -368,8 +410,12 @@ info.onAdd = function (map) {
 
 // method that will update the control based on feature properties passed (tied to user interaction onEachFeature() highlight and reset features)
 info.update = function (props) {
+    // + geoIdPrices[geoId]
+    // return {
+    // replace median with geoIdPrices[geoId]
+        // fillColor: getColor(getLevel(geoIdPrices[geoId])),
     this._div.innerHTML = '<h4>Median Value</h4>' +  (props ?
-        '<b>' + props.ZCTA5CE10 + '</b><br />' + props.GEOID10 + ' name / geoid':
+        '<b>' + props.ZCTA5CE10 + '</b><br />' + props.GEOID10 + ' name / geoid'  + geoIdPrices[props.GEOID10]['2009']:
         'Hover over a region');
 };
 
@@ -410,6 +456,8 @@ function createLegend() {
           console.log(minAmount);
           console.log(stepAmount);
 
+// TODO what's the most meaningful breakout of tier colors? Change large numbers to smaller ones by dividing by 100 and appending and using .formatMoney
+// Make colors more red for more neg, more green for more positive, what to do when 0-0 change? 
 // Makes a different legend type if YoY Change % option is selected
       if ($("#SPSC").is(":checked")) {
         console.log("regenerating legend for SPSC");
@@ -425,11 +473,12 @@ function createLegend() {
         }
 // Makes a different legend type if overall $ price option selected 
       } else {
-        for (var x = 0; x < tierCount; x++) {
+        for (var i = 0; i < tierCount; i++) {
             div.innerHTML +=
-                '<i style="background:' + getColor(x) + '"></i> ' +
-                '$'+((x*stepAmount)+minAmount).formatMoney(0) +
-                  ( x+1 < tierCount ?
+                '<i style="background:' + getColor(i) + '"></i> ' +
+                // if 
+                '$'+((i*stepAmount)+minAmount).formatMoney(0) +
+                  ( i+1 < tierCount ?
                     ' +' + '<br>':
                     '&ndash;' + '$' + maxAmount.formatMoney(0)
                     // '&ndash;' + '$'+(((grades[x + 1]*stepAmount)+minAmount)).formatMoney(0) + '<br>':
@@ -455,6 +504,7 @@ function removeLegend() {
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
+// NOTE TODO keep in mind that any stuff without change has a ""
 
 // SECTION select metrics to view on choropleth map
 function selectMetric(){
@@ -465,13 +515,15 @@ function selectMetric(){
           map.removeLayer(heatLayer);
           $("#year-slider").addClass("is-nodisplay");
           $("#slider-range").hide();
-          showHeatMap(zips, geoidpricesajax);
+          currentMetric = 'median_sales_price';
+          showHeatMap(zips, geoidpricesajax, 'median_sales_price');
       } else if ($("#SPS").is(":checked")) {
           console.log("you clicked SPS");
           map.removeLayer(heatLayer);
           $("#slider-range").hide();
           $("#year-slider").addClass("is-nodisplay");
-          showHeatMap(zips,psf);
+          currentMetric = 'median_sales_psf';
+          showHeatMap(zips,geoidpricesajax, 'median_sales_psf');
       } else if ($("#SPSC").is(":checked")) {
           console.log("you clicked SPSC");
           map.removeLayer(heatLayer);
@@ -499,10 +551,10 @@ function selectMetric(){
 function setupSlider() {
   $( "#slider-range" ).slider({
     range: true,
-    min: 2009,
+    min: 2005,
     max: 2013,
       // default values
-      values: [ 2009, 2013 ],
+      values: [ 2006, 2013 ],
       // TODO: this pulls the values from the slider and puts it on the label, what's below?
       slide: function( event, ui ) {
         $( "#year" ).val( "" + ui.values[ 0 ] + " - " + ui.values[ 1 ] );
@@ -532,7 +584,7 @@ function growthChange(baseyear, compyear, urli, region) {
       data: JSON.stringify({"baseyear":baseyear, "compyear":compyear})
       }).done(function(data){
         geoIdPrices = $.parseJSON(data);
-        heatColors(region);
+        heatColors(region, 'change');
         removeLegend();
         createLegend();
       // console.log(data);

@@ -11,10 +11,12 @@ import shapefile
 
 # loads active data file
 def load_alist(session):
-    with open("data/activedata_20140330fix.csv") as f:
+
+    with open("data/activedata_20140330fixltlg.csv") as f:
         reader = csv.reader(f, delimiter = ",")
         counter = 0
 # skips header row
+
         for row in reader:
             counter += 1
             if counter == 1:
@@ -92,7 +94,8 @@ def load_alist(session):
                 # state = state,
                 # full_address = full_address,
                 latitude = latitude,
-                longitude = longitude)
+                longitude = longitude) 
+                # zip_geoid = "__NOZIP")
             session.add(u)
 
     session.commit()
@@ -184,6 +187,8 @@ def load_slist(session):
                 mls_id = mls_id.decode("latin-1"),
                 description = description.decode("latin-1"),
                 parcel_number = parcel_number.decode("latin-1"))
+# Load a dummy row for foreign key constraint so can fill in later with insert join or Ray Casting algorithm
+                # zip_geoid = "__NOZIP")
                 # state = state,
                 # full_address = full_address,
                 # latitude = latitude,
@@ -195,6 +200,11 @@ def load_slist(session):
 
 
 def load_zips(session):
+
+# Load a dummy row for foreign key constraint so can fill in later with insert join or Ray Casting algorithm
+    # u = model.Zipcodes(geoid = "__NOZIP")
+    # session.add(u)
+    # session.commit()
 
     shpfile = shapefile.Reader("data/maps/tl_2013_us_zcta510zipcodes/subsetzips.shp")
 
@@ -219,31 +229,22 @@ def load_zips(session):
     session.commit()
 
 
+def load_countyprices(session):
+    county_list =["Monterey", "San Benito", "San Mateo", "Santa Clara", "Santa Cruz"]
 
-# def load_zips(session):
+    for item in county_list:
+        u = model.Countyprices(item)
+        session.add(u)
 
-#     shpfile = shapefile.Reader("data/maps/tl_2013_us_zcta510zipcodes/tl_2013_us_zcta510.shp")
+    session.commit()
 
-#     for (i, y) in zip(shpfile.iterShapes(), shpfile.iterRecords()):
-#         for x in range(len(i.points)):
-#             i.points[x] = list(i.points[x])
-#         # print i.points
 
-#         u = model.Zipcodes(zcta = y[0].decode("latin-1"),
-#             geoid = y[1].decode("latin-1"),
-#             # classfp = y[2].decode("latin-1"),
-#             # mtfcc = y[3].decode("latin-1"),
-#             # polygon_count = len(i.parts), # if it is a multipolygon will be >1
-# # iterates through to convert each item to a "real" list so it can then be converted to JSON
-#             # polypoint_starts = json.dumps(list(i.parts)), # this returns a list of position for start of each multipolygon
-#             #need to use json.loads(sqlalchemyobject.coordinates) to get back as list
-# # WARNING - these coordinates are backwards - longitude then lat (not latlong)
-#             # coordinates = json.dumps(list(i.points))) # this returns a list of all coordinates
-
-#         session.add(u)
-
-#     session.commit()
-
+# # TODO For extra dummy row for foreign key to insert join later: 
+# # county_geoid = "__NOCOUNTY", 
+# # bg_geoid = "__NOBG"
+# #     u = model.Zipcodes(geoid = "__NOZIP")
+# #     session.add(u)
+# #     session.commit()
 
 # def load_counties(session):
 #     # 3221 records or something (the more dense version had a more like 34xx)
@@ -343,13 +344,17 @@ def load_zips(session):
 
 #     session.commit()
 
+
+
+
 def main(session):
-    load_alist(session)
-    load_slist(session)
+    # load_alist(session)
+    # load_slist(session)
 
 # TODO Delete from counties where zcta not between 90001 - 96162 inclusive
     load_zips(session)
 
+# next run medianinsertdb.py
 
     # load_neighborhoods(session)
 # TODO Delete from counties where State not '06'

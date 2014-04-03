@@ -9,13 +9,18 @@ from datetime import datetime
 
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine, ForeignKey
-from sqlalchemy import Column, Integer, String, DateTime, Text, extract
+from sqlalchemy import Column, Integer, String, DateTime, Text, extract, or_
 from sqlalchemy.sql import text, func
 from sqlalchemy.dialects.postgresql import FLOAT, DOUBLE_PRECISION, VARCHAR
 
 from sqlalchemy.orm import sessionmaker, scoped_session, relationship, backref
 
 from flask.ext.login import UserMixin
+
+import logging
+
+# logging.basicConfig()
+# logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 
 Base = declarative_base()
 # Base.query = session.query_property()
@@ -43,6 +48,7 @@ def create_tables():
     # engine = create_engine("sqlite:///listings.db", echo=False)
 
     Base.metadata.create_all(engine)
+
 
 class Listings(Base):
     __tablename__ = "listings"
@@ -81,33 +87,39 @@ class Listings(Base):
     latitude = Column(DOUBLE_PRECISION, nullable=True)
     longitude = Column(DOUBLE_PRECISION, nullable=True)
 # TODO do sql query to input zip_geoid into Zipcodes directly in database
+    # zip_geoid = Column(VARCHAR, ForeignKey('zipcodes.geoid'))
     zip_geoid = Column(VARCHAR, nullable=True)
     zip_id = Column(Integer, nullable=True)
-    # county_geoid = Column(Integer, nullable=True)
-    # county_id
-    # bg_geoid
+# Not using for now: 
+    # county_geoid = Column(VARCHAR, ForeignKey('counties.geoid'))
+    # county_id = Column(Integer, nullable=True)
+    # subcounty_geoid = Column(VARCHAR, ForeignKey('subcounties.geoid'))
+    # subcounty_id = Column(Integer, nullable=True)
+    # bg_geoid = Column(VARCHAR, ForeignKey('blockgroups.geoid'))
     # bg_id = Column(Integer, nullable=True)
     # nb_id = Column(Integer, nullable=True)
     # state = Column(VARCHAR, nullable= True)
     # full_address = Column(VARCHAR, nullable= True)
 
-class Zipcodes(Base):
-    __tablename__ = "zipcodes"
+    # zipcodes = relationship("Zipcodes", backref=backref("listings", order_by=id))
+    # counties = relationship("Counties", backref=backref("listings", order_by=zip_geoid))
+    # subcounties = relationship("Subcounties", backref=backref("listings", order_by=id))
+    # blockgroups = relationship("Blockgroups", backref=backref("listings", order_by=id))
+
+
+class Zipcodeannual(Base):
+    __tablename__ = "zipcodeprices"
     
+    # id = Column(Integer, primary_key=True, unique=True)   
+    # geoid = Column(VARCHAR, unique=True)
     id = Column(Integer, primary_key=True)   
     geoid = Column(VARCHAR, nullable=True)
     zcta = Column(VARCHAR, nullable=True)
-    polygon_count = Column(Integer, nullable=False)
-    polypoint_starts = Column(VARCHAR, nullable=False)
-    coordinates = Column(VARCHAR, nullable=False) 
-    median_sales_price = Column(Integer, nullable=True)
-    median_sales_psf = Column(DOUBLE_PRECISION, nullable=True)
-    median_sales_psf_2009=Column(DOUBLE_PRECISION, nullable=True)
-    median_sales_psf_2010=Column(DOUBLE_PRECISION, nullable=True)
-    median_sales_psf_2011=Column(DOUBLE_PRECISION, nullable=True)
-    median_sales_psf_2012=Column(DOUBLE_PRECISION, nullable=True)
-    median_sales_psf_2013=Column(DOUBLE_PRECISION, nullable=True)
-#TODO maybe add (2005), 2006, 2007, 2008 maybe
+    year = Column(Integer, nullable=True)
+## TODO Add this to seed file
+    year_median_sp = Column(Integer, nullable=True)
+    year_median_spsf=Column(DOUBLE_PRECISION, nullable=True)
+    year_count_median_sp=Column(Integer, nullable=True)
 
     # classfp = Column(VARCHAR, nullable=True)
     # mtfcc = Column(String(100), nullable=True)
@@ -117,25 +129,115 @@ class Zipcodes(Base):
     # intptlat = Column(String(15), nullable=True)
     # intptlon = Column(String(15), nullable=True)
 
+
+class Zipcodes(Base):
+    __tablename__ = "zipcodes"
+    
+    # id = Column(Integer, primary_key=True, unique=True)   
+    # geoid = Column(VARCHAR, unique=True)
+    id = Column(Integer, primary_key=True)   
+    geoid = Column(VARCHAR, nullable=True)
+    zcta = Column(VARCHAR, nullable=True)
+    polygon_count = Column(Integer, nullable=True)
+    polypoint_starts = Column(VARCHAR, nullable=True)
+    coordinates = Column(VARCHAR, nullable=True) 
+    median_sales_price = Column(Integer, nullable=True)
+    median_sales_psf = Column(DOUBLE_PRECISION, nullable=True)
+    count_median_sales = Column(Integer, nullable=True)
+
+
+#TODO these tables not being used for now, write script to seed later if have time
+#TODO check if the subcounty stuff is correct
+
+class Countyprices(Base):
+    __tablename__ = "countyprices"
+    
+    id = Column(Integer, primary_key=True)   
+    geoid = Column(VARCHAR, nullable=True)
+# there are only 5
+    county = Column(VARCHAR, nullable=True)
+    name = Column(VARCHAR, nullable=True)
+    median_sales_price = Column(Integer, nullable=True)
+    median_sales_psf = Column(DOUBLE_PRECISION, nullable=True)
+    count_median_sales = Column(Integer, nullable=True)
+    year = Column(Integer, nullable=True)
+## TODO Add this to seed file
+    year_median_sp = Column(Integer, nullable=True)
+    year_median_spsf=Column(DOUBLE_PRECISION, nullable=True)
+    year_count_median_sp=Column(Integer, nullable=True)
+
+
 # class Counties(Base):
 #     __tablename__ = "counties"
     
 #     id = Column(Integer, primary_key=True)   
-#     geoid = Column(VARCHAR, nullable=True)
+#     geoid = Column(VARCHAR, unique=True)
 #     state = Column(VARCHAR, nullable=True)
 #     county = Column(VARCHAR, nullable=True)
-#     name = Column(VARCHAR, nullable=False)
-#     lsad = Column(VARCHAR, nullable=False)
-#     censusarea = Column(VARCHAR, nullable=False)
-#     polygon_count = Column(Integer, nullable=False)
-#     polypoint_starts = Column(VARCHAR, nullable=False)
-#     coordinates = Column(VARCHAR, nullable=False)
+#     name = Column(VARCHAR, nullable=True)
+#     lsad = Column(VARCHAR, nullable=True)
+#     censusarea = Column(VARCHAR, nullable=True)
+#     polygon_count = Column(Integer, nullable=True)
+#     polypoint_starts = Column(VARCHAR, nullable=True)
+#     coordinates = Column(VARCHAR, nullable=True)
+
+# across all data
+class Aggprices(Base):
+    __tablename__ = "aggprices"
+
+    id = Column(Integer, primary_key=True)
+    median_sales_price = Column(Integer, nullable=True)
+    median_sales_psf = Column(DOUBLE_PRECISION, nullable=True)
+    count_median_sales = Column(Integer, nullable=True)
+    year = Column(Integer, nullable=True)
+    year_median_sp = Column(Integer, nullable=True)
+    year_median_spsf=Column(DOUBLE_PRECISION, nullable=True)
+    year_count_median_sp=Column(Integer, nullable=True)
+
+# TODO (optional) would need to get national prices for all single family homes (ask Ilya?)
+class Nationalprices(Base):
+    __tablename__ = "nationalprices"
+
+    id = Column(Integer, primary_key=True)
+    median_sales_price = Column(Integer, nullable=True)
+    median_sales_psf = Column(DOUBLE_PRECISION, nullable=True)
+#TODO check if have count
+    # count_median_sales = Column(Integer, nullable=True)
+    year = Column(Integer, nullable=True)
+    year_median_sp = Column(Integer, nullable=True)
+    year_median_spsf=Column(DOUBLE_PRECISION, nullable=True)
+#TODO check if have count
+    # year_count_median_sp=Column(Integer, nullable=True)
+
+# Most likely will not use the following tables (maybe only subcounties)
+# class Subcounties(Base):
+#     __tablename__ = "subcounties"
+    
+#     id = Column(Integer, primary_key=True)   
+#     geoid = Column(VARCHAR, unique=True)
+#     state = Column(VARCHAR, nullable=True)
+#     county = Column(VARCHAR, nullable=True)
+#     cousub = Column(VARCHAR, nullable=True)
+#     name = Column(VARCHAR, nullable=True)
+#     lsad = Column(VARCHAR, nullable=True)
+#     censusarea = Column(VARCHAR, nullable=True)
+#     polygon_count = Column(Integer, nullable=True)
+#     polypoint_starts = Column(VARCHAR, nullable=True)
+#     coordinates = Column(VARCHAR, nullable=True)
+    # median_sales_price = Column(Integer, nullable=True)
+    # median_sales_psf = Column(DOUBLE_PRECISION, nullable=True)
+    # count_median_sales = Column(Integer, nullable=True)
+    # year = Column(Integer, nullable=True)
+    # year_median_sp = Column(Integer, nullable=True)
+    # year_median_spsf=Column(DOUBLE_PRECISION, nullable=True)
+    # year_count_median_sp=Column(Integer, nullable=True)
+
 
 # class Blockgroups(Base):
 #     __tablename__ = "blockgroups"
     
 #     id = Column(Integer, primary_key=True)   
-#     geoid = Column(VARCHAR, nullable=True)
+#     geoid = Column(VARCHAR, unique=True)
 #     state = Column(VARCHAR, nullable=True)
 #     county = Column(VARCHAR, nullable=True)
 #     tract = Column(VARCHAR, nullable=True)
@@ -146,7 +248,14 @@ class Zipcodes(Base):
 #     polygon_count = Column(Integer, nullable=False)
 #     polypoint_starts = Column(VARCHAR, nullable=False)
 #     coordinates = Column(VARCHAR, nullable=False)
-#     # color = Column(String(16), nullable=True)    
+    # median_sales_price = Column(Integer, nullable=True)
+    # median_sales_psf = Column(DOUBLE_PRECISION, nullable=True)
+    # count_median_sales = Column(Integer, nullable=True)
+    # year = Column(Integer, nullable=True)
+    # year_median_sp = Column(Integer, nullable=True)
+    # year_median_spsf=Column(DOUBLE_PRECISION, nullable=True)
+    # year_count_median_sp=Column(Integer, nullable=True)
+
 
 # class Neighborhoods(Base):
 #     __tablename__ = "neighborhoods"

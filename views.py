@@ -90,8 +90,9 @@ def leafactive():
 # retuns JSON dictionary of geoid:medianprice per region
 @app.route("/geoidpricesajax")
 def geoidpricesajax():    
-    return calculations.sp_median_byzip(model.session)
+    return calculations.total_median(model.session)
 
+# TODO DELETE THIS don't need it anymore
 @app.route("/psf")
 def psf():
     return calculations.psf_median_byzip(model.session)
