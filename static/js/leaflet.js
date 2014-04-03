@@ -38,6 +38,8 @@ var geoIdPrices = null;
 // var minPrice = null;
 // var blocks = null;
 var heatLayer;
+var heatLayerCount=0;
+
 var legend;
 var tierCount = 6;
 var currentMetric = 'median_sales_price';
@@ -316,6 +318,11 @@ var makeStyleFn = function(metric) {
 
 // this iterates through style function and matches geoid from counties geojson to style dict (same as style() if had done other notation in setting up style function)
 function heatColors(region,metric) {
+    console.log("making heat layer");
+    heatLayerCount += 1;
+    if (heatLayerCount > 1) {
+      throw 'WTF';
+    }
     var styleFn = makeStyleFn(metric);
     heatLayer = L.geoJson(region, {
       style: styleFn,
@@ -325,7 +332,10 @@ function heatColors(region,metric) {
 }
 
 function showHeatMap(region, urli, metric) {
-      $.ajax({
+    if (heatLayerCount === 1) {
+      throw 'WTF';
+    }
+    $.ajax({
 // pulls "data" from the data returned in the path /geoidpricesajax
       url: urli,
 // .done is a callback, submits function and waits for callback
@@ -374,6 +384,8 @@ function toggleHeatMap(region) {
     //   event.target.disabled = true;
 // removes metrics options if heatmap toggle is unchecked along with layer and legend
       $("#radio").addClass("is-nodisplay");
+      console.log("removing heat layer");
+      heatLayerCount -= 1;
       map.removeLayer(heatLayer);
       removeLegend();
 // if sales price % change checked at time of toggling, removes slider range
@@ -504,28 +516,86 @@ info.update = function (props) {
     // return {
     // replace median with geoIdPrices[geoId]
         // fillColor: getColor(getLevel(geoIdPrices[geoId])),
-    this._div.innerHTML = '<h4>Median Value</h4>' +  (props ?
-        '<b>' + props.ZCTA5CE10 + '</b><br />' + props.GEOID10 + ' name / geoid'  + geoIdPrices[props.GEOID10]['2009']:
-        'Hover over a region');
+
+// TODO format the numbers, pull in counties by adding join, check why some houses are less than 10?
+    if ($("#SP").is(":checked")) {
+      this._div.innerHTML = '<h4>Region Details</h4>' +  (props ?
+          '<h4> Zipcode: ' + props.ZCTA5CE10 + '</h4> </br>' +
+          '<b>County: '+ '</b> </br>' +
+          '<b> Median Sales Price: </b>' + geoIdPrices[props.GEOID10]['median_sales_price']  + '</br>' +
+          '<b> Number of Homes Sold: </b>'  + geoIdPrices[props.GEOID10]['count_median_sales'] :
+          'Hover over a region');
+    } else if ($("#SPS").is(":checked")){
+      this._div.innerHTML = '<h4>Region Details</h4>' +  (props ?
+          '<h4> Zipcode: ' + props.ZCTA5CE10 + '</h4> </br>' +
+          '<b>County: '+ '</b> </br>' +
+          '<b> Median Sales Price/Sqft: </b>' + geoIdPrices[props.GEOID10]['median_sales_psf']  + '</br>' +
+          '<b> Number of Homes Sold: </b>'  + geoIdPrices[props.GEOID10]['count_median_sales'] :
+          'Hover over a region');
+    } else if ($("#SPSC").is(":checked")) {
+      this._div.innerHTML = '<h4>Region Details</h4>' +  (props ?
+          '<h4> Zipcode: ' + props.ZCTA5CE10 + '</h4> </br>' +
+          '<b>County: '+ '</b> </br>' +
+          '<b> Sales Price/Sqft % Change YoY: </b>' + geoIdPrices[props.GEOID10]['change']  + '</br>' +
+          '<b> Base Year Median Sales Price/Sqft: </b>'  + geoIdPrices[props.GEOID10]['basePsf'] + '</br>' +
+          '<b> Homes Sold in Base Year: </b>'  + geoIdPrices[props.GEOID10]['baseCount'] + '</br>' +
+          '<b> Comp Year Median Sales Price/Sqft: </b>'  + geoIdPrices[props.GEOID10]['compPsf'] + '</br>' +
+          '<b> Homes Sold in Comp Year: </b>'  + geoIdPrices[props.GEOID10]['compCount']
+          :
+          'Hover over a region');
+    }
 };
 
 info.addTo(map);
+
+
+      // if ($("#SP").is(":checked")) {
+      //     console.log("you clicked SP");
+      //     if (heatLayer) {
+      //       console.log("removing heat layer");
+      //       heatLayerCount -= 1;
+      //       map.removeLayer(heatLayer);
+      //     }
+      //     $("#year-slider").addClass("is-nodisplay");
+      //     $("#slider-range").hide();
+      //     currentMetric = 'median_sales_price';
+      //     showHeatMap(zips, geoidpricesajax, 'median_sales_price');
+      // } else if ($("#SPS").is(":checked")) {
+      //     console.log("you clicked SPS");
+      //     console.log("removing heat layer");
+      //     heatLayerCount -= 1;
+      //     map.removeLayer(heatLayer);
+      //     $("#slider-range").hide();
+      //     $("#year-slider").addClass("is-nodisplay");
+      //     currentMetric = 'median_sales_psf';
+      //     showHeatMap(zips,geoidpricesajax, 'median_sales_psf');
+      // } else if ($("#SPSC").is(":checked")) {
+      //     console.log("you clicked SPSC");
+      //     console.log("removing heat layer");
+      //     heatLayerCount -= 1;
+      //     map.removeLayer(heatLayer);
+      //     $("#year-slider").removeClass("is-nodisplay");
+      //     $("#slider-range").show();
+      //     currentMetric = 'change';
+      //     var values = $('#slider-range').slider('values');
+      //     growthChange(values[0], values[1], geochanges, zips, currentMetric);
+      // }
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
 // SECTION Legend
 
 // Formats money
-Number.prototype.formatMoney = function(c, d, t){
-var n = this, 
-    c = isNaN(c = Math.abs(c)) ? 2 : c,
-    d = d == undefined ? "." : d,
-    t = t == undefined ? "," : t,
-    s = n < 0 ? "-" : "",
-    i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "",
-    j = (j = i.length) > 3 ? j % 3 : 0;
-   return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
- };
+function formatMoney(n, c, d, t) {
+  var c = isNaN(c = Math.abs(c)) ? 2 : c,
+      d = d == undefined ? "." : d,
+      t = t == undefined ? "," : t,
+      s = n < 0 ? "-" : "",
+      i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "",
+      j = (j = i.length) > 3 ? j % 3 : 0;
+     return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+ }
 
 function createLegend() {
 
@@ -547,6 +617,7 @@ function createLegend() {
           console.log(stepAmount);
 
 // TODO what's the most meaningful breakout of tier colors? Change large numbers to smaller ones by dividing by 100 and appending and using .formatMoney
+// TODO check if change is null then don't add in (or remove somehow?), what to do with same year
 // Make colors more red for more neg, more green for more positive, what to do when 0-0 change? 
 // Makes a different legend type if YoY Change % option is selected
       if ($("#SPSC").is(":checked")) {
@@ -554,23 +625,24 @@ function createLegend() {
         for (var x = 0; x < tierCount; x++) {
             div.innerHTML +=
                 '<i style="background:' + getColor(x) + '"></i> ' +
-                '$'+((x*stepAmount)+minAmount).formatMoney(0) +
+                formatMoney(((x*stepAmount)+minAmount)*100,2) + '%' +
                   ( x+1 < tierCount ?
                     ' +' + '<br>':
-                    '&ndash;' + '$' + maxAmount.formatMoney(0)
+                    '&ndash;' + formatMoney(maxAmount * 100, 2) + '%'
                     // '&ndash;' + '$'+(((grades[x + 1]*stepAmount)+minAmount)).formatMoney(0) + '<br>':
                     );
         }
 // Makes a different legend type if overall $ price option selected 
       } else {
         for (var i = 0; i < tierCount; i++) {
+            console.log((i*stepAmount)+minAmount);
             div.innerHTML +=
                 '<i style="background:' + getColor(i) + '"></i> ' +
                 // if 
-                '$'+((i*stepAmount)+minAmount).formatMoney(0) +
+                '$'+formatMoney((i*stepAmount)+minAmount,0) +
                   ( i+1 < tierCount ?
                     ' +' + '<br>':
-                    '&ndash;' + '$' + maxAmount.formatMoney(0)
+                    '&ndash;' + '$' + formatMoney(maxAmount,0)
                     // '&ndash;' + '$'+(((grades[x + 1]*stepAmount)+minAmount)).formatMoney(0) + '<br>':
                     );
         }
@@ -587,6 +659,7 @@ function createLegend() {
 function removeLegend() {
   if (legend !== undefined) {
     legend.removeFrom(map);
+    legend = undefined;
   }
 }
 
@@ -602,6 +675,8 @@ function selectMetric(){
     // if ($('.toggle-heat .btn.active input[type=radio]')[0].getAttribute('id') === "toggle-heat-on") {
       if ($("#SP").is(":checked")) {
           console.log("you clicked SP");
+          console.log("removing heat layer");
+          heatLayerCount -= 1;
           map.removeLayer(heatLayer);
           $("#year-slider").addClass("is-nodisplay");
           $("#slider-range").hide();
@@ -609,6 +684,8 @@ function selectMetric(){
           showHeatMap(zips, geoidpricesajax, 'median_sales_price');
       } else if ($("#SPS").is(":checked")) {
           console.log("you clicked SPS");
+          console.log("removing heat layer");
+          heatLayerCount -= 1;
           map.removeLayer(heatLayer);
           $("#slider-range").hide();
           $("#year-slider").addClass("is-nodisplay");
@@ -616,6 +693,8 @@ function selectMetric(){
           showHeatMap(zips,geoidpricesajax, 'median_sales_psf');
       } else if ($("#SPSC").is(":checked")) {
           console.log("you clicked SPSC");
+          console.log("removing heat layer");
+          heatLayerCount -= 1;
           map.removeLayer(heatLayer);
           $("#year-slider").removeClass("is-nodisplay");
           $("#slider-range").show();
@@ -657,6 +736,8 @@ function setupSlider() {
       // },
       stop: function(event, ui) {
             // when the user lets go and stops changing the slider
+        console.log("removing heat layer");
+        heatLayerCount -= 1;
         map.removeLayer(heatLayer);
         growthChange(ui.values[ 0 ], ui.values[ 1 ], geochanges, zips, currentMetric);
       }
