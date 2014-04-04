@@ -3,14 +3,16 @@
 <html>
     <head>
         <title>Real Estate</title>
-            <link href="/static/bootstrap/bootstrap.css" rel="stylesheet">
 
+<!-- bootstrap css -->
+            <link href="/static/bootstrap/bootstrap.css" rel="stylesheet">
 <!-- My css sheet for google maps -->
             <link href="/static/css/main.css" rel="stylesheet">
+<!-- jquery ui css -->
+            <link rel="stylesheet" href="/static/jquery/css/ui-lightness/jquery-ui-1.10.4.custom.min.css" />
+    
+    {% block head %}{% endblock %}
 
-               <link rel="stylesheet" href="/static/jquery/css/ui-lightness/jquery-ui-1.10.4.custom.min.css" />
-<!--             <link rel="stylesheet" href="/static/jquery/jquery-ui.css">
- -->            {% block head %}{% endblock %}
 <!--     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" /> -->
         <meta charset="utf-8">
     </head>
@@ -18,15 +20,14 @@
 
     {% block body %}{% endblock %}
 
+<!-- jquery  -->
         <script type="text/javascript" src="/static/jquery/jquery-2.0.3.min.js"></script>
-<!-- s        <script src="static/jquery/jquery-ui.js"></script> -->
-
-<!--  s       <script src="/static/jquery/js/jquery-1.10.2.js"></script> -->
+        <script src="/static/jquery/js/jquery-1.10.2.js"></script>
+<!-- jquery ui -->
         <script src="/static/jquery/js/jquery-ui-1.10.4.custom.js"></script>
-
+<!-- bootstrap -->
         <script type="text/javascript" src="/static/bootstrap/bootstrap.js"></script>
-<!-- s        <script type="text/javascript" src="/static/js/main.js"></script>
- -->
+
     {% block script %}{% endblock %}
 
     </body>

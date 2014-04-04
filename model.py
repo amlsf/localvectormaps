@@ -19,8 +19,6 @@ from flask.ext.login import UserMixin
 
 import logging
 
-# logging.basicConfig()
-# logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 
 Base = declarative_base()
 # Base.query = session.query_property()
@@ -53,9 +51,7 @@ def create_tables():
 class Listings(Base):
     __tablename__ = "listings"
 
-#TODO you can consider the sold data final - just trim those counties where you have low coverage
-# only 5 counties
-# only sold data for the first half of 2013
+# only sold data for the first half of 2013, 5 counties
 # includes all the property types, filter out later with detached (only single family) vs. attached (active is only detached; sold is only res. single family home)
     
     id = Column(Integer, primary_key=True)
@@ -116,25 +112,13 @@ class Zipcodeannual(Base):
     geoid = Column(VARCHAR, nullable=True)
     zcta = Column(VARCHAR, nullable=True)
     year = Column(Integer, nullable=True)
-## TODO Add this to seed file
     year_median_sp = Column(Integer, nullable=True)
     year_median_spsf=Column(DOUBLE_PRECISION, nullable=True)
     year_count_median_sp=Column(Integer, nullable=True)
 
-    # classfp = Column(VARCHAR, nullable=True)
-    # mtfcc = Column(String(100), nullable=True)
-    # funcstat = Column(String(15), nullable=True)
-    # aland = Column(String(15), nullable=True)
-    # awater = Column(String(15), nullable=True)
-    # intptlat = Column(String(15), nullable=True)
-    # intptlon = Column(String(15), nullable=True)
-
-
 class Zipcodes(Base):
     __tablename__ = "zipcodes"
     
-    # id = Column(Integer, primary_key=True, unique=True)   
-    # geoid = Column(VARCHAR, unique=True)
     id = Column(Integer, primary_key=True)   
     geoid = Column(VARCHAR, nullable=True)
     zcta = Column(VARCHAR, nullable=True)
@@ -145,9 +129,6 @@ class Zipcodes(Base):
     median_sales_psf = Column(DOUBLE_PRECISION, nullable=True)
     count_median_sales = Column(Integer, nullable=True)
 
-
-#TODO these tables not being used for now, write script to seed later if have time
-#TODO check if the subcounty stuff is correct
 
 class Countyprices(Base):
     __tablename__ = "countyprices"

@@ -21,21 +21,6 @@ box-shadow: 0 0 15px rgba(0,0,0,0.2);
 width:381px;
 }
 
-/*#metricspanel .metricspanellabel {
-line-height:3;
-border:dotted 1px red;
-}*/
-
-/*Trick: to see where boxes are*/
-/*.toggle-heat {
-border:dotted 1px green;
-}
-
-.toggle-active {
-border:dotted 1px purple;
-}
-*/
-
 /*Styling for the hover box info*/ 
 .info {
     padding: 6px 30px;

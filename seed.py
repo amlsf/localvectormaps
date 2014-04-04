@@ -1,5 +1,5 @@
 # For loading data into the database once it's been set up and tables created from model.py
-# TODO Look into auto-geocoding data with Sarah's ruby script?
+
 import model
 import csv
 import datetime
@@ -238,6 +238,7 @@ def load_countyprices(session):
 
     session.commit()
 
+# TODO Look into auto-geocoding data with Sarah's ruby script?
 
 # # TODO For extra dummy row for foreign key to insert join later: 
 # # county_geoid = "__NOCOUNTY", 
@@ -343,9 +344,6 @@ def load_countyprices(session):
 #         session.add(u)
 
 #     session.commit()
-
-
-
 
 def main(session):
     load_alist(session)

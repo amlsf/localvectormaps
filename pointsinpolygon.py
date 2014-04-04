@@ -1,4 +1,3 @@
-# TODO change so inputting geoid of region (isntead of autoncrement id) into listings table - easier to reference
 import model
 import re
 import sqlite3
@@ -9,7 +8,6 @@ import json
 # NOTE make sure in long-lat order according to database
 
 # this is catching concave polygons - read Ray Casting algorithm
-# TODO look at Keunwoo's notes
 def point_inside_polygon(x,y,poly):
 
     n = len(poly)
@@ -40,10 +38,6 @@ def point_inside_polygon(x,y,poly):
 
     return inside
 
-#TODO: Best way to loop through entire table and change stuff along the way - 
-    # would it be too slow to swallow the entire table and loop through like that? 
-    # Could do a loop through limit 100 at a time, and then offset 101, and then length
-
 
 def point_in_neighborhood(session):
     listings = session.query(model.Listings).all()
@@ -54,7 +48,6 @@ def point_in_neighborhood(session):
         polygon.coordinates = json.loads(polygon.coordinates)
         polygon.polypoint_starts = json.loads(polygon.polypoint_starts)
 
-#TODO better way to do this that might be faster without multiple big O? better way to code it up so not so confusing? 
 
 # Loop through each house in the listings
     for house in listings:
@@ -87,7 +80,6 @@ def point_in_neighborhood(session):
                     breaker = 1
                     print "single polygon. house_id: %r, house region: %r :::: region id: %r region name: %r" % (house.id, house.neighborhood, house.nb_id, polygon.neighborhood)
 
-# TODO check if coordinates is long/lat in that order?     
         if not house.nb_id:
             print "neighborhood not found!"
 
@@ -198,65 +190,14 @@ def point_in_blockgroups(session):
     session.commit()
 
 
-# def point_in_zips(session):
-#     listings = session.query(model.Listings).all()
-#     regions = session.query(model.Zipcodes).all()
-
-# # JSON dump everything
-#     for polygon in regions:
-#         polygon.coordinates = json.loads(polygon.coordinates)
-#         polygon.polypoint_starts = json.loads(polygon.polypoint_starts)
-
-# # Loop through each house in the listings
-#     for house in listings:
-#         breaker = 0
-# # With each house, loop through each (neighborhood), county, zip, block group to see if it's in the polygon
-#         for polygon in regions:
-#             if breaker == 1:
-#                 break
-#             # if it is a multipolygon
-#             if polygon.polygon_count > 1:
-#                 i = 0
-#                 # loop through each polygon in multipolygon and take slice of coordinates using polypoint_starts list
-#                 for s in range(len(polygon.polypoint_starts)):
-#                     i += 1
-#                     # if it's the last polygon, pull slice through rest of list so not out of index range
-#                     if i == len(polygon.polypoint_starts):
-#                         if point_inside_polygon(house.longitude,house.latitude,polygon.coordinates[polygon.polypoint_starts[s]:]):
-#                             house.zip_id = polygon.id
-#                             breaker = 1
-#                             print "multipolygon, last one in the list. house_id: %r, house zip: %r :::: house zcta zip_id: %r" % (house.id, house.postal_code, house.zip_id)
-#                     else:  
-#                         if point_inside_polygon(house.longitude,house.latitude,polygon.coordinates[polygon.polypoint_starts[s]:polygon.polypoint_starts[s+1]]):
-#                             house.zip_id = polygon.id
-#                             breaker = 1
-#                             print "multipolygon, SOMEWHERE in the list. house_id: %r, house zip: %r :::: house zcta zip_id: %r" % (house.id, house.postal_code, house.zip_id)
-#             # for regular polygons: 
-#             else: 
-#                 if point_inside_polygon(house.longitude, house.latitude, polygon.coordinates):
-#                     house.zip_id = polygon.id
-#                     breaker = 1
-#                     print "single polygon. house_id: %r, house zip: %r :::: house zcta zip_id: %r" % (house.id, house.postal_code, house.zip_id)
-
-#         if not house.zip_id:
-#             print "region not found!"
-
-# # Cancel any changes to regions with JSON dumps so database doesn't freak out
-#     for polygon in regions:
-#         session.expire(polygon)
-
-#     session.commit()
-
 def main(session):
-# Don't need to use
-    # point_in_neighborhood(session)
 
 #TODO just run counties (in case names not normalized in BD) and blockgroups, use sql query to match up zipcodes
     point_in_counties(session) 
     # point_in_blockgroups(session)
 
-#TODO just run sql join, don't need to use this
-    # point_in_zips(session)
+# Don't need to use
+    # point_in_neighborhood(session)
 
 if __name__ == "__main__":
     s = model.connect()

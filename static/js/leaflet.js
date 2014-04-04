@@ -1,41 +1,9 @@
-//TODO: factor out code so not so many global variables
-//TODO maybe use leaflet layer controls http://leafletjs.com/examples/layers-control.html
-//TODO How to organize when there are so many f-ing dependencies????
-// Gotta speed up the layering of geoJSON - too slow! Maybe change to county, subcounty, zips (no BG, census tracts?)
-
 mapid = 125674;
 apikey = "99d055cec8794a33b9e2cb09553e3506";
 
 var map = L.map('map').setView([36.685067, -121.73021], 9);
 
-
-                // var map = new L.Map('map', {
-                //     zoomControl: false,
-                //     center: new L.LatLng(37.75042,-122.489),
-                //     zoom: 12,
-                //     layers: [baseLayer, heatmapLayer]
-                // });
-                // new L.Control.Zoom({
-                //     position: 'topright'
-                // }).addTo(map);
-
-             // var baseLayer = L.tileLayer(
-             //        'http://{s}.tile.cloudmade.com/38be25219f7c4b6f8953354a1b2e583f/82651/256/{z}/{x}/{y}.png', 
-             //        {
-             //            attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
-             //            maxZoom: 18
-             //        }
-             //    );
-
-              // var heatmapLayer = L.TileLayer.heatMap({
-
-// initialized when /geoidpricesajax result is available
 var geoIdPrices = null;
-// var geoIdPricesMax = null;
-// var geoIdPricesMin = null;
-// var maxPrice = null;
-// var minPrice = null;
-// var blocks = null;
 var heatLayer;
 var heatLayerCount=0;
 
@@ -46,14 +14,10 @@ var markers = null;
 
 // route variables for radio button selections
 var geoidpricesajax = "/geoidpricesajax";
-// var psf = "/psf";
 var geochanges = "/geochanges";
 
 
 var initLeaflet = function () {
-
-    // var metric_route = geoidpricesajax;
-    // var region = counties;
 
     addBaseMap();
     showHeatMap(zips, geoidpricesajax, 'median_sales_price');
@@ -68,7 +32,6 @@ var initLeaflet = function () {
     selectMetric();
 
     setupSlider();
-    // setupMinSlider();
 };
 
 
@@ -94,29 +57,11 @@ function addZips(){
 }
 
 
-// function addBlockGroups(){
-//     L.geoJson(blockgroups).addTo(map);
-// }
-
-//////////////////////Zoom function
-    // map.on("zoomend",function(e){
-    //   console.log( "zoom level is " + map.getZoom());
-    //   var zoom = map.getZoom();
-    //   if (zoom < 10) {
-    //     showHeatMap(zips, geoidpricesajax);
-    //   } else if (zoom < 12) {
-    //     map.removeLayer(heatLayer);
-    //     addBlockGroups();
-    //   }
-    // });
-
-
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 // SECTION creates active listing markers with details pop-ups
-// var markers = new L.FeatureGroup();
 
 function createMarkers(active_listings) {
     console.log("createMarkers called:" + active_listings.length);
@@ -150,7 +95,7 @@ function createMarkers(active_listings) {
         mls_id:mls_id,
         url:url
       });
-// TODO: bind url somehow here? 
+
       marker.bindPopup(
         "<h4>" + "<a href='" + url + "'>" + address + ", " + city + ", CA " + postal_code + "</a></h4>" +
         "<i><b>County</b>: " + county + "</i><br>" +
@@ -167,30 +112,17 @@ function createMarkers(active_listings) {
 
 
 // Toggle checkbox to display active listings
-// QUESTIONS 
-// note to self: 'event' is when the input[] "active" .changes (.target is the object)
-// why doesn't a .click() or .toggle() work?
-// schedule deferred exeecution with setTimeout function at 0 ms of adding gmarkers before re-enabling form and removing spinner?
+
 function showActive() {
   $('.toggle-active .btn').change(function(event) {
     if ($(event.target).prop("id") === "toggle-active-on") {
-  // this disables checkbox
-      // $("#toggle-active-off").button("toggle");
-      // event.target.disabled = true;
-// TODO put spinner bar in here? 
-    // $('#imgid').show()
-      // console.log('disabled checkbox');
       $.ajax({
         url: "/leafactivelistings",
       }).done(function(data) {
         prices = $.parseJSON(data);
         createMarkers(prices);
-        // addActiveMarkers(prices);
-        // event.target.disabled = false;
-        // $('#imgid').hide()
       });
     } else {
-      // $("#toggle-active-on").button("toggle");
       if (markers !== null) {
         map.removeLayer(markers);
       }
@@ -199,37 +131,12 @@ function showActive() {
 }
 
 
-
-// function showActive() {
-//   $('input[name=active]').change(function(event) {
-//     if (event.target.checked) {
-//   // this disables checkbox
-//       event.target.disabled = true;
-// // TODO put spinner bar in here? 
-//     // $('#imgid').show()
-//       // console.log('disabled checkbox');
-//       $.ajax({
-//         url: "/leafactivelistings",
-//       }).done(function(data) {
-//         prices = $.parseJSON(data);
-//         createMarkers(prices);
-//         // addActiveMarkers(prices);
-//         event.target.disabled = false;
-//         // $('#imgid').hide()
-//       });
-//     } else {
-//       map.removeLayer(markers);
-//     }
-//   });
-// }
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
 // SECTION Adds/removes colors on the choropleth map
 
 // get max and min price in region and $ amount per block level, called in getLevel()
-// geoIdPrices is a global variable that is defined in ajax call in showHeatMap() function 
-// remove the counties with nothing so not calculated in min price
 function getLevelAmounts(metric) {
   var prices = [];
   for (var key in geoIdPrices) {
@@ -240,16 +147,12 @@ function getLevelAmounts(metric) {
     var maxAmount = Math.max.apply(Math, prices);
     var minAmount = Math.min.apply(Math, prices);
     var steps = (maxAmount - minAmount)/tierCount;
-    // console.log("price list is" + prices);
-    // console.log("maxprice is " + maxAmount);
-    // console.log("minprice is " + minAmount);
-    // console.log("block amount is " + steps);
+
     return {maxAmount: maxAmount,
       minAmount: minAmount,
       steps: steps
     };
 }
-
 
 // use the $ blocks to determine the particular house price color level, called in style fxn with getColor()
 function getLevel(levelAmounts, price) {
@@ -261,31 +164,19 @@ function getLevel(levelAmounts, price) {
   }
 }
 
-
 // dicts of color levels, called in style function with getLevel()
-// This is shorthand notation ? is "if" then do what's before colon:, else do whatever is after 
 function getColor(level) {
     // alpha = (level+1)/tierCount;
    // // return 'rgba(255,0,0,' + alpha + ')';
   if ($("#SPSC").is(":checked")) {
       return level >= 0.66  ? 'rgba(0,109,44,1)' :
              level >= 0.33  ? 'rgba(49,163,84,1)' :
-             level >= 0  ? 'rgba(116,196,118,1)' :
+             level >= 0  ? 'rgba(116,196,118,1)':
              level >= -0.33 ? 'rgba(201,166,64,1)' :
              level >= -0.66  ? 'rgba(201,115,54,1)' :
              level >= -1  ? 'rgba(210,58,56,1)':
                             'rgba(0,0,0,0)';
-
-      // if (geoIdPrices[props.GEOID10]['basePsf'] !== 0 && geoIdPrices[props.GEOID10]['compPsf'] !== 0)
-      // return level >= 0.66  ? 'rgba(26,152,80,1)' :
-      //        level >= 0.33  ? 'rgba(145,207,96,1)' :
-      //        level >= 0  ? 'rgba(217,239,139,1)' :
-      //        level >= -0.33 ? 'rgba(254,224,139,1)' :
-      //        level >= -0.66  ? 'rgba(252,141,89,1)' :
-      //        level >= -1  ? 'rgba(215,48,39,1)':
-                            // 'rgba(0,0,0,0)';
   } else {
-      // if (geoIdPrices[props.GEOID10]['basePsf'] !== 0 && geoIdPrices[props.GEOID10]['compPsf'] !== 0)
 
       return level >= 5  ? 'rgba(8,48,107,1)' :
              level >= 4  ? 'rgba(8,81,156,1)' :
@@ -293,33 +184,31 @@ function getColor(level) {
              level >= 2  ? 'rgba(66,146,198,1)' :
              level >= 1  ? 'rgba(107,174,214,1)' :
                          'rgba(158,202,225,1)';
-
-
-      // return level >= 5  ? 'rgba(8,48,107,1)' :
-      //        level >= 4  ? 'rgba(33,113,181,1)' :
-      //        level >= 3  ? 'rgba(107,174,214,1)' :
-      //        level >= 2  ? 'rgba(158,202,225,1)' :
-      //        level >= 1  ? 'rgba(198,219,239,1)' :
-      //                    'rgba(222,235,247,1)';
   }
 }
 
 
-
+// This is used in heatColors(), iterates through counties by geoID in heatColors and pulls geoID
 var makeStyleFn = function(metric) {
   var levelAmounts = getLevelAmounts(metric);
 
   // This is used in heatColors(), iterates through counties by geoID in heatColors and pulls geoID
   return function(feature) {
-  // TODO check: this references my geojson, actually wouldn't I change it to the variable name.dictkey.dictkey?
       var geoId = feature.properties.GEOID10;
       var color = 'rgba(0,0,0,0)';
-      // console.log(geoIdPrices);
+
+// TODO Experimenting here
+      var values = $('#slider-range').slider('values');
       if (geoIdPrices[geoId][metric] !== null) {
+         // color = getColor(getLevel(levelAmounts, geoIdPrices[geoId][metric]));
+        if (values[0] !== values[1]) {
          color = getColor(getLevel(levelAmounts, geoIdPrices[geoId][metric]));
+        } else {
+          color = 'rgba(255,255,255,0.7)';
+        }
+  
       }
       return {
-      // replace median with geoIdPrices[geoId]
           fillColor: color,
           weight: 1,
           opacity: 0.4,
@@ -329,26 +218,6 @@ var makeStyleFn = function(metric) {
       };
   };
 };
-
-// // This is used in heatColors(), iterates through counties by geoID in heatColors and pulls geoID
-// var style = function(feature) {
-// // TODO check: this references my geojson, actually wouldn't I change it to the variable name.dictkey.dictkey?
-//     var geoId = feature.properties.GEOID10;
-//     var color = 'rgba(0,0,0,0)';
-//     // console.log(geoIdPrices);
-//     if (geoIdPrices[geoId]['median_sales_price'] !== null) {
-//        color = getColor(getLevel(geoIdPrices[geoId]['median_sales_price']));
-//     }
-//     return {
-//     // replace median with geoIdPrices[geoId]
-//         fillColor: color,
-//         weight: 2,
-//         opacity: 1,
-//         color: 'white',
-//         dashArray: '3',
-//         fillOpacity: 0.7
-//     };
-// };
 
 // this iterates through style function and matches geoid from counties geojson to style dict (same as style() if had done other notation in setting up style function)
 function heatColors(region,metric) {
@@ -379,7 +248,6 @@ function showHeatMap(region, urli, metric) {
 // takes JSON data and converts it JS objects 
         geoIdPrices = $.parseJSON(data);
 // call heatColors AFTER stuff above has loaded
-      // console.log(geoIdPrices)
         $("#radio").removeClass("is-nodisplay");
         heatColors(region, metric);
         removeLegend();
@@ -389,13 +257,7 @@ function showHeatMap(region, urli, metric) {
 }
 
 
-// function getMetricFromUI() {
-//   if 
-// }
-
 // toggle checkbox to show and remove heatmap layer
-// TODO change this to a toggle button like Gmaps one with abbreviated notation
-// TODO why is the disabled not working when toggling heatmap back on? 
 function toggleHeatMap(region) {
   $('.toggle-heat .btn').change(function(event){
 // if toggle button on, show radio button
@@ -412,10 +274,7 @@ function toggleHeatMap(region) {
             createLegend();
         }
 // if prices $ change checked at time of toggling, add back slider range
-      // event.target.disabled = false;
     } else {
-    // if (event.target.checked) {
-    //   event.target.disabled = true;
 // removes metrics options if heatmap toggle is unchecked along with layer and legend
       $("#radio").addClass("is-nodisplay");
       console.log("removing heat layer");
@@ -435,57 +294,17 @@ function toggleHeatMap(region) {
 function showActive() {
   $('.toggle-active .btn').change(function(event) {
     if ($(event.target).prop("id") === "toggle-active-on") {
-  // this disables checkbox
-      // $("#toggle-active-off").button("toggle");
-      // event.target.disabled = true;
-// TODO put spinner bar in here? 
-    // $('#imgid').show()
-      // console.log('disabled checkbox');
       $.ajax({
         url: "/leafactivelistings",
       }).done(function(data) {
         prices = $.parseJSON(data);
         createMarkers(prices);
-        // addActiveMarkers(prices);
-        // event.target.disabled = false;
-        // $('#imgid').hide()
       });
     } else {
-      // $("#toggle-active-on").button("toggle");
       map.removeLayer(markers);
     }
   });
 }
-
-// function toggleHeatMap(region) {
-//   $('input[name=toggleheat]').change(function(event){
-// // if toggle button on, show radio button
-//     if (event.target.checked) {
-//       event.target.disabled = true;
-//       $("#radio").removeClass("is-nodisplay");
-//       heatColors(region,currentMetric);
-//       createLegend();
-// // if prices $ change checked at time of toggling, add back slider range
-//      if ($("#SPSC").is(":checked")) {
-//         $("#year-slider").removeClass("is-nodisplay");
-//         $("#slider-range").show();
-//       }
-//       event.target.disabled = false;
-//     }
-// // removes metrics options if heatmap toggle is unchecked along with layer and legend
-//     else {
-//       $("#radio").addClass("is-nodisplay");
-//       map.removeLayer(heatLayer);
-//       removeLegend();
-// // if sales price % change checked at time of toggling, removes slider range
-//      if ($("#SPSC").is(":checked")) {
-//         $("#year-slider").addClass("is-nodisplay");
-//         $("#slider-range").hide();
-//       }
-//     }
-//   });
-// }
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -522,8 +341,6 @@ function zoomToFeature(e) {
     map.fitBounds(e.target.getBounds());
 }
 
-// TODO add a zoom out feature where double click takes you back to original default zoom level
-
 // used in heatColors() fxn
 function onEachFeature(feature, layer) {
     layer.on({
@@ -547,12 +364,7 @@ info.onAdd = function (map) {
 
 // method that will update the control based on feature properties passed (tied to user interaction onEachFeature() highlight and reset features)
 info.update = function (props) {
-    // + geoIdPrices[geoId]
-    // return {
-    // replace median with geoIdPrices[geoId]
-        // fillColor: getColor(getLevel(geoIdPrices[geoId])),
 
-// TODO format the numbers, pull in counties by adding join, check why some houses are less than 10?
     if ($("#SP").is(":checked")) {
       this._div.innerHTML = '<h4>Region Details</h4>' +  (props ?
           '<h5><b> Zipcode: ' + props.ZCTA5CE10 + '</b>, ' +  geoIdPrices[props.GEOID10]['county'] + " County </h5>" +
@@ -577,16 +389,6 @@ info.update = function (props) {
               // if (geoIdPrices[props.GEOID10]['basePsf'] !== 0 && geoIdPrices[props.GEOID10]['compPsf'] !== 0) {
                 this._div.innerHTML = '<h4>Region Details</h4>' +  (props ?
 
-                // '<table>' +
-                // '<tr><td class="infolabel"> Zipcode: </td>' + '<td class = "infoamount">' +  props.ZCTA5CE10 + '</td></tr>' +
-                // '<tr><td class="infolabel"> County: </td>' + '<td class = "infoamount">' +  geoIdPrices[props.GEOID10]['county'] + '</td></tr>' +
-                // '<tr><td class="infolabel"> Sales Price/Sqft % Change: </td>' + '<td class = "infoamount">' +  formatMoney(geoIdPrices[props.GEOID10]['change']*100,1) + "%"  + '</td></tr>' +
-                // '<tr><td class="infolabel">' + values[0] + ' Median Sales Price/Sqft: </td>' + '<td class = "infoamount">' +  "$" + formatMoney(geoIdPrices[props.GEOID10]['basePsf'],0) + '</td></tr>' +
-                // '<tr><td class="infolabel"> Total # of Homes Sold in ' + values[0] + ': </td>'+ '<td class = "infoamount">' +  formatMoney(geoIdPrices[props.GEOID10]['baseCount'],0) + '</td></tr>' +
-                // '<tr><td class="infolabel">'  + values[1] + ' Median Sales Price/Sqft: </td>'+ '<td class = "infoamount">' +  "$" + formatMoney(geoIdPrices[props.GEOID10]['compPsf']) + '</td></tr>' +
-                // '<tr><td class="infolabel"> Total # of Homes Sold in ' + values[1]  + ': </td>'+ '<td class = "infoamount">' + formatMoney(geoIdPrices[props.GEOID10]['compCount'],0) + '</td></tr>' +
-                // '</table>'
-
                 '<h5><b> Zipcode: ' + props.ZCTA5CE10 + '</b>, ' +  geoIdPrices[props.GEOID10]['county'] + " County </h5>" +
                 ((geoIdPrices[props.GEOID10]['change'] < 0) ?
                 ('<h6 style="color: red"><b><i>Sales Price/Sqft % Change: ' + formatMoney(geoIdPrices[props.GEOID10]['change']*100,1) + "%"  + '</i></b></h6>'):
@@ -602,48 +404,10 @@ info.update = function (props) {
                }
          
         }
-        // } else {
-        //       this._div.innerHTML = '<h4>Region Details</h4>Too few homes sold in this region for your selected <br>' +
-        //        ' years to give you an accurate answer!';
-        // }
-
     }
 };
 
 info.addTo(map);
-
-
-      // if ($("#SP").is(":checked")) {
-      //     console.log("you clicked SP");
-      //     if (heatLayer) {
-      //       console.log("removing heat layer");
-      //       heatLayerCount -= 1;
-      //       map.removeLayer(heatLayer);
-      //     }
-      //     $("#year-slider").addClass("is-nodisplay");
-      //     $("#slider-range").hide();
-      //     currentMetric = 'median_sales_price';
-      //     showHeatMap(zips, geoidpricesajax, 'median_sales_price');
-      // } else if ($("#SPS").is(":checked")) {
-      //     console.log("you clicked SPS");
-      //     console.log("removing heat layer");
-      //     heatLayerCount -= 1;
-      //     map.removeLayer(heatLayer);
-      //     $("#slider-range").hide();
-      //     $("#year-slider").addClass("is-nodisplay");
-      //     currentMetric = 'median_sales_psf';
-      //     showHeatMap(zips,geoidpricesajax, 'median_sales_psf');
-      // } else if ($("#SPSC").is(":checked")) {
-      //     console.log("you clicked SPSC");
-      //     console.log("removing heat layer");
-      //     heatLayerCount -= 1;
-      //     map.removeLayer(heatLayer);
-      //     $("#year-slider").removeClass("is-nodisplay");
-      //     $("#slider-range").show();
-      //     currentMetric = 'change';
-      //     var values = $('#slider-range').slider('values');
-      //     growthChange(values[0], values[1], geochanges, zips, currentMetric);
-      // }
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -683,9 +447,6 @@ function createLegend() {
           console.log(minAmount);
           console.log(stepAmount);
 
-// TODO what's the most meaningful breakout of tier colors? Change large numbers to smaller ones by dividing by 100 and appending and using .formatMoney
-// TODO check if change is null then don't add in (or remove somehow?), what to do with same year
-// Make colors more red for more neg, more green for more positive, what to do when 0-0 change? 
 // Makes a different legend type if YoY Change % option is selected
 
       if ($("#SPSC").is(":checked")) {
@@ -768,8 +529,6 @@ function removeLegend() {
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
-// NOTE TODO keep in mind that any stuff without change has a ""
-
 // SECTION select metrics to view on choropleth map
 function selectMetric(){
   $('#SP, #SPS, #SPSC').change(function(){
@@ -812,13 +571,6 @@ function selectMetric(){
 ////////////////////////////////////////////////////////////////////////////////////////////////
 // Section - Recovery Growth % Change
 
-// TODO Make this work - make sure only works/shows when "Sales PSF Comparison" is checked
-//  Think I need to make it somehow clear when it changes again
-// TODO make this slider work for sales price and sales PSF ranges too? (But sthg needs to look diff since would be inclusive whereas this is just YoY)
-// TODO understand what's happening here
-// TODO get it so that the first view that shows is the 2007-2013 range upon click of radio button
-  // make so doesn't show when toggle heatmap button unchcked, remove this document ready stuff and put it in a function and attach event handler
-
 // This is the double slider for % change
 function setupSlider() {
   $( "#slider-range" ).slider({
@@ -827,14 +579,10 @@ function setupSlider() {
     max: 2013,
       // default values
       values: [ 2006, 2013 ],
-      // TODO: this pulls the values from the slider and puts it on the label, what's below?
+      // this pulls the values from the slider and puts it on the label
       slide: function( event, ui ) {
         $( "#year" ).val( "" + ui.values[ 0 ] + " - " + ui.values[ 1 ] );
       },
-      // when anything changes, run the function growthChange()
-      // change: function(event, ui) {
-      //   growthChange(ui.values[ 0 ], ui.values[ 1 ], geochanges, zips);
-      // },
       stop: function(event, ui) {
             // when the user lets go and stops changing the slider
         console.log("removing heat layer");
@@ -865,25 +613,5 @@ function growthChange(baseyear, compyear, urli, region, metric) {
         heatColors(region, metric);
         removeLegend();
         createLegend();
-      // console.log(data);
     });
 }
-
-// function setupMinSlider() {
-//     $( "#slider" ).slider({
-//       value:2013,
-//       min: 2009,
-//       max: 2013,
-//       step: 1,
-//       slide: function( event, ui ) {
-//         $( "#comp-year" ).val( "" + ui.value );
-//       },
-//       stop: function( event, ui ) {
-//             // when the user lets go and stops changing the slider
-//           growthChange(ui.values[ 0 ], ui.values[ 1 ], geochanges, zips);
-//       }
-//     });
-//     $( "#comp-year" ).val( "" + $( "#slider" ).slider( "value" ) );
-//   }
-
-

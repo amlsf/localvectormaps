@@ -2,7 +2,6 @@
 
 {% block head %}
 <!-- leaflet css sheet -->
-<!-- <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" /> -->
 <link rel="stylesheet" href="/static/leaflet/leaflet.css" />
 
 <!-- my css sheet -->
@@ -18,15 +17,15 @@
 {% block body %}
 
     <div id="metricspanel" class="controls">
-    
+<!--  Welcome header -->    
         <p align="center"><img src="\static\img\localvectorcropped.jpg"></p>
-<!--         <h3>LocalVector Maps (insert img) - 5 County by Zipcode</h3> -->
         <p id='welcome'><b>Welcome to the Local Vector Maps page!</b>
         <li style="font-size:11px">Visually explore local price trends between 2006-2013 in five Bay Are counties</li>
         <li style="font-size:11px">Identify high growth areas and visualize recovery since the 2009 crash</li>
         <li style = "font-size:11px">View currently homes for sale</li><br>
         </p>
 
+<!-- Buttons to toggle active listings on and off -->
         <div>
             <p class="col-sm-6 metricspanellabel">Show Homes For Sale</p>
             <div class="btn-group toggle-active col-sm-6" data-toggle="buttons">
@@ -39,6 +38,7 @@
             </div>
         </div>
 
+<!-- Buttons to toggle heat colors layer on and off -->
         <div class = "show-heat-row">
             <p class="col-sm-6 metricspanellabel">Show Choropleth Map</p>
             <div class="btn-group toggle-heat col-sm-6" data-toggle="buttons">
@@ -51,10 +51,7 @@
             </div>
         </div>
 
-<!--         <INPUT TYPE="Checkbox" CHECKED NAME="toggleheat">Show Heat Map<br>
- -->
-    <!-- Other Metrics: PSF, valuation, rental price, sophisticated logic -->
-    <!-- TODO What is this value id for? --> 
+<!-- Options for Other Metrics: Sales Price, Sales Price per Square Foot, year on year comparison -->
     <div id="radio" class="is-nodisplay col-sm-12">
         <div class = 'radio'>
             <label>
@@ -74,16 +71,12 @@
 
     </div>
 
+<!-- Double range slider -->
         <p class="is-nodisplay" id="year-slider">
           <label for="year">Year-on-Year Comparison:</label>
           <input type="text" id="year" style="border:0; color:#f6931f; font-weight:bold;" readonly>
             <div id="slider-range"></div>
         </p>
-    <!--     <p class="is-nodisplay" id="min-slider">
-          <label for="comp-year">Comparison Year (over 2009 Crash):</label>
-          <input type="text" id="comp-year" style="border:0; color:#f6931f; font-weight:bold;">
-            <div id="slider"></div>
-        </p> -->
     </div>
 
 <div id="map"></div>
@@ -91,13 +84,9 @@
 {% endblock %}
 
 
-
 {% block script %}
-<!-- This makes variable now available anywhere in html page from /geoidpricessrce route, one non-AJAX METHOD -->
-<!-- <script src="/geoidpricessrc"></script> -->
 
 <!-- leaflet API -->
-<!-- <script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script> -->
 <script src="/static/leaflet/leaflet.js"></script>
 
 <!-- MarkerCluster plugin -->
@@ -120,3 +109,6 @@
 
 {% endblock %}
 
+
+<!-- This makes variable now available anywhere in html page from /geoidpricessrce route, one non-AJAX METHOD -->
+<!-- <script src="/geoidpricessrc"></script> -->
