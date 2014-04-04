@@ -46,9 +46,9 @@ border:dotted 1px purple;
     border-radius: 5px;
 }
 
-.leaflet-control.info {
+/*.leaflet-control.info {
     margin-top: 500px;
-}
+}*/
 
 .info h4 {
     margin: 0 0 5px;

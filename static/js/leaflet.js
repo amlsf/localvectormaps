@@ -4,7 +4,6 @@
 // Gotta speed up the layering of geoJSON - too slow! Maybe change to county, subcounty, zips (no BG, census tracts?)
 
 mapid = 125674;
-// TODO: set as env var
 apikey = "99d055cec8794a33b9e2cb09553e3506";
 
 var map = L.map('map').setView([36.685067, -121.73021], 9);
@@ -153,11 +152,13 @@ function createMarkers(active_listings) {
       });
 // TODO: bind url somehow here? 
       marker.bindPopup(
-        "<b>Address:</b> " + "<a href='" + url + "'>" + address + ", " + city + ", " + postal_code + ", " + county + " County  </a> <br>"  +
-        "<b>Ask Price/PSF:</b> " + list_price + " / " + psf + "<br>" +
-        "<b>Bedrooms:</b> " + bedrooms + ", " + "<b> Bathrooms:</b> " + bathrooms + ", " + "<b>SF:</b> " + squarefeet + "<br>" +
-        description + "<br>" +
-        "<b>MLS listing number:</b> " + mls_id
+        "<h4>" + "<a href='" + url + "'>" + address + ", " + city + ", CA " + postal_code + "</a></h4>" +
+        "<i><b>County</b>: " + county + "</i><br>" +
+        "<h5><b>Ask Price/PSF</b>: " + "$" + formatMoney(list_price,0) + " / " + "$" + formatMoney(psf,0) + "</h5>" +
+        "<b>Bedrooms</b>: " + bedrooms + ", <b>Bathrooms </b>: " + bathrooms + "<br>" +
+        "<b>Total Square Feet</b>: " + formatMoney(squarefeet,0) + "<br><br>" +
+        "<b>Description</b>: " + description + "<br><br>" +
+        "<b>MLS listing number</b>: " + mls_id
         );
       markers.addLayer(marker);
   }
@@ -252,8 +253,12 @@ function getLevelAmounts(metric) {
 
 // use the $ blocks to determine the particular house price color level, called in style fxn with getColor()
 function getLevel(levelAmounts, price) {
-    var level = (price - levelAmounts.minAmount)/levelAmounts.steps;
+  var level = (price - levelAmounts.minAmount)/levelAmounts.steps;
+  if ($("#SPSC").is(":checked")) {
+    return price;
+  } else {
     return level;
+  }
 }
 
 
@@ -261,14 +266,25 @@ function getLevel(levelAmounts, price) {
 // This is shorthand notation ? is "if" then do what's before colon:, else do whatever is after 
 function getColor(level) {
     // alpha = (level+1)/tierCount;
-
-    // return 'rgba(255,0,0,' + alpha + ')';
-    return level >= 5  ? 'rgba(237,248,251,1)' :
-           level >= 4  ? 'rgba(2191,211,230,1)' :
-           level >= 3  ? 'rgba(158,188,218,1)' :
-           level >= 2  ? 'rgba(140,150,198,1)' :
-           level >= 1  ? 'rgba(136,86,167,1)' :
-                      'rgba(129,15,124,1)';
+   // // return 'rgba(255,0,0,' + alpha + ')';
+  if ($("#SPSC").is(":checked")) {
+      // if (geoIdPrices[props.GEOID10]['basePsf'] !== 0 && geoIdPrices[props.GEOID10]['compPsf'] !== 0)
+      return level >= 0.66  ? 'rgba(0,255,0,1)' :
+             level >= 0.33  ? 'rgba(0,255,0,0.6)' :
+             level >= 0  ? 'rgba(0,255,0,0.3)' :
+             level >= -0.33 ? 'rgba(255,0,0,0.3)' :
+             level >= -0.66  ? 'rgba(255,0,0,0.6)' :
+             level >= -1  ? 'rgba(255,0,0,1)':
+                            'rgba(0,0,0,0)';
+  } else {
+      // if (geoIdPrices[props.GEOID10]['basePsf'] !== 0 && geoIdPrices[props.GEOID10]['compPsf'] !== 0)
+      return level >= 5  ? 'rgba(237,248,251,1)' :
+             level >= 4  ? 'rgba(2191,211,230,1)' :
+             level >= 3  ? 'rgba(158,188,218,1)' :
+             level >= 2  ? 'rgba(140,150,198,1)' :
+             level >= 1  ? 'rgba(136,86,167,1)' :
+                         'rgba(129,15,124,1)';
+  }
 }
 
 
@@ -287,11 +303,11 @@ var makeStyleFn = function(metric) {
       return {
       // replace median with geoIdPrices[geoId]
           fillColor: color,
-          weight: 2,
-          opacity: 1,
+          weight: 1,
+          opacity: 0.4,
           color: 'white',
-          dashArray: '3',
-          fillOpacity: 0.7
+          // dashArray: '3',
+          fillOpacity: 0.6
       };
   };
 };
@@ -477,9 +493,10 @@ function highlightFeature(e) {
 
 // reset to default colors (action for mouseout)
 function resetHighlight(e) {
+    var layer = e.target;
     heatLayer.resetStyle(e.target);
 // for mousehover pop-up info to remove (see section in info pop-ups)
-    info.update();
+    info.update(layer.feature.properties);
 }
 
 // click listener that zooms to the state
@@ -502,7 +519,7 @@ function onEachFeature(feature, layer) {
 
 
 // SECTION show info pop-ups on mouse hover
-var info = L.control({position:'topleft'});
+var info = L.control({position:'topright'});
 
 info.onAdd = function (map) {
     this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
@@ -517,32 +534,46 @@ info.update = function (props) {
     // replace median with geoIdPrices[geoId]
         // fillColor: getColor(getLevel(geoIdPrices[geoId])),
 
+            // var values = $('#slider-range').slider('values');
+
 // TODO format the numbers, pull in counties by adding join, check why some houses are less than 10?
     if ($("#SP").is(":checked")) {
       this._div.innerHTML = '<h4>Region Details</h4>' +  (props ?
-          '<h4> Zipcode: ' + props.ZCTA5CE10 + '</h4> </br>' +
-          '<b>County: '+ '</b> </br>' +
-          '<b> Median Sales Price: </b>' + geoIdPrices[props.GEOID10]['median_sales_price']  + '</br>' +
-          '<b> Number of Homes Sold: </b>'  + geoIdPrices[props.GEOID10]['count_median_sales'] :
+          '<h5><b> Zipcode: ' + props.ZCTA5CE10 + '</b></h5>' +
+          '<h6><b>County: '+ '</b></h6>' +
+          '<h6><b> Median Sales Price: </b>' + "$" + formatMoney(geoIdPrices[props.GEOID10]['median_sales_price'],0) + '</h6>' +
+          '<h6><b> Number of Homes Sold: </b>'  + formatMoney(geoIdPrices[props.GEOID10]['count_median_sales'],0) +"</h6>" :
           'Hover over a region');
     } else if ($("#SPS").is(":checked")){
       this._div.innerHTML = '<h4>Region Details</h4>' +  (props ?
-          '<h4> Zipcode: ' + props.ZCTA5CE10 + '</h4> </br>' +
-          '<b>County: '+ '</b> </br>' +
-          '<b> Median Sales Price/Sqft: </b>' + geoIdPrices[props.GEOID10]['median_sales_psf']  + '</br>' +
-          '<b> Number of Homes Sold: </b>'  + geoIdPrices[props.GEOID10]['count_median_sales'] :
+          '<h5><b> Zipcode: ' + props.ZCTA5CE10 + '</b></h5>' +
+          '<h6><b>County: '+ '</b></h6>' +
+          '<h6><b> Median Sales Price/Sqft: </b>' + "$" + formatMoney(geoIdPrices[props.GEOID10]['median_sales_psf'],0)  + '</h6>' +
+          '<h6><b> Number of Homes Sold: </b>' + formatMoney(geoIdPrices[props.GEOID10]['count_median_sales'],0) + "</h6>" :
           'Hover over a region');
     } else if ($("#SPSC").is(":checked")) {
-      this._div.innerHTML = '<h4>Region Details</h4>' +  (props ?
-          '<h4> Zipcode: ' + props.ZCTA5CE10 + '</h4> </br>' +
-          '<b>County: '+ '</b> </br>' +
-          '<b> Sales Price/Sqft % Change YoY: </b>' + geoIdPrices[props.GEOID10]['change']  + '</br>' +
-          '<b> Base Year Median Sales Price/Sqft: </b>'  + geoIdPrices[props.GEOID10]['basePsf'] + '</br>' +
-          '<b> Homes Sold in Base Year: </b>'  + geoIdPrices[props.GEOID10]['baseCount'] + '</br>' +
-          '<b> Comp Year Median Sales Price/Sqft: </b>'  + geoIdPrices[props.GEOID10]['compPsf'] + '</br>' +
-          '<b> Homes Sold in Comp Year: </b>'  + geoIdPrices[props.GEOID10]['compCount']
-          :
-          'Hover over a region');
+        console.log(geoIdPrices[props.GEOID10]);
+        if (geoIdPrices[props.GEOID10]['change'] != -2) {
+            // if (geoIdPrices[props.GEOID10]['basePsf'] !== 0 && geoIdPrices[props.GEOID10]['compPsf'] !== 0) {
+              this._div.innerHTML = '<h4>Region Details</h4>' +  (props ?
+              '<h5><b> Zipcode: ' + props.ZCTA5CE10 + '</b></h5>' +
+              '<h6><b>County: '+ '</b></br>' +
+              '<h6><b><i><u>Sales Price/Sqft % Change YoY: </b>' + formatMoney(geoIdPrices[props.GEOID10]['change']*100,1) + "%"  + '</i></u></h6>' +
+              '<h6><b>Base Year Median Sales Price/Sqft: </b>'  + "$" + formatMoney(geoIdPrices[props.GEOID10]['basePsf'],0) + '</h6>' +
+              '<h6><b>Homes Sold in Base Year: </b>'  + formatMoney(geoIdPrices[props.GEOID10]['baseCount'],0) + '</h6>' +
+              '<h6><b>Comp Year Median Sales Price/Sqft: </b>' + "$" + formatMoney(geoIdPrices[props.GEOID10]['compPsf']) + '</h6>' +
+              '<h6><b>Homes Sold in Comp Year: </b>'  + formatMoney(geoIdPrices[props.GEOID10]['compCount'],0) + '</h6>'
+              :
+              'Hover over a region');
+            } else {
+              this._div.innerHTML = '<h4>Region Details</h4>Too few homes sold in this region for your selected <br>' +
+               ' years to give you an accurate answer!';
+             }
+        // } else {
+        //       this._div.innerHTML = '<h4>Region Details</h4>Too few homes sold in this region for your selected <br>' +
+        //        ' years to give you an accurate answer!';
+        // }
+
     }
 };
 
@@ -620,15 +651,17 @@ function createLegend() {
 // TODO check if change is null then don't add in (or remove somehow?), what to do with same year
 // Make colors more red for more neg, more green for more positive, what to do when 0-0 change? 
 // Makes a different legend type if YoY Change % option is selected
+
       if ($("#SPSC").is(":checked")) {
         console.log("regenerating legend for SPSC");
-        for (var x = 0; x < tierCount; x++) {
+        var growthLevels = [-1, -0.66, -0.33, 0, 0.33, 0.66, 1];
+        for (var x=0; x < growthLevels.length-1; x++) {
             div.innerHTML +=
-                '<i style="background:' + getColor(x) + '"></i> ' +
-                formatMoney(((x*stepAmount)+minAmount)*100,2) + '%' +
+                '<i style="background:' + getColor(growthLevels[x]) + '"></i> ' +
+                formatMoney(growthLevels[x]*100, 1) + '%' +
                   ( x+1 < tierCount ?
                     ' +' + '<br>':
-                    '&ndash;' + formatMoney(maxAmount * 100, 2) + '%'
+                    '&ndash;' + formatMoney(growthLevels[x+1] * 100, 1) + '%'
                     // '&ndash;' + '$'+(((grades[x + 1]*stepAmount)+minAmount)).formatMoney(0) + '<br>':
                     );
         }

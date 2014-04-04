@@ -45,10 +45,10 @@ def psf_median_comp(session, year1, year2):
         basemedian = year1result[0].year_median_spsf
         compmedian = year2result[0].year_median_spsf
 
-        if basemedian != 0:
+        if basemedian != 0 and compmedian != 0:
             change = float(compmedian)/basemedian-1 
         else: 
-            change = None
+            change = -2
 
         growth[region.geoid] = {'change':change,
                 'baseSp':year1result[0].year_median_sp,

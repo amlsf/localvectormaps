@@ -12,7 +12,7 @@ import shapefile
 # loads active data file
 def load_alist(session):
 
-    with open("data/activedata_20140330fixltlg.csv") as f:
+    with open("data/activedata_20140330fixltlg2.csv") as f:
         reader = csv.reader(f, delimiter = ",")
         counter = 0
 # skips header row
@@ -348,11 +348,11 @@ def load_countyprices(session):
 
 
 def main(session):
-    # load_alist(session)
+    load_alist(session)
     # load_slist(session)
 
 # TODO Delete from counties where zcta not between 90001 - 96162 inclusive
-    load_zips(session)
+    # load_zips(session)
 
 # next run medianinsertdb.py
 
