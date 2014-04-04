@@ -286,12 +286,21 @@ function getColor(level) {
                             // 'rgba(0,0,0,0)';
   } else {
       // if (geoIdPrices[props.GEOID10]['basePsf'] !== 0 && geoIdPrices[props.GEOID10]['compPsf'] !== 0)
+
       return level >= 5  ? 'rgba(8,48,107,1)' :
-             level >= 4  ? 'rgba(33,113,181,1)' :
-             level >= 3  ? 'rgba(107,174,214,1)' :
-             level >= 2  ? 'rgba(158,202,225,1)' :
-             level >= 1  ? 'rgba(198,219,239,1)' :
-                         'rgba(222,235,247,1)';
+             level >= 4  ? 'rgba(8,81,156,1)' :
+             level >= 3  ? 'rgba(33,113,181,1)' :
+             level >= 2  ? 'rgba(66,146,198,1)' :
+             level >= 1  ? 'rgba(107,174,214,1)' :
+                         'rgba(158,202,225,1)';
+
+
+      // return level >= 5  ? 'rgba(8,48,107,1)' :
+      //        level >= 4  ? 'rgba(33,113,181,1)' :
+      //        level >= 3  ? 'rgba(107,174,214,1)' :
+      //        level >= 2  ? 'rgba(158,202,225,1)' :
+      //        level >= 1  ? 'rgba(198,219,239,1)' :
+      //                    'rgba(222,235,247,1)';
   }
 }
 
