@@ -493,10 +493,10 @@ function highlightFeature(e) {
 
 // reset to default colors (action for mouseout)
 function resetHighlight(e) {
-    var layer = e.target;
+    // var layer = e.target;
     heatLayer.resetStyle(e.target);
 // for mousehover pop-up info to remove (see section in info pop-ups)
-    info.update(layer.feature.properties);
+    info.update();
 }
 
 // click listener that zooms to the state
@@ -539,35 +539,42 @@ info.update = function (props) {
       this._div.innerHTML = '<h4>Region Details</h4>' +  (props ?
           '<h5><b> Zipcode: ' + props.ZCTA5CE10 + '</b></h5>' +
           '<h6><b>County: '+ '</b></h6>' +
+          '<h6><b><u> For the Period of 2006-2013: </u></b></h6>' +
           '<h6><b> Median Sales Price: </b>' + "$" + formatMoney(geoIdPrices[props.GEOID10]['median_sales_price'],0) + '</h6>' +
-          '<h6><b> Number of Homes Sold: </b>'  + formatMoney(geoIdPrices[props.GEOID10]['count_median_sales'],0) +"</h6>" :
+          '<h6><b>Total # of Homes Sold: </b>'  + formatMoney(geoIdPrices[props.GEOID10]['count_median_sales'],0) +"</h6>" :
           'Hover over a region');
     } else if ($("#SPS").is(":checked")){
       this._div.innerHTML = '<h4>Region Details</h4>' +  (props ?
           '<h5><b> Zipcode: ' + props.ZCTA5CE10 + '</b></h5>' +
           '<h6><b>County: '+ '</b></h6>' +
+          '<h6><b><u> For the Period of 2006-2013: </u></b></h6>' +
           '<h6><b> Median Sales Price/Sqft: </b>' + "$" + formatMoney(geoIdPrices[props.GEOID10]['median_sales_psf'],0)  + '</h6>' +
-          '<h6><b> Number of Homes Sold: </b>' + formatMoney(geoIdPrices[props.GEOID10]['count_median_sales'],0) + "</h6>" :
+          '<h6><b>Total # of Homes Sold: </b>' + formatMoney(geoIdPrices[props.GEOID10]['count_median_sales'],0) + "</h6>" :
           'Hover over a region');
     } else if ($("#SPSC").is(":checked")) {
         var values = $('#slider-range').slider('values');
         // console.log(geoIdPrices[props.GEOID10]);
-        if (geoIdPrices[props.GEOID10]['change'] != -2) {
-            // if (geoIdPrices[props.GEOID10]['basePsf'] !== 0 && geoIdPrices[props.GEOID10]['compPsf'] !== 0) {
-              this._div.innerHTML = '<h4>Region Details</h4>' +  (props ?
-              '<h5><b> Zipcode: ' + props.ZCTA5CE10 + '</b></h5>' +
-              '<h6><b>County: '+ '</b></br>' +
-              '<h6><b><i><u>Sales Price/Sqft % Change YoY: </b>' + formatMoney(geoIdPrices[props.GEOID10]['change']*100,1) + "%"  + '</i></u></h6>' +
-              '<h6><b>' + values[0] + ' Median Sales Price/Sqft: </b>'  + "$" + formatMoney(geoIdPrices[props.GEOID10]['basePsf'],0) + '</h6>' +
-              '<h6><b>Number of Homes Sold in ' + values[0] + ': </b>'  + formatMoney(geoIdPrices[props.GEOID10]['baseCount'],0) + '</h6>' +
-              '<h6><b>' + values[1] + ' Median Sales Price/Sqft: </b>' + "$" + formatMoney(geoIdPrices[props.GEOID10]['compPsf']) + '</h6>' +
-              '<h6><b>Number of Homes Sold in ' + values[1] + ': </b>'  + formatMoney(geoIdPrices[props.GEOID10]['compCount'],0) + '</h6>'
-              :
-              'Hover over a region');
-            } else {
-              this._div.innerHTML = '<h4>Region Details</h4>Too few homes sold in this region for your selected <br>' +
-               ' years to give you an accurate answer!';
-             }
+        if (props === undefined) {
+            this._div.innerHTML = '<h4>Region Details</h4>' + 'Hover over a region';
+        } else {
+          if (geoIdPrices[props.GEOID10]['change'] != -2) {
+              // if (geoIdPrices[props.GEOID10]['basePsf'] !== 0 && geoIdPrices[props.GEOID10]['compPsf'] !== 0) {
+                this._div.innerHTML = '<h4>Region Details</h4>' +  (props ?
+                '<h5><b> Zipcode: ' + props.ZCTA5CE10 + '</b></h5>' +
+                '<h6><b>County: '+ '</b></br>' +
+                '<h6><b><i><u>Sales Price/Sqft % Change (' + values[1] + ' over ' + values[0] + '): </b>' + formatMoney(geoIdPrices[props.GEOID10]['change']*100,1) + "%"  + '</i></u></h6>' +
+                '<h6><b>' + values[0] + ' Median Sales Price/Sqft: </b>'  + "$" + formatMoney(geoIdPrices[props.GEOID10]['basePsf'],0) + '</h6>' +
+                '<h6><b>Total # of Homes Sold in ' + values[0] + ': </b>'  + formatMoney(geoIdPrices[props.GEOID10]['baseCount'],0) + '</h6>' +
+                '<h6><b>' + values[1] + ' Median Sales Price/Sqft: </b>' + "$" + formatMoney(geoIdPrices[props.GEOID10]['compPsf']) + '</h6>' +
+                '<h6><b>Total # of Homes Sold in ' + values[1] + ': </b>'  + formatMoney(geoIdPrices[props.GEOID10]['compCount'],0) + '</h6>'
+                :
+                'Hover over a region');
+              } else {
+                this._div.innerHTML = '<h4>Region Details</h4>Too few homes sold in this region for your selected <br>' +
+                 ' years to give you an accurate answer!';
+               }
+         
+        }
         // } else {
         //       this._div.innerHTML = '<h4>Region Details</h4>Too few homes sold in this region for your selected <br>' +
         //        ' years to give you an accurate answer!';
@@ -754,7 +761,7 @@ function selectMetric(){
 function setupSlider() {
   $( "#slider-range" ).slider({
     range: true,
-    min: 2005,
+    min: 2006,
     max: 2013,
       // default values
       values: [ 2006, 2013 ],

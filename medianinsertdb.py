@@ -121,7 +121,7 @@ def populate_prices_table(session, year):
 #             total_median_psf = 0
 
 # PART II - get the yearly data 
-        houses_year = session.query(model.Listings).filter_by(zip_id=region.id, property_type='Res. Single Family').filter(model.extract('year', model.Listings.list_date)==year).all()
+        houses_year = session.query(model.Listings).filter_by(zip_id=region.id, property_type='Res. Single Family').filter(model.extract('year', model.Listings.close_escrow_date)==year).all()
 # PART 3 this will just take sold listings total sales prices per year
         prices = []
         for houseprice in houses_year:
@@ -148,7 +148,7 @@ def populate_prices_table(session, year):
                     psf = float(houseprice.sell_price)/houseprice.living_sq_ft
                     psf_prices.append(psf)
                     print "Houseprice postal_code is: %r" % houseprice.postal_code
-                    print "House sell date is %r" % houseprice.list_date
+                    print "House sell date is %r" % houseprice.close_escrow_date
     # ignore any zipcodes with fewer than 10 data points
                 else: 
                     psf_median = 0
