@@ -93,9 +93,9 @@ def geoidpricesajax():
     return calculations.total_median(model.session)
 
 # TODO DELETE THIS don't need it anymore
-@app.route("/psf")
-def psf():
-    return calculations.psf_median_byzip(model.session)
+# @app.route("/psf")
+# def psf():
+#     return calculations.psf_median_byzip(model.session)
 
 
 @app.route("/geochanges", methods=['PUT','POST'])

@@ -46,7 +46,7 @@ var markers = null;
 
 // route variables for radio button selections
 var geoidpricesajax = "/geoidpricesajax";
-var psf = "/psf";
+// var psf = "/psf";
 var geochanges = "/geochanges";
 
 
@@ -268,24 +268,33 @@ function getColor(level) {
     // alpha = (level+1)/tierCount;
    // // return 'rgba(255,0,0,' + alpha + ')';
   if ($("#SPSC").is(":checked")) {
-      // if (geoIdPrices[props.GEOID10]['basePsf'] !== 0 && geoIdPrices[props.GEOID10]['compPsf'] !== 0)
-      return level >= 0.66  ? 'rgba(0,255,0,1)' :
-             level >= 0.33  ? 'rgba(0,255,0,0.6)' :
-             level >= 0  ? 'rgba(0,255,0,0.3)' :
-             level >= -0.33 ? 'rgba(255,0,0,0.3)' :
-             level >= -0.66  ? 'rgba(255,0,0,0.6)' :
-             level >= -1  ? 'rgba(255,0,0,1)':
+      return level >= 0.66  ? 'rgba(0,109,44,1)' :
+             level >= 0.33  ? 'rgba(49,163,84,1)' :
+             level >= 0  ? 'rgba(116,196,118,1)' :
+             level >= -0.33 ? 'rgba(201,166,64,1)' :
+             level >= -0.66  ? 'rgba(201,115,54,1)' :
+             level >= -1  ? 'rgba(210,58,56,1)':
                             'rgba(0,0,0,0)';
+
+      // if (geoIdPrices[props.GEOID10]['basePsf'] !== 0 && geoIdPrices[props.GEOID10]['compPsf'] !== 0)
+      // return level >= 0.66  ? 'rgba(26,152,80,1)' :
+      //        level >= 0.33  ? 'rgba(145,207,96,1)' :
+      //        level >= 0  ? 'rgba(217,239,139,1)' :
+      //        level >= -0.33 ? 'rgba(254,224,139,1)' :
+      //        level >= -0.66  ? 'rgba(252,141,89,1)' :
+      //        level >= -1  ? 'rgba(215,48,39,1)':
+                            // 'rgba(0,0,0,0)';
   } else {
       // if (geoIdPrices[props.GEOID10]['basePsf'] !== 0 && geoIdPrices[props.GEOID10]['compPsf'] !== 0)
-      return level >= 5  ? 'rgba(237,248,251,1)' :
-             level >= 4  ? 'rgba(2191,211,230,1)' :
-             level >= 3  ? 'rgba(158,188,218,1)' :
-             level >= 2  ? 'rgba(140,150,198,1)' :
-             level >= 1  ? 'rgba(136,86,167,1)' :
-                         'rgba(129,15,124,1)';
+      return level >= 5  ? 'rgba(8,48,107,1)' :
+             level >= 4  ? 'rgba(33,113,181,1)' :
+             level >= 3  ? 'rgba(107,174,214,1)' :
+             level >= 2  ? 'rgba(158,202,225,1)' :
+             level >= 1  ? 'rgba(198,219,239,1)' :
+                         'rgba(222,235,247,1)';
   }
 }
+
 
 
 var makeStyleFn = function(metric) {
@@ -307,7 +316,7 @@ var makeStyleFn = function(metric) {
           opacity: 0.4,
           color: 'white',
           // dashArray: '3',
-          fillOpacity: 0.6
+          fillOpacity: 0.65
       };
   };
 };
@@ -537,19 +546,17 @@ info.update = function (props) {
 // TODO format the numbers, pull in counties by adding join, check why some houses are less than 10?
     if ($("#SP").is(":checked")) {
       this._div.innerHTML = '<h4>Region Details</h4>' +  (props ?
-          '<h5><b> Zipcode: ' + props.ZCTA5CE10 + '</b></h5>' +
-          '<h6><b>County: '+ '</b></h6>' +
-          '<h6><b><u> For the Period of 2006-2013: </u></b></h6>' +
+          '<h5><b> Zipcode: ' + props.ZCTA5CE10 + '</b>, ' +  geoIdPrices[props.GEOID10]['county'] + " County </h5>" +
           '<h6><b> Median Sales Price: </b>' + "$" + formatMoney(geoIdPrices[props.GEOID10]['median_sales_price'],0) + '</h6>' +
-          '<h6><b>Total # of Homes Sold: </b>'  + formatMoney(geoIdPrices[props.GEOID10]['count_median_sales'],0) +"</h6>" :
+          '<h6><b>Total # of Homes Sold: </b>'  + formatMoney(geoIdPrices[props.GEOID10]['count_median_sales'],0) +"</h6>" +
+          '<h6><i>(For the Period of 2006-2013)</i></h6>':
           'Hover over a region');
     } else if ($("#SPS").is(":checked")){
       this._div.innerHTML = '<h4>Region Details</h4>' +  (props ?
-          '<h5><b> Zipcode: ' + props.ZCTA5CE10 + '</b></h5>' +
-          '<h6><b>County: '+ '</b></h6>' +
-          '<h6><b><u> For the Period of 2006-2013: </u></b></h6>' +
+          '<h5><b> Zipcode: ' + props.ZCTA5CE10 + '</b>, ' + '</b>' + geoIdPrices[props.GEOID10]['county'] + " County </h5>" +
           '<h6><b> Median Sales Price/Sqft: </b>' + "$" + formatMoney(geoIdPrices[props.GEOID10]['median_sales_psf'],0)  + '</h6>' +
-          '<h6><b>Total # of Homes Sold: </b>' + formatMoney(geoIdPrices[props.GEOID10]['count_median_sales'],0) + "</h6>" :
+          '<h6><b>Total # of Homes Sold: </b>' + formatMoney(geoIdPrices[props.GEOID10]['count_median_sales'],0) + "</h6>" +
+          '<h6><i>(For the Period of 2006-2013)</i></h6>'           :
           'Hover over a region');
     } else if ($("#SPSC").is(":checked")) {
         var values = $('#slider-range').slider('values');
@@ -560,18 +567,29 @@ info.update = function (props) {
           if (geoIdPrices[props.GEOID10]['change'] != -2) {
               // if (geoIdPrices[props.GEOID10]['basePsf'] !== 0 && geoIdPrices[props.GEOID10]['compPsf'] !== 0) {
                 this._div.innerHTML = '<h4>Region Details</h4>' +  (props ?
-                '<h5><b> Zipcode: ' + props.ZCTA5CE10 + '</b></h5>' +
-                '<h6><b>County: '+ '</b></br>' +
-                '<h6><b><i><u>Sales Price/Sqft % Change (' + values[1] + ' over ' + values[0] + '): </b>' + formatMoney(geoIdPrices[props.GEOID10]['change']*100,1) + "%"  + '</i></u></h6>' +
-                '<h6><b>' + values[0] + ' Median Sales Price/Sqft: </b>'  + "$" + formatMoney(geoIdPrices[props.GEOID10]['basePsf'],0) + '</h6>' +
+
+                // '<table>' +
+                // '<tr><td class="infolabel"> Zipcode: </td>' + '<td class = "infoamount">' +  props.ZCTA5CE10 + '</td></tr>' +
+                // '<tr><td class="infolabel"> County: </td>' + '<td class = "infoamount">' +  geoIdPrices[props.GEOID10]['county'] + '</td></tr>' +
+                // '<tr><td class="infolabel"> Sales Price/Sqft % Change: </td>' + '<td class = "infoamount">' +  formatMoney(geoIdPrices[props.GEOID10]['change']*100,1) + "%"  + '</td></tr>' +
+                // '<tr><td class="infolabel">' + values[0] + ' Median Sales Price/Sqft: </td>' + '<td class = "infoamount">' +  "$" + formatMoney(geoIdPrices[props.GEOID10]['basePsf'],0) + '</td></tr>' +
+                // '<tr><td class="infolabel"> Total # of Homes Sold in ' + values[0] + ': </td>'+ '<td class = "infoamount">' +  formatMoney(geoIdPrices[props.GEOID10]['baseCount'],0) + '</td></tr>' +
+                // '<tr><td class="infolabel">'  + values[1] + ' Median Sales Price/Sqft: </td>'+ '<td class = "infoamount">' +  "$" + formatMoney(geoIdPrices[props.GEOID10]['compPsf']) + '</td></tr>' +
+                // '<tr><td class="infolabel"> Total # of Homes Sold in ' + values[1]  + ': </td>'+ '<td class = "infoamount">' + formatMoney(geoIdPrices[props.GEOID10]['compCount'],0) + '</td></tr>' +
+                // '</table>'
+
+                '<h5><b> Zipcode: ' + props.ZCTA5CE10 + '</b>, ' +  geoIdPrices[props.GEOID10]['county'] + " County </h5>" +
+                ((geoIdPrices[props.GEOID10]['change'] < 0) ?
+                ('<h6 style="color: red"><b><i>Sales Price/Sqft % Change: ' + formatMoney(geoIdPrices[props.GEOID10]['change']*100,1) + "%"  + '</i></b></h6>'):
+                ('<h6 style="color: green"><b><i>Sales Price/Sqft % Change: ' + formatMoney(geoIdPrices[props.GEOID10]['change']*100,1) + "%"  + '</i></b></h6>')) +
+                '<h6 style="margin-top: 20px"><b>' + values[0] + ' Median Sales Price/Sqft: </b>'  + "$" + formatMoney(geoIdPrices[props.GEOID10]['basePsf'],0) + '</h6>' +
                 '<h6><b>Total # of Homes Sold in ' + values[0] + ': </b>'  + formatMoney(geoIdPrices[props.GEOID10]['baseCount'],0) + '</h6>' +
-                '<h6><b>' + values[1] + ' Median Sales Price/Sqft: </b>' + "$" + formatMoney(geoIdPrices[props.GEOID10]['compPsf']) + '</h6>' +
+                '<h6 style="margin-top: 20px"><b>' + values[1] + ' Median Sales Price/Sqft: </b>' + "$" + formatMoney(geoIdPrices[props.GEOID10]['compPsf']) + '</h6>' +
                 '<h6><b>Total # of Homes Sold in ' + values[1] + ': </b>'  + formatMoney(geoIdPrices[props.GEOID10]['compCount'],0) + '</h6>'
                 :
                 'Hover over a region');
               } else {
-                this._div.innerHTML = '<h4>Region Details</h4>Too few homes sold in this region for your selected <br>' +
-                 ' years to give you an accurate answer!';
+                this._div.innerHTML = '<h4>Region Details</h4>Too few homes sold in this region for your selected years to give you an accurate answer!';
                }
          
         }
@@ -639,7 +657,7 @@ function createLegend() {
   legend = L.control({position: 'bottomright'});
 
   legend.onAdd = function (map) {
-
+      var values = $('#slider-range').slider('values');
       var div = L.DomUtil.create('div', 'info legend'),
           // grades = [0, 1, 2, 3, 4, 5],
           labels = [],
@@ -647,6 +665,9 @@ function createLegend() {
           stepAmount = steps.steps,
           minAmount = steps.minAmount,
           maxAmount = steps.maxAmount;
+          var lowerRange = null;
+          var nextRange = null;
+          var upperRange = null;
       // loop through our density intervals and generate a label with a colored square for each interval
           console.log(geoIdPrices);
           console.log(maxAmount);
@@ -660,32 +681,64 @@ function createLegend() {
 
       if ($("#SPSC").is(":checked")) {
         console.log("regenerating legend for SPSC");
+        div.innerHTML += '<div><b>% Price Change of ' + values[1] + ' over ' + values[0] + '</b></div></br>';
         var growthLevels = [-1, -0.66, -0.33, 0, 0.33, 0.66, 1];
         for (var x=0; x < growthLevels.length-1; x++) {
             div.innerHTML +=
                 '<i style="background:' + getColor(growthLevels[x]) + '"></i> ' +
-                formatMoney(growthLevels[x]*100, 1) + '%' +
-                  ( x+1 < tierCount ?
-                    ' +' + '<br>':
-                    '&ndash;' + formatMoney(growthLevels[x+1] * 100, 1) + '%'
+                formatMoney(growthLevels[x]*100, 0) + '%' +
+                    ' to ' + formatMoney(growthLevels[x+1] * 100, 0) + '% <br>';
                     // '&ndash;' + '$'+(((grades[x + 1]*stepAmount)+minAmount)).formatMoney(0) + '<br>':
-                    );
         }
 // Makes a different legend type if overall $ price option selected 
-      } else {
+      } else if ($("#SP").is(":checked")) {
+        // if ($("#SP").is(":checked")) {
+          div.innerHTML += "<div><b>Median Sales Price</b></div></br>";
+        
         for (var i = 0; i < tierCount; i++) {
             console.log((i*stepAmount)+minAmount);
+            lowerRange = (i*stepAmount)+minAmount;
+            nextRange = ((i+1)*stepAmount)+minAmount;
+            if (lowerRange > 1000000) {
+              lowerRange = formatMoney(((i*stepAmount)+minAmount)/1000000,1) + 'M';
+              nextRange = formatMoney((((i+1)*stepAmount)+minAmount)/1000000,1) + 'M';
+              upperRange = formatMoney(maxAmount/1000000,1) +'M';
+            } else if (nextRange > 1000000) {
+              lowerRange = formatMoney((((i*stepAmount)+minAmount)/10000)*10,0) + 'k';
+              nextRange = formatMoney((((i+1)*stepAmount)+minAmount)/1000000,1) + 'M';
+              upperRange = formatMoney(maxAmount/1000000,1) +'M';
+            } else {
+              lowerRange = formatMoney((((i*stepAmount)+minAmount)/10000)*10,0) + 'k';
+              nextRange = formatMoney(((((i+1)*stepAmount)+minAmount)/10000)*10,0) + 'k';
+              upperRange = formatMoney(((maxAmount/10000)*10),0) +'k';
+            }
             div.innerHTML +=
                 '<i style="background:' + getColor(i) + '"></i> ' +
-                // if 
-                '$'+formatMoney((i*stepAmount)+minAmount,0) +
+                '$'+ lowerRange +
                   ( i+1 < tierCount ?
-                    ' +' + '<br>':
-                    '&ndash;' + '$' + formatMoney(maxAmount,0)
+                    ' &ndash; ' + '$' + nextRange + '<br>':
+                    ' &ndash; ' + '$' + upperRange
                     // '&ndash;' + '$'+(((grades[x + 1]*stepAmount)+minAmount)).formatMoney(0) + '<br>':
                     );
+              }
+        } else if ($("#SPS").is(":checked")) {
+            div.innerHTML += "<div><b>Median Sales Price/Sqft</b></div></br>";
+
+        for (var z=0; z < tierCount; z++) {
+            lowerRange = formatMoney(((z*stepAmount)+minAmount),0);
+            nextRange = formatMoney((((z+1)*stepAmount)+minAmount),0);
+            upperRange = formatMoney(maxAmount,0);
+
+            div.innerHTML +=
+                '<i style="background:' + getColor(z) + '"></i> ' +
+                '$'+ lowerRange +
+                  ( z+1 < tierCount ?
+                    ' &ndash; ' + '$' + nextRange + '<br>':
+                    ' &ndash; ' + '$' + upperRange
+                    // '&ndash;' + '$'+(((grades[x + 1]*stepAmount)+minAmount)).formatMoney(0) + '<br>':
+                    );
+                  }
         }
-      }
 
       return div;
   };

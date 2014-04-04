@@ -44,6 +44,7 @@ border:dotted 1px purple;
     background: rgba(255,255,255,0.8);
     box-shadow: 0 0 15px rgba(0,0,0,0.2);
     border-radius: 5px;
+    width: 300px;
 }
 
 /*.leaflet-control.info {
@@ -62,6 +63,7 @@ border:dotted 1px purple;
 .legend {
     line-height: 18px;
     color: #555;
+    width: 225px;
 }
 .legend i {
     width: 18px;
