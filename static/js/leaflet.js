@@ -201,12 +201,11 @@ var makeStyleFn = function(metric) {
       var values = $('#slider-range').slider('values');
       if (geoIdPrices[geoId][metric] !== null) {
          // color = getColor(getLevel(levelAmounts, geoIdPrices[geoId][metric]));
-        if (values[0] !== values[1]) {
-         color = getColor(getLevel(levelAmounts, geoIdPrices[geoId][metric]));
-        } else {
+        if (values[0] === values[1] && ($("#SPSC").is(":checked"))) {
           color = 'rgba(255,255,255,0.7)';
+        } else {
+          color = getColor(getLevel(levelAmounts, geoIdPrices[geoId][metric]));
         }
-  
       }
       return {
           fillColor: color,
