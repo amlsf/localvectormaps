@@ -2,13 +2,15 @@
 
 {% block head %}
 <!-- leaflet css sheet -->
-<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" />
+<!-- <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" /> -->
+<link rel="stylesheet" href="/static/leaflet/leaflet.css" />
+
 <!-- my css sheet -->
 <link href="/static/css/leaflet.css" rel="stylesheet">
 
 <!-- MarkerCluster plugin -->
-<link rel="stylesheet" href="/static/css/MarkerCluster.css">
-<link rel="stylesheet" href="/static/css/MarkerCluster.Default.css">
+<link rel="stylesheet" href="/static/markercluster/MarkerCluster.css">
+<link rel="stylesheet" href="/static/markercluster/MarkerCluster.Default.css">
 
 {% endblock %}
 
@@ -94,10 +96,11 @@
 <!-- <script src="/geoidpricessrc"></script> -->
 
 <!-- leaflet API -->
-<script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
+<!-- <script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script> -->
+<script src="/static/leaflet/leaflet.js"></script>
 
 <!-- MarkerCluster plugin -->
-<script src="../static/js/leaflet.markercluster.js"></script>
+<script src="/static/markercluster/leaflet.markercluster.js"></script>
 
 <!-- GeoJSON shape files -->
 <script src ="/static/js/zipssubsetonly.js"></script>

@@ -534,8 +534,6 @@ info.update = function (props) {
     // replace median with geoIdPrices[geoId]
         // fillColor: getColor(getLevel(geoIdPrices[geoId])),
 
-            // var values = $('#slider-range').slider('values');
-
 // TODO format the numbers, pull in counties by adding join, check why some houses are less than 10?
     if ($("#SP").is(":checked")) {
       this._div.innerHTML = '<h4>Region Details</h4>' +  (props ?
@@ -552,17 +550,18 @@ info.update = function (props) {
           '<h6><b> Number of Homes Sold: </b>' + formatMoney(geoIdPrices[props.GEOID10]['count_median_sales'],0) + "</h6>" :
           'Hover over a region');
     } else if ($("#SPSC").is(":checked")) {
-        console.log(geoIdPrices[props.GEOID10]);
+        var values = $('#slider-range').slider('values');
+        // console.log(geoIdPrices[props.GEOID10]);
         if (geoIdPrices[props.GEOID10]['change'] != -2) {
             // if (geoIdPrices[props.GEOID10]['basePsf'] !== 0 && geoIdPrices[props.GEOID10]['compPsf'] !== 0) {
               this._div.innerHTML = '<h4>Region Details</h4>' +  (props ?
               '<h5><b> Zipcode: ' + props.ZCTA5CE10 + '</b></h5>' +
               '<h6><b>County: '+ '</b></br>' +
               '<h6><b><i><u>Sales Price/Sqft % Change YoY: </b>' + formatMoney(geoIdPrices[props.GEOID10]['change']*100,1) + "%"  + '</i></u></h6>' +
-              '<h6><b>Base Year Median Sales Price/Sqft: </b>'  + "$" + formatMoney(geoIdPrices[props.GEOID10]['basePsf'],0) + '</h6>' +
-              '<h6><b>Homes Sold in Base Year: </b>'  + formatMoney(geoIdPrices[props.GEOID10]['baseCount'],0) + '</h6>' +
-              '<h6><b>Comp Year Median Sales Price/Sqft: </b>' + "$" + formatMoney(geoIdPrices[props.GEOID10]['compPsf']) + '</h6>' +
-              '<h6><b>Homes Sold in Comp Year: </b>'  + formatMoney(geoIdPrices[props.GEOID10]['compCount'],0) + '</h6>'
+              '<h6><b>' + values[0] + ' Median Sales Price/Sqft: </b>'  + "$" + formatMoney(geoIdPrices[props.GEOID10]['basePsf'],0) + '</h6>' +
+              '<h6><b>Number of Homes Sold in ' + values[0] + ': </b>'  + formatMoney(geoIdPrices[props.GEOID10]['baseCount'],0) + '</h6>' +
+              '<h6><b>' + values[1] + ' Median Sales Price/Sqft: </b>' + "$" + formatMoney(geoIdPrices[props.GEOID10]['compPsf']) + '</h6>' +
+              '<h6><b>Number of Homes Sold in ' + values[1] + ': </b>'  + formatMoney(geoIdPrices[props.GEOID10]['compCount'],0) + '</h6>'
               :
               'Hover over a region');
             } else {
