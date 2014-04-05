@@ -2,7 +2,6 @@ from flask import Flask, render_template, redirect, request, g, session, url_for
 from flask.ext.login import LoginManager, login_required, login_user, current_user
 from flaskext.markdown import Markdown
 import config
-import forms
 import model
 import calculations
 import json
@@ -41,9 +40,7 @@ def geoidpricesajax():
 def geochanges():
     # try:
     body = request.json
-    # print request.json
     baseyear = int(body["baseyear"])
-    # print baseyear
     compyear = int(body["compyear"])
         # print compyear
     # except ValueError, err:

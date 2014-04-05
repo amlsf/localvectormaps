@@ -99,7 +99,7 @@ function createMarkers(active_listings) {
       marker.bindPopup(
         "<h4>" + "<a href='" + url + "'>" + address + ", " + city + ", CA " + postal_code + "</a></h4>" +
         "<i><b>County</b>: " + county + "</i><br>" +
-        "<h5><b>Ask Price/PSF</b>: " + "$" + formatMoney(list_price,0) + " / " + "$" + formatMoney(psf,0) + "</h5>" +
+        "<h5><b>List Price / Price per Sqft</b>: " + "$" + formatMoney(list_price,0) + " / " + "$" + formatMoney(psf,0) + "</h5>" +
         "<b>Bedrooms</b>: " + bedrooms + ", <b>Bathrooms </b>: " + bathrooms + "<br>" +
         "<b>Total Square Feet</b>: " + formatMoney(squarefeet,0) + "<br><br>" +
         "<b>Description</b>: " + description + "<br><br>" +
@@ -169,21 +169,26 @@ function getColor(level) {
     // alpha = (level+1)/tierCount;
    // // return 'rgba(255,0,0,' + alpha + ')';
   if ($("#SPSC").is(":checked")) {
-      return level >= 0.66  ? 'rgba(0,109,44,1)' :
-             level >= 0.33  ? 'rgba(49,163,84,1)' :
-             level >= 0  ? 'rgba(116,196,118,1)':
-             level >= -0.33 ? 'rgba(201,166,64,1)' :
-             level >= -0.66  ? 'rgba(201,115,54,1)' :
-             level >= -1  ? 'rgba(210,58,56,1)':
+      return level >= 0.66  ? 'rgba(0,109,44,0.75)' :
+             level >= 0.33  ? 'rgba(49,163,84,0.75)' :
+             level >= 0  ? 'rgba(116,196,118,0.75)':
+             level >= -0.33 ? 'rgba(233,195,154,0.75)' :
+             level >= -0.66  ? 'rgba(210,150,128,0.75)' :
+             level >= -1  ? 'rgba(210,107,90,0.75)':
                             'rgba(0,0,0,0)';
+
+             // level >= -0.33 ? 'rgba(201,166,64,0.75)' :
+             // level >= -0.66  ? 'rgba(201,115,54,0.75)' :
+             // level >= -1  ? 'rgba(210,58,56,0.75)':
+
   } else {
 
-      return level >= 5  ? 'rgba(8,48,107,1)' :
-             level >= 4  ? 'rgba(8,81,156,1)' :
-             level >= 3  ? 'rgba(33,113,181,1)' :
-             level >= 2  ? 'rgba(66,146,198,1)' :
-             level >= 1  ? 'rgba(107,174,214,1)' :
-                         'rgba(158,202,225,1)';
+      return level >= 5  ? 'rgba(8,48,107,0.75)' :
+             level >= 4  ? 'rgba(8,81,156,0.75)' :
+             level >= 3  ? 'rgba(33,113,181,0.75)' :
+             level >= 2  ? 'rgba(66,146,198,0.75)' :
+             level >= 1  ? 'rgba(107,174,214,0.75)' :
+                         'rgba(158,202,225,0.75)';
   }
 }
 
@@ -213,7 +218,7 @@ var makeStyleFn = function(metric) {
           opacity: 0.4,
           color: 'white',
           // dashArray: '3',
-          fillOpacity: 0.65
+          fillOpacity: 0.75
       };
   };
 };

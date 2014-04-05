@@ -1,6 +1,6 @@
 import model
 import re
-import sqlite3
+# import sqlite3
 import json
 
 # determine if a point is inside a given polygon or not
