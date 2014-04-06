@@ -42,6 +42,11 @@ def psf_median_comp(session, year1, year2):
         else: 
             change = -2
 
+        if zip_county_dict.get(region.geoid) == None:
+            county_name = None
+        else: 
+            county_name = zip_county_dict[region.geoid]
+
         growth[region.geoid] = {'change':change,
                 'baseSp':year1result[0].year_median_sp,
                 'basePsf':basemedian,
@@ -49,7 +54,7 @@ def psf_median_comp(session, year1, year2):
                 'compSp':year2result[0].year_median_sp,
                 'compPsf':compmedian,
                 'compCount':year2result[0].year_count_median_sp,
-                'county': zip_county_dict[region.geoid]}
+                'county': county_name}
 
     return json.dumps(growth)
 

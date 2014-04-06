@@ -1,7 +1,9 @@
 import unittest
 import model
 import medianinsertdb
-import seedimport calculations
+import seed
+import calculations
+import json
 
 class TestZipcodes(unittest.TestCase):
     @classmethod
@@ -63,7 +65,6 @@ class TestZipcodes(unittest.TestCase):
         self.assertEqual(no_rows[0].median_sales_price, None)
 
 
-
 class TestZipcodeannual(unittest.TestCase):
     @classmethod
     def setUpClass(self):
@@ -115,6 +116,45 @@ class TestZipcodeannual(unittest.TestCase):
         self.assertEqual(no_rows[0].year_median_sp, 0)
         self.assertEqual(no_rows[0].year_median_spsf, 0)
         self.assertEqual(no_rows[0].year_count_median_sp, 0)
+
+class Testgrowth(unittest.TestCase):
+    @classmethod
+    def setUpClass(self):
+        self.session = model.connect("postgresql+psycopg2://postgres:password@localhost/testlocalvector")
+
+    def setUp(self):
+        seed.load_zips(self.session)
+        seed.load_slist(self.session, "data/offmarket3fix_5onlyTEST2.csv") 
+
+    def tearDown(self):
+        self.session.query(model.Listings).delete()
+        self.session.query(model.Zipcodes).delete()
+        self.session.query(model.Zipcodeannual).delete()
+        self.session.commit()
+
+    def test_psf_median_comp(self):
+        for year in range(2006, 2014):
+            medianinsertdb.populate_prices_table(self.session, year)
+
+        zip_95124 = calculations.psf_median_comp(self.session, 2006, 2007)
+        zip_95124 = json.loads(zip_95124)
+
+        change = round(zip_95124['95124']['change'], 4)
+
+        self.assertEqual(change, -0.0459)
+
+        self.assertEqual(zip_95124['95124']['baseSp'], 660000)
+        basePsf = round(zip_95124['95124']['basePsf'],3)
+        self.assertEqual(basePsf, 644.231)
+        self.assertEqual(zip_95124['95124']['baseCount'],11)
+
+        self.assertEqual(zip_95124['95124']['compSp'], 629500)
+        compPsf = round(zip_95124['95124']['compPsf'],3)
+        self.assertEqual(compPsf, 614.663)
+        self.assertEqual(zip_95124['95124']['compCount'],20)
+
+        self.assertEqual(zip_95124['95124']['county'],'Santa Clara')
+
 
 if __name__ == '__main__':
     unittest.main()

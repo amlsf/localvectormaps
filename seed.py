@@ -136,7 +136,7 @@ def load_slist(session, slist):
 # converts to integers
             list_price = int(list_price)
             # if list_price == '':
-            #     list_price = float(list_price)
+                #     list_price = float(list_price)
 
             if sell_price == '':
                 sell_price = -1
