@@ -61,6 +61,8 @@ width:381px;
 
 #slider-range, #slider {
     width: 75%;
+    margin-left:auto;
+    margin-right:auto;
 }
 
 .is-nodisplay {
@@ -71,6 +73,10 @@ width:381px;
     margin-left: 30px;
 }
 
-/*#welcome {
-    border:dotted 1px purple;
-}*/
+.metricspanellabel {
+    margin-top: 6px;
+}
+
+.show-heat-row {
+    margin-top:60px;
+}

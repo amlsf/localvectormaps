@@ -8,11 +8,12 @@ import re
 from decimal import *
 import json
 import shapefile
+import sys
 
 # loads active data file
-def load_alist(session):
+def load_alist(session, alist):
 
-    with open("data/activedata_20140330fixltlg2.csv") as f:
+    with open(alist) as f:
         reader = csv.reader(f, delimiter = ",")
         counter = 0
 # skips header row
@@ -103,8 +104,8 @@ def load_alist(session):
 
 
 # loads sold data file
-def load_slist(session):
-    with open("data/offmarket3fix_5only.csv") as f:
+def load_slist(session, slist):
+    with open(slist) as f:
         reader = csv.reader(f, delimiter = ",")
         counter = 0
 # skips header row
@@ -345,12 +346,18 @@ def load_countyprices(session):
 
 #     session.commit()
 
-def main(session):
-    load_alist(session)
-    # load_slist(session)
+def main():
+    if len(sys.argv) < 2:
+        connectionstring = model.defaultconnectionstring
+    else: 
+        connectionstring = sys.argv[1]
 
-# TODO Delete from counties where zcta not between 90001 - 96162 inclusive
-    # load_zips(session)
+    session = model.connect(connectionstring)
+
+    load_alist(session, "data/activedata_20140330fixltlg2.csv")
+    load_slist(session, "data/offmarket3fix_5only.csv")
+
+    load_zips(session)
 
 # next run medianinsertdb.py
 
@@ -360,5 +367,4 @@ def main(session):
     # load_blockgroups(session)
 
 if __name__ == "__main__":
-    s = model.connect()
-    main(s)
+    main()

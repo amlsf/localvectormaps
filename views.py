@@ -5,11 +5,17 @@ import config
 import model
 import calculations
 import json
+import sys
 
 app = Flask(__name__)
 app.config.from_object(config)
 
-model.session = model.connect()
+if len(sys.argv) < 2:
+    connectionstring = model.defaultconnectionstring
+else: 
+    connectionstring = sys.argv[1]
+
+model.session = model.connect(connectionstring)
 
 app.secret_key = "secretkey"
 
@@ -21,15 +27,7 @@ def leaflet():
 # returns active listings longlat for making active listings markers
 @app.route("/leafactivelistings")
 def leafactive():
-    active_listings = model.session.query(model.Listings).filter_by(listing_status='Active').all()
-    activelatlong = [
-        {'latitude': l.latitude, 'longitude': l.longitude, 'list_price': l.list_price, \
-        'bathrooms': l.bathrooms_count, 'bedrooms': l.bedrooms_count, 'squarefeet': l.living_sq_ft, \
-        'address': l.address, 'city': l.city_name, 'postal_code': l.postal_code, 'county': l.county_name, \
-        'neighborhood': l.neighborhood, 'mls_id': l.mls_id, 'description': l.description, 'url': l.property_url} \
-        for l in active_listings
-        ]
-    return json.dumps(activelatlong)
+    return calculations.active_listings(model.session)
 
 # retuns JSON dictionary of geoid:medianprice per region
 @app.route("/geoidpricesajax")

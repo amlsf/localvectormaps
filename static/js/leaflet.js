@@ -355,6 +355,7 @@ function onEachFeature(feature, layer) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 // SECTION show info pop-ups on mouse hover
@@ -381,7 +382,7 @@ info.update = function (props) {
           '<h5><b> Zipcode: ' + props.ZCTA5CE10 + '</b>, ' + '</b>' + geoIdPrices[props.GEOID10]['county'] + " County </h5>" +
           '<h6><b> Median Sales Price/Sqft: </b>' + "$" + formatMoney(geoIdPrices[props.GEOID10]['median_sales_psf'],0)  + '</h6>' +
           '<h6><b>Total # of Homes Sold: </b>' + formatMoney(geoIdPrices[props.GEOID10]['count_median_sales'],0) + "</h6>" +
-          '<h6><i>(For the Period of 2006-2013)</i></h6>'           :
+          '<h6><i>(For the Period of 2006-2013)</i></h6>' :
           'Hover over a region');
     } else if ($("#SPSC").is(":checked")) {
         var values = $('#slider-range').slider('values');
@@ -399,7 +400,7 @@ info.update = function (props) {
                 ('<h6 style="color: green"><b><i>Sales Price/Sqft % Change: ' + formatMoney(geoIdPrices[props.GEOID10]['change']*100,1) + "%"  + '</i></b></h6>')) +
                 '<h6 style="margin-top: 20px"><b>' + values[0] + ' Median Sales Price/Sqft: </b>'  + "$" + formatMoney(geoIdPrices[props.GEOID10]['basePsf'],0) + '</h6>' +
                 '<h6><b>Total # of Homes Sold in ' + values[0] + ': </b>'  + formatMoney(geoIdPrices[props.GEOID10]['baseCount'],0) + '</h6>' +
-                '<h6 style="margin-top: 20px"><b>' + values[1] + ' Median Sales Price/Sqft: </b>' + "$" + formatMoney(geoIdPrices[props.GEOID10]['compPsf']) + '</h6>' +
+                '<h6 style="margin-top: 20px"><b>' + values[1] + ' Median Sales Price/Sqft: </b>' + "$" + formatMoney(geoIdPrices[props.GEOID10]['compPsf'],0) + '</h6>' +
                 '<h6><b>Total # of Homes Sold in ' + values[1] + ': </b>'  + formatMoney(geoIdPrices[props.GEOID10]['compCount'],0) + '</h6>'
                 :
                 'Hover over a region');
@@ -413,7 +414,7 @@ info.update = function (props) {
 
 info.addTo(map);
 
-
+////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
 // SECTION Legend
@@ -585,7 +586,7 @@ function setupSlider() {
       values: [ 2006, 2013 ],
       // this pulls the values from the slider and puts it on the label
       slide: function( event, ui ) {
-        $( "#year" ).val( "" + ui.values[ 0 ] + " - " + ui.values[ 1 ] );
+        $( "#year" ).val( "       " + ui.values[ 0 ] + " - " + ui.values[ 1 ] );
       },
       stop: function(event, ui) {
             // when the user lets go and stops changing the slider
@@ -596,7 +597,7 @@ function setupSlider() {
       }
     });
   // Setting up slider before any user action based on default values
-  $( "#year" ).val( "" + $( "#slider-range" ).slider( "values", 0 ) +
+  $( "#year" ).val( "       " + $( "#slider-range" ).slider( "values", 0 ) +
     " - " + $( "#slider-range" ).slider( "values", 1 ) );
   $("#slider-range").hide();
 // Don't need to remove layer, already setup in selectMetric()

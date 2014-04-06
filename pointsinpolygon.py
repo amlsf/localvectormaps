@@ -2,6 +2,7 @@ import model
 import re
 # import sqlite3
 import json
+import syst
 
 # determine if a point is inside a given polygon or not
 # Polygon is a list of (x,y) pairs.
@@ -190,7 +191,15 @@ def point_in_blockgroups(session):
     session.commit()
 
 
-def main(session):
+def main():
+
+    if len(sys.argv) < 2:
+        connectionstring = model.defaultconnectionstring
+    else: 
+        connectionstring = sys.argv[1]
+
+    session = model.connect(connectionstring)
+
 
 #TODO just run counties (in case names not normalized in BD) and blockgroups, use sql query to match up zipcodes
     point_in_counties(session) 
@@ -200,7 +209,6 @@ def main(session):
     # point_in_neighborhood(session)
 
 if __name__ == "__main__":
-    s = model.connect()
-    main(s)
+    main()
 
 

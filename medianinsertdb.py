@@ -3,6 +3,7 @@ import re
 # import sqlite3
 import json
 import numpy
+import sys
 
 # This script inserts to each zipcode in Zipcodes table the total median price, median PSF price, count for all time and per year
 
@@ -11,19 +12,24 @@ def insert_median_sales_price(session):
 
     for region in regions:
 # this will just take sold listings
-        houses = session.query(model.Listings).filter_by(zip_id=region.id, property_type='Res. Single Family').all()
+        # houses = session.query(model.Listings).filter_by(zip_id=region.id, property_type='Res. Single Family').all()
+        houses = session.query(model.Listings).filter_by(postal_code=region.zcta, property_type='Res. Single Family').all()
         prices = []
         for houseprice in houses:
             prices.append(houseprice.sell_price)
-            print "Houseprice postal_code is: %r" % houseprice.postal_code
+            # print "Houseprice postal_code is: %r" % houseprice.postal_code
+
+            # if region.zcta == '93908':
+            #     print "Looking at 93908 sell_price is %r" % (houseprice.sellprice)       
+
 # ignore any zipcodes with fewer than 10 data points
         if len(prices) > 10:
             median = numpy.median(prices)
         else:
             median = 0
 
-        print "zcta: %r, pricelist: %r" % (region.zcta, prices)
-        print "median is %r" % median
+        # print "zcta: %r, pricelist: %r" % (region.zcta, prices)
+        # print "median is %r" % median
 # set the column in the listings table to the median price
         region.median_sales_price = median
         region.count_median_sales = len(prices)
@@ -35,7 +41,8 @@ def insert_median_sales_psf(session):
     regions = session.query(model.Zipcodes).all()
 
     for region in regions:
-        houses = session.query(model.Listings).filter_by(zip_id=region.id, property_type='Res. Single Family').all()
+        # houses = session.query(model.Listings).filter_by(zip_id=region.id, property_type='Res. Single Family').all()
+        houses = session.query(model.Listings).filter_by(postal_code=region.zcta, property_type='Res. Single Family').all()
         prices = []
     # Filter out the regions with no houses
         if len(houses) != 0:
@@ -44,7 +51,7 @@ def insert_median_sales_psf(session):
                 if houseprice.living_sq_ft != 0:
                     psf = float(houseprice.sell_price)/houseprice.living_sq_ft
                     prices.append(psf)
-                    print "Houseprice postal_code is: %r" % houseprice.postal_code
+                    # print "Houseprice postal_code is: %r" % houseprice.postal_code
     # ignore any zipcodes with fewer than 10 data points
                 else: 
                     median = 0
@@ -53,8 +60,8 @@ def insert_median_sales_psf(session):
             else:
                 median = 0
 
-            print "zcta: %r, pricelist: %r" % (region.zcta, prices)
-            print "median is %r" % median
+            # print "zcta: %r, pricelist: %r" % (region.zcta, prices)
+            # print "median is %r" % median
         else:
             median = 0
 # set the column in the listings table to the median price
@@ -70,20 +77,21 @@ def populate_prices_table(session, year):
     for region in regions:
 
 # calculates the annual total sales price data 
-        houses_year = session.query(model.Listings).filter_by(zip_id=region.id, property_type='Res. Single Family').filter(model.extract('year', model.Listings.close_escrow_date)==year).all()
+        # houses_year = session.query(model.Listings).filter_by(zip_id=region.id, property_type='Res. Single Family').filter(model.extract('year', model.Listings.close_escrow_date)==year).all()
+        houses_year = session.query(model.Listings).filter_by(postal_code=region.zcta, property_type='Res. Single Family').filter(model.extract('year', model.Listings.close_escrow_date)==year).all()
 # this will just take sold listings total sales prices per year
         prices = []
         for houseprice in houses_year:
             prices.append(houseprice.sell_price)
-            print "Houseprice postal_code is: %r" % houseprice.postal_code
+            # print "Houseprice postal_code is: %r" % houseprice.postal_code
 # ignore any zipcodes with fewer than 10 data points
         if len(prices) > 10:
             median = numpy.median(prices)
         else:
             median = 0
 
-        print "zcta: %r, pricelist: %r" % (region.zcta, prices)
-        print "median is %r" % median
+        # print "zcta: %r, pricelist: %r" % (region.zcta, prices)
+        # print "median is %r" % median
 # set the column in the listings table to the median price
 
 
@@ -96,8 +104,8 @@ def populate_prices_table(session, year):
                 if houseprice.living_sq_ft != 0:
                     psf = float(houseprice.sell_price)/houseprice.living_sq_ft
                     psf_prices.append(psf)
-                    print "Houseprice postal_code is: %r" % houseprice.postal_code
-                    print "House sell date is %r" % houseprice.close_escrow_date
+                    # print "Houseprice postal_code is: %r" % houseprice.postal_code
+                    # print "House sell date is %r" % houseprice.close_escrow_date
     # ignore any zipcodes with fewer than 10 data points
                 else: 
                     psf_median = 0
@@ -106,8 +114,8 @@ def populate_prices_table(session, year):
             else:
                 psf_median = 0
 
-            print "zcta: %r, pricelist: %r" % (region.zcta, psf_prices)
-            print "psf_median is %r" % psf_median
+            # print "zcta: %r, pricelist: %r" % (region.zcta, psf_prices)
+            # print "psf_median is %r" % psf_median
         else:
             psf_median = 0
 
@@ -128,18 +136,23 @@ def populate_prices_table(session, year):
     session.commit()
 
 
-def main(session):
+def main():
+    if len(sys.argv) < 2:
+        connectionstring = model.defaultconnectionstring
+    else: 
+        connectionstring = sys.argv[1]
 
-    # insert_median_sales_price(session)
+    session = model.connect(connectionstring)
+
+    insert_median_sales_price(session)
     # insert_median_sales_psf(session)
 
     # populate_prices_table(session, 2005)
 
-    for year in range(2006,2014):
-        populate_prices_table(session, year)
+    # for year in range(2006,2014):
+    #     populate_prices_table(session, year)
 
 if __name__ == "__main__":
-    s = model.connect()
-    main(s)
+    main()
 
 

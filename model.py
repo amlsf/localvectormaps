@@ -18,7 +18,11 @@ from sqlalchemy.orm import sessionmaker, scoped_session, relationship, backref
 from flask.ext.login import UserMixin
 
 import logging
+import sys
 
+
+defaultconnectionstring = "postgresql+psycopg2://postgres:password@localhost/postgres"
+# test database = "postgresql+psycopg2://postgres:password@localhost/testlocalvector"
 
 Base = declarative_base()
 # Base.query = session.query_property()
@@ -26,12 +30,13 @@ Base = declarative_base()
 ENGINE = None
 Session = None
 
-def connect():
+def connect(connectionstring):
     global engine
     global Session
 
-    engine = create_engine("postgresql+psycopg2://postgres:ratcatdog1@localhost/postgres", echo=False)
+    engine = create_engine(connectionstring, echo=False)
 # Use this for heroku
+    # engine = create_engine("postgresql+psycopg2://postgres:password@localhost/postgres", echo=False)
     # engine = create_engine(os.environ.get("DATABASE_URL"), echo=False)
     # engine = create_engine("sqlite:///listings.db", echo=False)
 
@@ -39,8 +44,9 @@ def connect():
 
     return Session()
 
-def create_tables():
-    engine = create_engine("postgresql+psycopg2://postgres:ratcatdog1@localhost/postgres", echo=False)
+def create_tables(connectionstring):
+    engine = create_engine(connectionstring, echo=False)
+    # engine = create_engine("postgresql+psycopg2://postgres:password@localhost/postgres", echo=False)
 # Use this for heroku
     # engine = create_engine(os.environ.get("DATABASE_URL"), echo=False)
     # engine = create_engine("sqlite:///listings.db", echo=False)
@@ -262,9 +268,18 @@ class Nationalprices(Base):
 
     #     return JSON.dumps(self_dict)
 
+def main():
+    if len(sys.argv) < 2:
+        connectionstring = defaultconnectionstring
+    else: 
+        connectionstring = sys.argv[1]
+    create_tables(connectionstring)
+
+    create_tables(sys.argv[1])
+
 
 if __name__ == "__main__":
-    create_tables()
+    main()
     # session = connect()
 
     # session = Session()
