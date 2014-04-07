@@ -14,7 +14,7 @@ Developed in 3.5 weeks at Hackbright Academy's Software Engineering Fellowship i
 #####Technologies & tools used:
 The application is built using the Flask framework and is written in Python in the back-end, Javascript in the front-end, and uses a PostgreSQL database.
 
-1. Front-end: Javascript, jQuery, AJAX, HTML, CSS, Bootstrap
+1. Front-end: Javascript, jQuery, AJAX, HTML, CSS, Bootstrap, D3
 2. Back-end: Python, Flask, SQLAlchemy, PostgreSQL
 3. GIS-related: Leaflet API, Cloudmade, QuantumGIS, GeoJSON, Python shapefile library, markercluster library
 
@@ -37,6 +37,7 @@ The map offers visualization of 3 different metrics split out by zipcode. A butt
 
 #####3.	Information boxes on mouseover
   * When the mouse hovers over any region, the region is highlighted and an information box on the upper right corner shows additional details about the region such as median price and number of homes sold, and exact % change where appropriate.
+  * Additionally, in the Price Comparison heatmap view, a time series chart displays the median price/sqft each year for the mouseover region.
   * Clicking on any particular region automatically zooms in to pull the region into the full viewport.
 
 #####4.	Legend 
@@ -72,7 +73,7 @@ I learned how to use an open source GIS system called QuantumGIS to quickly visu
 I then used the Python csv module to seed the MLS data of over 200,000 homes into my database, while validating, cleaning and normalizing the data. The next step was to use a tool provided by Mapquest to bulk geocode the addresses to acquire their latlong coordinates for placement on the map.
 
 ###Displaying Data with Performance in Mind
-######AJAX, JQuery, Markercluster library, GeoJSON, Jquery UI, Bootstrap
+######AJAX, JQuery, Markercluster library, GeoJSON
 
 I had originally used a Leaflet feature that drew each region's polygon by feeding my latlong data from the database to the client, but found this to be extremely slow so I switched to another method that used GeoJSON formats so that the frontend could handle all drawing of each polygon and avoided making extra server calls. While this increased the speed, it was still slower than I would have liked. I then switched to using a smoothed out version of the shapefiles with simplified vertices that still retained the shape. (As a next step for the future, to further improve performance by avoiding drawing hundreds of polygons altogether, I would want to use a tool called Tilemill to style the tiles ahead of time and then Mapbox's hosting services to serve the tiles/data.) 
 
@@ -82,7 +83,9 @@ Initially, I tried rendering the active listings as individual markers but ident
 
 Another complication was how to pass the relative values to the render the appropriate color in each region. Normally, the API assumes you have your values embedded in the GeoJSON. However, in my case, the map displayed different subsets of data and rendering a different GeoJSON for each dataset would have been time-consuming and inefficient. I used an AJAX call to a handler that created a separate JSON with just the relative values to then link together with the GeoJSON data on the client side. 
 
-On the front-end I used the Jquery UI library for the range slider, bootstrap to style the buttons, Mapbrewer to select the colorscheme.
+######Jquery UI, Bootstrap, D3
+
+On the front-end I used the Jquery UI library for the range slider, bootstrap to style the buttons, Mapbrewer to select the colorscheme, and D3 for the time series graphs.
 
 Sample Data Insights
 --------------------
