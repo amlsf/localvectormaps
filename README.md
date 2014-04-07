@@ -14,7 +14,7 @@ Developed in 3.5 weeks at Hackbright Academy's Software Engineering Fellowship i
 #####Technologies & tools used:
 The application is built using the Flask framework and is written in Python in the back-end, Javascript in the front-end, and uses a PostgreSQL database.
 
-1. Front-end: Javascript, jQuery, AJAX, HTML, CSS, Bootstrap
+1. Front-end: Javascript, jQuery, AJAX, HTML, CSS, Bootstrap, D3
 2. Back-end: Python, Flask, SQLAlchemy, PostgreSQL
 3. GIS-related: Leaflet API, Cloudmade, QuantumGIS, GeoJSON, Python shapefile library, markercluster library
 
