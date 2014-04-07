@@ -103,7 +103,7 @@ You might then toggle on the active listings and research homes currently for sa
 
 Extensions
 ----------
-######Additional Options and Filters
+#####Additional Options and Filters
 
 In the future, I'll be adding additional values of various cuts of the data, including the ability to filter by number of bedrooms, baths, square footage and price level both for the heatmap and the active listing markers. I would also like to create different zoom levels that show the regions broken out with increasing granularity such as block groups in addition to zipcodes. 
 
@@ -113,10 +113,10 @@ On the front-end coding side, I noticed that as you add more options, the number
 
 In addition, since block group information isn't available in my real estate data, I would need to run a Ray Casting algorithm to determine the membership of each home within the appropriate block group.
 
-######Interactive Time Series Graphs
+#####Interactive Time Series Graphs
 
 I'd like to create time series line graphs that allow the user to select multiple metrics and regions to compare on the same graph. 
 
-######Predictive Analytics
+#####Predictive Analytics
 
 The next step would be to create predictive algorithms that focus on predicting future prices and growth potential. One idea is to run linear regressions on each region and identify potentially undervalued homes based on where the ask price falls relative to the linear regression. 
