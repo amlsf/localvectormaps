@@ -410,6 +410,7 @@ info.update = function (props) {
                 'Hover over a region');
 
 
+//D3 annual time series graph of PSF by region
                 var graph = new Rickshaw.Graph( {
                         element: document.querySelector("#chart"),
                         width: 260,
@@ -448,6 +449,7 @@ info.update = function (props) {
                         graph: graph,
                         orientation: 'left',
                         tickFormat: Rickshaw.Fixtures.Number.formatKMBT,
+                        pixelsPerTick: 25,
                         element: document.getElementById('y_axis'),
                 } );
 
