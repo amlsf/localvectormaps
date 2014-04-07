@@ -21,7 +21,8 @@ The application is built using the Flask framework and is written in Python in t
 Summary of Features
 -------------------
 
-![Main page] (/screenshots/2salespricepage.JPG)
+![Main page](/screenshots/2salespricepage.JPG)
+![yoy page](/screenshots/1YoYpricechange.JPG)
 
 #####1. Choropleth Map 
 The map offers visualization of 3 different metrics split out by zipcode. A button in the control panel on the left toggles off the choropleth layer if users want a clearer view of the map. For a more intuitive experience, the controls showing the metric options disappear when the user turns toggles off the choropleth. The three metric options displayed on the map are:  
@@ -38,7 +39,6 @@ The map offers visualization of 3 different metrics split out by zipcode. A butt
   * When the mouse hovers over any region, the region is highlighted and an information box on the upper right corner appears to drill down into additional details about the region such as median price and number of homes sold, and exact % change where appropriate.
   * Additionally, in the Price Comparison option view, a time series chart displays the median price/sqft each year for the mouseover region.
   * Clicking on any particular region automatically zooms in to pull the region into the full viewport.
-![yoy page] (/screenshots/1YoYpricechange.JPG.JPG)
 
 #####4.	Legend 
   *	The legend updates dynamically with the dataset with a clear label giving the user a clear understanding of what she is viewing. It updates based on the metric and the years selected. 
@@ -47,8 +47,8 @@ The map offers visualization of 3 different metrics split out by zipcode. A butt
 #####5.	Toggle Active listings & Markerclusters
   *	In the control panel on the left, a button allows user to toggle on markers for active listings. When the users click on the markers, a pop-up displays showing detailed listing information including list price, address, # of beds/bath, a description of the property, and the MLS listing number. Users can click on the address and be taken to a separate detailed listings page  
   *	The display uses a markercluster API to improve performance and avoid overwhelming the user with too many markers. When the user mouses over a particular cluster, a polygon appears on the map displaying what region the cluster covers. Upon clicking the cluster, the map automatically zooms in and the clusters split out into smaller clusters or map pins. Double clicking zooms back out to the original view.   
-![Other page] (/screenshots/1-activelistings.JPG)
-![Local page] (//screenshots/11-activelistings2.JPG)
+![Other page](/screenshots/1-activelistings.JPG)
+![Local page](/screenshots/11-activelistings2.JPG)
 
 Project Walk Through
 --------------------
