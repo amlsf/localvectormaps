@@ -2,14 +2,14 @@ LocalVector Maps
 =================
 LocalVector Maps is a real estate data visualization and exploratory tool that uses colorful choropleth maps as an intuitive approach to help residential real estate buyers quickly absorb a large amount of data in order to compare local prices, identify specific high growth areas, visualize the recovery of the real estate market since the 2009 meltdown, and explore homes currently for sale within five Bay Area counties. 
 
-I built this application with the goal to make a large amount of data useful and easily digestible. Partially due to the proprietary nature of the MLS data used for this application, I noticed a lack of exploratory, interactive tools that displayed real estate growth and recovery over time in addition to price level snapshots. Line graphs exist, but showing a graph comparing hundreds of regions at once would be difficult be unwieldy and difficult to quickly absorb. 
+I built this application with the goal to make a large amount of data useful and easily digestible. Partially due to the proprietary nature of the MLS data used in this application, I noticed a lack of exploratory, interactive tools that displayed real estate growth and recovery over time in addition to price levels. While line graphs exist that show growth, they are limiting in the number of regions that can be compared at the same time.
 
-I had in mind people like my parents and other mom-and-pop investors who invest son the side with their nest eggs and need to gain a broader understanding of where the opportunities lie. This app will be hosted shortly as a new feature in my friend's real estate startup.
+I had in mind people like my parents and other mom-and-pop investors who invest their nest eggs in real estate on the side with their nest eggs and have limited access to research tools that help them gain a bigger picture understanding of the landscape of investment opportunities. This app will be hosted shortly as a new feature in a friend's real estate startup, LocalVector.
+
+Developed in 3.5 weeks at Hackbright Academy's Software Engineering Fellowship in the Winter 2014 cohort. 
 
 #####Note on cloning this repository:
 Note that this application uses licensed Multiple Listing Services (MLS) data, it is not possible to run this repository locally on your machine. The site where the app will be hosted will be posted shortly.
-
-Developed in 3.5 weeks at Hackbright Academy's Software Engineering Fellowship in the Winter 2014 cohort. 
 
 #####Technologies & tools used:
 The application is built using the Flask framework and is written in Python in the back-end, Javascript in the front-end, and uses a PostgreSQL database.
@@ -118,7 +118,7 @@ In addition, since block group information isn't available in my real estate dat
 
 #####Interactive Time Series Graphs
 
-I'd like to create time series line graphs that allow the user to select multiple metrics and regions to compare on the same graph. 
+I'd like to create interactive time series line graphs that allow the user to select multiple metrics and regions to compare on the same graph. 
 
 #####Predictive Analytics
 
