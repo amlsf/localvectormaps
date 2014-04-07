@@ -46,6 +46,14 @@ def geochanges():
     #     return
     return calculations.psf_median_comp(model.session, baseyear, compyear)
 
+
+@app.route("/play")
+def graphs():
+    return render_template("testgraphs.html")
+
+
+
+
 leafactive()
 
 if __name__ == "__main__":

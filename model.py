@@ -134,6 +134,8 @@ class Zipcodes(Base):
     median_sales_price = Column(Integer, nullable=True)
     median_sales_psf = Column(DOUBLE_PRECISION, nullable=True)
     count_median_sales = Column(Integer, nullable=True)
+# TODO to see this later
+    time_series_psf = Column(VARCHAR, nullable=True) 
 
 
 class Countyprices(Base):

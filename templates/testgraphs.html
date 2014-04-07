@@ -1,0 +1,166 @@
+<!doctype>
+<link type="text/css" rel="stylesheet" href="/static/D3/rickshaw.min.css">
+<script src="../static/D3/d3.v3.min.js"></script>
+<!-- <script src="../vendor/d3.layout.min.js"></script> -->
+<script src="/static/D3/rickshaw.min.js"></script>
+
+<!-- <link type="text/css" rel="stylesheet" href="/static/D3/graph.css">
+<link type="text/css" rel="stylesheet" href="/static/D3/detail.css">
+<link type="text/css" rel="stylesheet" href="/static/D3/legend.css">
+<link type="text/css" rel="stylesheet" href="/static/D3/lines.css">  -->
+
+
+<style>
+#chart_container {
+        position: relative;
+        font-family: Arial, Helvetica, sans-serif;
+}
+#chart {
+        position: relative;
+        left: 40px;
+}
+#y_axis {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 40px;
+}
+</style>
+
+
+<div id="chart_container">
+        <div id="y_axis"></div>
+        <div id="chart"></div>
+</div>
+
+
+<script>
+// var data = [ { x: 1910, y: 92228531 }, { x: 1920, y: 106021568 }, { x: 1930, y: 123202660 }, { x: 1940, y: 132165129 }, { x: 1950, y: 151325798 }, { x: 1960, y: 179323175 }, { x: 1970, y: 203211926 }, { x: 1980, y: 226545805 }, { x: 1990, y: 248709873 }, { x: 2000, y: 281421906 }, { x: 2010, y: 308745538 } ];
+
+
+// var data = [ { x: -1893456000, y: 40 }, { x: -1577923200, y: 20 }, { x: -1262304000, y: 30 }, { x: -946771200, y: 60 }, { x: -631152000, y: 70 }, { x: -315619200, y: 80 }, { x: 0, y: 90 }, { x: 315532800, y: 100 }, { x: 631152000, y: 120 }, { x: 946684800, y: 125 }, { x: 1262304000, y: 135 } ];
+
+// var data = [ { x: 1136073600, y: 40 }, { x: 1167609600, y: 20 }, { x: 1199145600, y: 30 } , { x: 1230768000, y: 60 }, { x: 1262304000, y: 70 } ];
+
+// WHy isn't the first datapoint showing? whereas it's the opposiite for the example where the last one doesn't show
+// 2006 through 2013
+
+var data = [ { x: 1136073600, y: 40 }, { x: 1167609600, y: 20 }, { x: 1199145600, y: 30 }, { x: 1230768000, y: 60 }, { x: 1262304000, y: 70 }, { x: 1293840000, y: 80 }, { x: 1325376000, y: 90 }, { x: 1356998400, y: 100 } ];
+
+
+// var data = [ { 'x': 1136073600, 'y': 40 }, { 'x': 1167609600, 'y': 20 }, { 'x': 1199145600, 'y': 30 }, { 'x': 1230768000, 'y': 60 }, { 'x': 1262304000, 'y': 70 }, { 'x': 1293840000, 'y': 80 }, { x: 1325376000, 'y': 90 }, { 'x': 1356998400, 'y': 100 } ];
+
+
+var graph = new Rickshaw.Graph( {
+        element: document.querySelector("#chart"),
+        width: 580,
+        height: 250,
+        renderer: 'line',
+        series: [ {
+                color: 'steelblue',
+                data: data
+        } ]
+} );
+
+var axes = new Rickshaw.Graph.Axis.Time( { graph: graph } );
+
+var y_axis = new Rickshaw.Graph.Axis.Y( {
+        graph: graph,
+        orientation: 'left',
+        tickFormat: Rickshaw.Fixtures.Number.formatKMBT,
+        element: document.getElementById('y_axis'),
+} );
+
+graph.render();
+axes.render();
+
+
+// var palette = new Rickshaw.Color.Palette();
+
+// var graph = new Rickshaw.Graph( {
+//         element: document.querySelector("#chart"),
+//         width: 540,
+//         height: 240,
+//         renderer: 'line',
+//         series: [
+//                 {
+//                         name: "Northeast",
+//                         data: [ { x: -1893456000, y: 25868573 }, { x: -1577923200, y: 29662053 }, { x: -1262304000, y: 34427091 }, { x: -946771200, y: 35976777 }, { x: -631152000, y: 39477986 }, { x: -315619200, y: 44677819 }, { x: 0, y: 49040703 }, { x: 315532800, y: 49135283 }, { x: 631152000, y: 50809229 }, { x: 946684800, y: 53594378 }, { x: 1262304000, y: 55317240 } ],
+//                         color: palette.color()
+//                 },
+                // {
+                //         name: "Midwest",
+                //         data: [ { x: -1893456000, y: 29888542 }, { x: -1577923200, y: 34019792 }, { x: -1262304000, y: 38594100 }, { x: -946771200, y: 40143332 }, { x: -631152000, y: 44460762 }, { x: -315619200, y: 51619139 }, { x: 0, y: 56571663 }, { x: 315532800, y: 58865670 }, { x: 631152000, y: 59668632 }, { x: 946684800, y: 64392776 }, { x: 1262304000, y: 66927001 } ],
+                //         color: palette.color()
+                // },
+                // {
+                //         name: "South",
+                //         data: [ { x: -1893456000, y: 29389330 }, { x: -1577923200, y: 33125803 }, { x: -1262304000, y: 37857633 }, { x: -946771200, y: 41665901 }, { x: -631152000, y: 47197088 }, { x: -315619200, y: 54973113 }, { x: 0, y: 62795367 }, { x: 315532800, y: 75372362 }, { x: 631152000, y: 85445930 }, { x: 946684800, y: 100236820 }, { x: 1262304000, y: 114555744 } ],
+                //         color: palette.color()
+                // },
+                // {
+                //         name: "West",
+                //         data: [ { x: -1893456000, y: 7082086 }, { x: -1577923200, y: 9213920 }, { x: -1262304000, y: 12323836 }, { x: -946771200, y: 14379119 }, { x: -631152000, y: 20189962 }, { x: -315619200, y: 28053104 }, { x: 0, y: 34804193 }, { x: 315532800, y: 43172490 }, { x: 631152000, y: 52786082 }, { x: 946684800, y: 63197932 }, { x: 1262304000, y: 71945553 } ],
+                //         color: palette.color()
+                // }
+//         ]
+// } );
+
+// var x_axis = new Rickshaw.Graph.Axis.Time( { graph: graph } );
+
+// var y_axis = new Rickshaw.Graph.Axis.Y( {
+//         graph: graph,
+//         orientation: 'left',
+//         tickFormat: Rickshaw.Fixtures.Number.formatKMBT,
+//         element: document.getElementById('y_axis'),
+// } );
+
+// var legend = new Rickshaw.Graph.Legend( {
+//         element: document.querySelector('#legend'),
+//         graph: graph
+// } );
+
+// var offsetForm = document.getElementById('offset_form');
+
+// offsetForm.addEventListener('change', function(e) {
+//         var offsetMode = e.target.value;
+
+//         if (offsetMode == 'lines') {
+//                 graph.setRenderer('line');
+//                 graph.offset = 'zero';
+//         } else {
+//                 graph.setRenderer('stack');
+//                 graph.offset = offsetMode;
+//         }       
+//         graph.render();
+
+// }, false);
+
+// graph.render();
+
+
+// // show data point info
+// var hoverDetail = new Rickshaw.Graph.HoverDetail({
+//         graph: graph
+// });
+
+// // graph legend
+// var legend = new Rickshaw.Graph.Legend({
+//         graph: graph,
+//         element: document.getElementById("legend")
+// });
+
+// // allows toggling between keys of legend
+// var shelving = new Rickshaw.Graph.Behavior.Series.Toggle({
+//         graph: graph,
+//         legend: legend
+// });
+
+// // graph axes
+// var axes = new Rickshaw.Graph.Axis.Time({
+//         graph: graph
+// });
+
+// axes.render();
+
+</script>

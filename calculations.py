@@ -54,7 +54,8 @@ def psf_median_comp(session, year1, year2):
                 'compSp':year2result[0].year_median_sp,
                 'compPsf':compmedian,
                 'compCount':year2result[0].year_count_median_sp,
-                'county': county_name}
+                'county': county_name,
+                'graph':json.loads(region.time_series_psf)}
 
     return json.dumps(growth)
 
@@ -69,6 +70,8 @@ def active_listings(session):
         ]
     return json.dumps(activelatlong)
 
+
+
 def main():
     if len(sys.argv) < 2:
         connectionstring = model.defaultconnectionstring
@@ -78,12 +81,12 @@ def main():
     session = model.connect(connectionstring)
 
 
-    total_median(session)
-    # psf_median_comp(session, 2005, 2006)
+    # total_median(session)
+    # psf_median_comp(session, 2006, 2007)
+    # psf_median_comp(session, 2009, 2012)
     
     # sp_median_byzip(session)
     # psf_median_byzip(session)
-    # psf_median_comp(session, 2009, 2012)
     
     # county_activemedian(session)
     # county_psf(session)

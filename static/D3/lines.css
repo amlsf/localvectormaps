@@ -1,0 +1,22 @@
+div, span, p, td {
+	font-family: Arial, sans-serif;
+}
+#chart {
+	display: inline-block;
+	width: 800px;
+}
+#legend {
+	display: inline-block;
+	position: relative;
+	/*left: 50%;*/
+}
+#legend_container {
+	position: absolute;
+	bottom: 50px;
+	width: 0;
+	left: 40%;
+}
+#chart_container {
+	float: left;
+	position: relative;
+}
