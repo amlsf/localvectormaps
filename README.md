@@ -21,7 +21,8 @@ The application is built using the Flask framework and is written in Python in t
 Summary of Features
 -------------------
 
-![Main page!] (/screenshots/10-activelistings.jpg)
+![Main page] (/screenshots/1openingpage.JPG)
+![Other page] (/screenshots/10-activelistings.jpg)
 
 #####1. Choropleth Map 
 Visualization of 3 different metrics split out by zipcode. A button in the control panel on the left toggles off the choropleth layer if users want a clearer view of the map. For a more intuitive experience, the controls showing the metric options disappear when the user turns toggles off the choropleth. The three metric options displayed on the map are:  
