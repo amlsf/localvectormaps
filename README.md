@@ -15,8 +15,8 @@ Note that this application uses licensed Multiple Listing Services (MLS) data, i
 The application is built using the Flask framework and is written in Python in the back-end, Javascript in the front-end, and uses a PostgreSQL database.
 
 1. Front-end: Javascript, jQuery, AJAX, HTML, CSS, Bootstrap, D3
-2. Back-end: Python, Flask, SQLAlchemy, PostgreSQL
-3. GIS-related: Leaflet API, Cloudmade, QuantumGIS, GeoJSON, Python shapefile library, numpy, markercluster library
+2. Back-end: Python, Flask, SQLAlchemy, PostgreSQL, numpy module
+3. GIS-related: Leaflet API, Cloudmade, QuantumGIS, GeoJSON, Python shapefile library, markercluster library
 
 Summary of Features
 -------------------
@@ -57,7 +57,7 @@ Project Walk Through
 
 This project proved to be a test of resourcefulness in finding and selecting the the data and tools given the time constraints. With no prior experience with GIS or cartography, one of the biggest tasks was determining what data to use and how to display it on the map, as well as navigating the sea of geo systems and tools. This included quickly getting up to speed on the ecosystem of tools in the geo space, understanding how they fit together and their pros and cons to decide which ones would be best suited for this project. 
 
-The application uses the Leaflet and Cloudmade API. I built some preliminary applications using the Google Maps API and explored Mapbox and CartoDB, but Leaflet had more features and 3rd party libraries I could use for customizing a map, had excellent documentation, and because it's open source, I didn't need to worry about Terms of Service. 
+The application uses the Leaflet Javascript library for mapping applications, the Cloudmade API for basemap tileserving, which uses OpenStreetMaps for the base mapping data. I built some preliminary applications using the Google Maps API and explored Mapbox and CartoDB, but Leaflet had more features and 3rd party libraries I could use for customizing a map, had excellent documentation, and because it's open source, I didn't need to worry about Terms of Service. 
 
 Choropleth maps are thematic maps in which areas are shaded or patterned in proportion to the measurement of statistical variable. They're similar to heatmaps, though I chose not to use heatps because in addition to values, heatmaps also reflect the density of data points in a region, which would not have been an accurate representation of the data for the purposes of this project. This is how all the heatmaps libraries for cartography behaved.
 
@@ -71,7 +71,7 @@ I found that the US Census Bureau has large shapefiles gigabytes in size contain
 
 I learned how to use an open source GIS system called QuantumGIS to quickly visualize the shapefiles and convert them to a GeoJSON format for displaying as a layer on the map. I also used the Python shapefile library to extract data from the shapefile and seed into my database where I then trimmed the unnecessary regions. I wrote another Python script to modify the GeoJSON to extract a subset of the data once I determined those regions from the previous step in the process. 
 
-A major task was designing the structure of the database and how I wanted to store all the longlat data so it could be easily and efficiently accessed. A good amount of time was spent figuring out how to set up the database and write a script to run a Ray Casting algorithm that determines the membership of each home in its respective region, be it block group, census tract or subcounty.  
+A major task was designing the structure of the database to store all the longlat data so it could be easily and efficiently accessed, particularly to be able to run a Ray Casting algorithm that determines the membership of each home in its respective region, be it block group, census tract or subcounty.  
 
 As for the real estate data, I used the Python csv module to seed the MLS data of over 200,000 homes into my database, while validating, cleaning and normalizing the data. I then used a Mapquest tool to bulk geocode all the addresses to to longlat pairs for placement on the map.
 

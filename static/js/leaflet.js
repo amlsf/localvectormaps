@@ -404,7 +404,7 @@ info.update = function (props) {
                 '<h6><b>Total # of Homes Sold in ' + values[0] + ': </b>'  + formatMoney(geoIdPrices[props.GEOID10]['baseCount'],0) + '</h6>' +
                 '<h6 style="margin-top: 20px"><b>' + values[1] + ' Median Sales Price/Sqft: </b>' + "$" + formatMoney(geoIdPrices[props.GEOID10]['compPsf'],0) + '</h6>' +
                 '<h6><b>Total # of Homes Sold in ' + values[1] + ': </b>'  + formatMoney(geoIdPrices[props.GEOID10]['compCount'],0) + '</h6><br>' +
-                '<h6><b>Annual Sales Price/Sqft</b></h6>' +
+                '<h6><b>$ Annual Sales Price/Sqft</b></h6>' +
                 '<div id="chart_container"><div id="y_axis"></div><div id="chart"></div><div id = "x_axis"></div></div><br>'
                 :
                 'Hover over a region');
