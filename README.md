@@ -89,12 +89,17 @@ Sample Data Insights
 Here is a sample walk-through of one scenario of how a user might find insight from this tool and use it to then research possible homes to purchase. 
 
 By 2009-2010, real estate had reached a bottom on home value compared to the peak in 2006 following the real estate meltdown. If you select the slider bar to compare 2006 as the base year and 2009 as the comparison year, this is the apparent from the overwhelming warm colors covering the map. 
+![Loss] (/screenshots/3-2006-2009.JPG)
 
 Recently, real estate values have been increasing as you can see from the overwhelming green when you select 2011-2013 on the range slider. As one might expect, growth is especially strong near San Francisco, around Palo Alto, and Monterrey. 
+![Growth] (/screenshots/4-2011-2013.JPG)
 
 If you compare using the baseline of the 2006 peak in order to gauge whether prices have returned to previous highs by comparing each of the years of 2010-2013 to 2006, you'll notice a single, rapidly growing green hot spot centered around Mountain View and Palo Alto, which indicates those regions have median home values that are now exceeding 2006 highs and are growing at a faster pace than the areas around San Francisco and Monterrey, which have not yet returned to previous highs. 
+![Improving] (/screenshots/6-2006-2011.JPG)
+![Improving More] (/screenshots/8-2006-2013.JPG)
 
 You might then toggle on the active listings and research homes currently for sale around the fringes of the growing green hotspot or speculate that San Francisco and Monterrey still have good potential for growth. 
+![Searching] (/screenshots/9-2006-2013 with clusters.JPG)
 
 Extensions
 ----------
