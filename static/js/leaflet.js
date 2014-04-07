@@ -370,6 +370,7 @@ info.onAdd = function (map) {
 // method that will update the control based on feature properties passed (tied to user interaction onEachFeature() highlight and reset features)
 info.update = function (props) {
 
+
     if ($("#SP").is(":checked")) {
       this._div.innerHTML = '<h4>Region Details</h4>' +  (props ?
           '<h5><b> Zipcode: ' + props.ZCTA5CE10 + '</b>, ' +  geoIdPrices[props.GEOID10]['county'] + " County </h5>" +
@@ -391,6 +392,7 @@ info.update = function (props) {
             this._div.innerHTML = '<h4>Region Details</h4>' + 'Hover over a region';
         } else {
           if (geoIdPrices[props.GEOID10]['change'] != -2) {
+
               // if (geoIdPrices[props.GEOID10]['basePsf'] !== 0 && geoIdPrices[props.GEOID10]['compPsf'] !== 0) {
                 this._div.innerHTML = '<h4>Region Details</h4>' +  (props ?
 
@@ -401,9 +403,58 @@ info.update = function (props) {
                 '<h6 style="margin-top: 20px"><b>' + values[0] + ' Median Sales Price/Sqft: </b>'  + "$" + formatMoney(geoIdPrices[props.GEOID10]['basePsf'],0) + '</h6>' +
                 '<h6><b>Total # of Homes Sold in ' + values[0] + ': </b>'  + formatMoney(geoIdPrices[props.GEOID10]['baseCount'],0) + '</h6>' +
                 '<h6 style="margin-top: 20px"><b>' + values[1] + ' Median Sales Price/Sqft: </b>' + "$" + formatMoney(geoIdPrices[props.GEOID10]['compPsf'],0) + '</h6>' +
-                '<h6><b>Total # of Homes Sold in ' + values[1] + ': </b>'  + formatMoney(geoIdPrices[props.GEOID10]['compCount'],0) + '</h6>'
+                '<h6><b>Total # of Homes Sold in ' + values[1] + ': </b>'  + formatMoney(geoIdPrices[props.GEOID10]['compCount'],0) + '</h6><br>' +
+                '<h6><b>Annual Sales Price/Sqft</b></h6>' +
+                '<div id="chart_container"><div id="y_axis"></div><div id="chart"></div><div id = "x_axis"></div></div><br>'
                 :
                 'Hover over a region');
+
+
+//D3 annual time series graph of PSF by region
+                var graph = new Rickshaw.Graph( {
+                        element: document.querySelector("#chart"),
+                        width: 260,
+                        height: 200,
+                        renderer: 'line',
+                        series: [ {
+                                color: 'steelblue',
+                                data: geoIdPrices[props.GEOID10]['graph']
+                        } ]
+                } );
+
+
+                var format = function(n) {
+                  var map = {
+                              1: "'06",
+                              2: "'07",
+                              3: "'08",
+                              4: "'09",
+                              5: "'10",
+                              6: "'11",
+                              7: "'12",
+                              8: "'13"
+                    };
+                    return map[n];
+                };
+
+                var x_ticks = new Rickshaw.Graph.Axis.X( {
+                  graph: graph,
+                  orientation: 'bottom',
+                  element: document.getElementById('x_axis'),
+                  pixelsPerTick: 40,
+                  tickFormat: format
+                } );
+
+                var y_axis = new Rickshaw.Graph.Axis.Y( {
+                        graph: graph,
+                        orientation: 'left',
+                        tickFormat: Rickshaw.Fixtures.Number.formatKMBT,
+                        pixelsPerTick: 25,
+                        element: document.getElementById('y_axis'),
+                } );
+
+              graph.render();
+
               } else {
                 this._div.innerHTML = '<h4>Region Details</h4>Too few homes sold in this region for your selected years to give you an accurate answer!';
                }

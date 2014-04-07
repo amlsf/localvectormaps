@@ -239,7 +239,7 @@ def load_countyprices(session):
 
     session.commit()
 
-# TODO Look into auto-geocoding data with Sarah's ruby script?
+
 
 # # TODO For extra dummy row for foreign key to insert join later: 
 # # county_geoid = "__NOCOUNTY", 

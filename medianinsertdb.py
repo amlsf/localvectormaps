@@ -136,6 +136,27 @@ def populate_prices_table(session, year):
     session.commit()
 
 
+def insert_psf_time_series(session):
+    regions = session.query(model.Zipcodes).all()
+
+    for region in regions:
+
+        graph = []
+        counter = 1
+        for year in range(2006,2014):
+            point_dict = {}
+            yearresult = session.query(model.Zipcodeannual).filter_by(geoid=region.geoid, year=year).all()
+            point_dict['x'] = counter
+            point_dict['y'] = yearresult[0].year_median_spsf
+            counter += 1
+            graph.append(point_dict) 
+
+        graphjson = json.dumps(graph)
+        # print graphjson
+        region.time_series_psf = graphjson
+
+    session.commit()
+
 def main():
     if len(sys.argv) < 2:
         connectionstring = model.defaultconnectionstring
@@ -144,7 +165,9 @@ def main():
 
     session = model.connect(connectionstring)
 
-    insert_median_sales_price(session)
+    # insert_psf_time_series(session)
+
+    # insert_median_sales_price(session)
     # insert_median_sales_psf(session)
 
     # populate_prices_table(session, 2005)
