@@ -102,7 +102,7 @@ By 2009-2010, real estate home values had reached bottom and the peak in home va
 In recent years, real estate values have been recovering, apparent from the overwhelming green when 2011-2013 is selected on the range slider. When you hover over the regions for drill-down, you can see growth is especially strong near San Francisco, around Palo Alto, and Monterrey. 
 ![Growth] (/screenshots/4-2011-2013.JPG)
 
-By comparing each of the years of 2010-2013 to the baseline of the 2006 peak in home values to gauge whether prices have returned to previous highs, you'll notice a single, rapidly growing green hot spot over time centered around Mountain View and Palo Alto. TThs indicates those regions have median home values that are now exceeding 2006 highs and are growing at a faster pace than the areas around San Francisco and Monterrey, which have not yet returned to previous highs. This likely is an effect of the strength of the tech industry in recent years. 
+By comparing each of the years of 2010-2013 to the baseline of the 2006 peak in home values to gauge whether prices have returned to previous highs, you'll notice a single, rapidly growing green hot spot over time centered around Mountain View and Palo Alto. This indicates those regions have median home values that are now exceeding 2006 highs and are growing at a faster pace than the areas around San Francisco and Monterrey, which have not yet returned to previous highs. This likely is an effect of the strength of the tech industry in recent years. 
 ![Improving] (/screenshots/6-2006-2011.JPG)
 ![Improving More] (/screenshots/8-2006-2013.JPG)
 
