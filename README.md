@@ -71,7 +71,7 @@ I found that the US Census Bureau has large shapefiles gigabytes in size contain
 
 I learned how to use an open source GIS system called QuantumGIS to quickly visualize the shapefiles and convert them to a GeoJSON format for displaying as a layer on the map. I also used the Python shapefile library to extract data from the shapefile and seed into my database where I then trimmed the unnecessary regions. I wrote another Python script to modify the GeoJSON to extract a subset of the data once I determined those regions from the previous step in the process. 
 
-A major task was designing the structure of the database to store all the longlat data so it could be easily and efficiently accessed, particularly to be able to run a Ray Casting algorithm that determines the membership of each home in its respective region, be it block group, census tract or subcounty.  
+A major task was designing the structure of the database to store all the longlat data so it could be easily and efficiently accessed, particularly to be able to run a Ray Casting algorithm that determines the membership of each home in the appropriate region, be it block group, census tract or subcounty.  
 
 As for the real estate data, I used the Python csv module to seed the MLS data of over 200,000 homes into my database, while validating, cleaning and normalizing the data. I then used a Mapquest tool to bulk geocode all the addresses to to longlat pairs for placement on the map.
 
@@ -113,17 +113,22 @@ Planned Expansions
 -----------------
 #####Predictive Analytics
 
-I plan to build in predictive algorithms that focus on predicting future prices and growth potential based on leading indicators and correlated factors such as trends in crime statistics, gentrification, major commercial real estate purchases by new employers, and stock market indices. In addition, linear regressions for each region could identify potentially undervalued homes based on whether the ask price falls below the linear regression. 
+I plan to build in predictive analytics that estimate growth potential based on leading indicators and correlated factors such as trends in crime statistics, gentrification, major commercial real estate purchases by new employers, and stock market indices. In addition, linear regressions for each region could identify potentially undervalued homes based on whether the ask price falls below the linear regression. 
 
-#####Additional Options and Filters
+#####Building for Scalability & Increased Complexity of Feature Interaction
 
-I plan to add options to view additional cuts of the data, including the ability to filter by number of bedrooms, baths, square footage and price level both for the heatmap and the active listing markers. In addition, users will have the option to view the choropleth map with regions broken out by increasing granularity, such as block groups. 
+I plan to add additional options and filters to view more cuts of the data, such as the ability to filter by number of bedrooms, baths, square footage and price level both for the heatmap and the active listing markers. In addition, users will have the option to view the choropleth map with regions broken out by increasing granularity, such as block groups. 
 
 I realized from the project this is much more complex than it seems both in terms of managing how to structure the code and managing performance. As I noted earlier, as the number of permutations of options users can select grows, the less feasible it is to pre-calculate and store metrics for every scenario in the database. However, having the server run many calculations on the fly can significantly slow down the application. 
 
-On the front-end, I noticed that as you add more user options, the complexity grows at an increasing rate as the number of conditional statements and edge cases increase. As of now, I have my code written such that every change a user makes triggers a chain of reactions across the page, so each time a new option is introduced, the number of interactions and code accounting for conditionals and edge cases grows at an increasing rate. Ideally, the code would grow at a linear rate with additional user optionality. To achieve this, I would want to experiment with refactoring my code to build a unified change hander that acts as a function of the overall state of the form at any time. 
+To solve this problem, I would experiment with a combination of techniques such as creating a caching layer, using Tilemill to pre-style and serve my own tiles, decreasing the granularity of regional breakouts in the choropleth map at a higher zoom level, and restricting the data calculations within the specific user's viewport.  
 
-In addition, since block group information isn't available in my real estate data, I would need to run a Ray Casting algorithm to determine the membership of each home within the appropriate block group. In terms of rendering, this might also require using the UTFGrid technique to handle the large amount of data objects on the map.
+On the front-end, I noticed that as more user options are added, the complexity grows at an increasing rate as the number of conditional statements and edge cases increase. As of now, I have my code written such that every change a user makes triggers a chain of reactions across the page, so each time a new option is introduced, the number of interactions and code accounting for conditionals and edge cases grows at an increasing rate. Ideally, the code would grow at a linear rate with additional user optionality. 
+
+To solve this problem, I would like to need to refactor my Javascript code to build a unified change hander that acts as a function of the overall state of the form at any time. In terms of rendering, I would also explore a new technique called UTFGrids that can handle a large number of data objects on a map. 
+
+#####Security
+Given the proprietary nature of the licensed MLS data I am using, a security layer would need to be built prior to deployment.
 
 #####Interactive Time Series Graphs
 
