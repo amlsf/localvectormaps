@@ -55,7 +55,7 @@ Project Walk Through
 ###Planning
 ######Leaflet, Cloudmade, OpenStreetMap
 
-This project proved to be a test of resourcefulness in finding and selecting the the data and tools given the time constraints. With no prior experience with GIS or cartography, one of the biggest tasks was determining what data to use and how to display it on the map, as well as navigating the sea of geo systems and tools. This included quickly getting up to speed on the ecosystem of tools in the geo space, understanding how they fit together and their pros and cons to decide which ones would be best suited for this project. 
+This project proved to be a test of resourcefulness in finding, understanding, and selecting the right data and tools given the time constraints. With no prior experience with GIS or cartography, one of the biggest tasks was determining what data to use and how to display it on the map, as well as navigating the sea of geo systems and tools. This included quickly getting up to speed on the ecosystem of tools in the geo space, understanding how they fit together and their pros and cons to decide which ones would be best suited for this project. 
 
 The application uses the Leaflet Javascript library for mapping applications, the Cloudmade API for basemap tileserving, which uses OpenStreetMaps for the base mapping data. I built some preliminary applications using the Google Maps API and explored Mapbox and CartoDB, but Leaflet had more features and 3rd party libraries I could use for customizing a map, had excellent documentation, and because it's open source, I didn't need to worry about Terms of Service. 
 
@@ -123,7 +123,7 @@ I realized from the project this is much more complex than it seems both in term
 
 To solve this problem, I would experiment with a combination of techniques such as creating a caching layer, using Tilemill to pre-style and serve my own tiles, decreasing the granularity of regional breakouts in the choropleth map at a higher zoom level, and restricting the data calculations within the specific user's viewport.  
 
-On the front-end, I noticed that as more user options are added, the complexity grows at an increasing rate as the number of conditional statements and edge cases increase. As of now, I have my code written such that every change a user makes triggers a chain of reactions across the page, so each time a new option is introduced, the number of interactions and code accounting for conditionals and edge cases grows at an increasing rate. Ideally, the code would grow at a linear rate with additional user optionality. 
+On the front-end, I noticed that as more user options are added, the complexity grows at an increasing rate as the number of conditional statements and edge cases increase. I would need to refactor my code so that variation is encoded as data as a table or dictionary look-up and not as control to avoid the exponential growth of code in the form of if-then-else branches with each introduction fo an additional user option.  
 
 To solve this problem, I would like to need to refactor my Javascript code to build a unified change hander that acts as a function of the overall state of the form at any time. In terms of rendering, I would also explore a new technique called UTFGrids that can handle a large number of data objects on a map. 
 
