@@ -29,7 +29,7 @@ The map offers visualization of 3 different metrics split out by zipcode. A butt
   *	Median sales price of homes
   *	Median sales price per square foot
   *	Percent change in median sales price between any two years of the user's choice 
-      *	This uses a diverging color scheme instead of  asequential one used the metrics above. 
+      *	This uses a diverging color scheme instead of a sequential one used the metrics above. 
       *	The Python script ensures a minimum number of houses in each region for a more accurate representation of the data.
 
 #####2. Range slider for year on year comparison
