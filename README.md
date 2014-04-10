@@ -1,10 +1,14 @@
 LocalVector Maps
 =================
-LocalVector Maps is a real estate data visualization and exploratory tool that uses colorful choropleth maps as an intuitive approach to help residential real estate buyers quickly absorb a large amount of data in order to compare local prices, identify specific high growth areas, visualize the recovery of the real estate market since the 2009 meltdown, and explore homes currently for sale within five Bay Area counties. 
+LocalVector Maps is a real estate data visualization and exploratory tool that uses colorful choropleth maps as an intuitive approach to help residential real estate buyers quickly absorb a large amount of data in order to compare trends, identify specific high growth areas, visualize the recovery of the real estate market since the 2009 meltdown, and explore homes currently for sale within five Bay Area counties. My goal was to build a unique real estate research tool that is intuitive and easy to gain a high level, comparative overview of the landscape and its trends but also offer enough granularity to be able to drill in and identify specific opportunities. 
+
+The application uses over 200,000 rows of licensed Multiple Listing Services data about past sold homes and those currently for sale. This app will be incorporated as a new feature in the website of LocalVector, a real estate tech company.
+
+The users I had in mind 
 
 I built this application with the goal to make a large amount of data useful and easily digestible. Likely due to the proprietary nature of the MLS data used in this application, I noticed a lack of exploratory, interactive tools that displayed real estate growth and recovery over time rather than price level snapshots. While line graphs also certainly show growth, they are limiting in the number of regions that can be compared at the same time.
 
-I had in mind users like my parents and other mom-and-pop investors who invest their nest eggs on the side and have limited access to research tools to help gain a bigger picture understanding of the landscape of investment opportunities. This app will be hosted shortly as a new feature in a friend's real estate startup, LocalVector.
+I had in mind users like my parents and other mom-and-pop investors who invest their nest eggs on the side and have limited access to research tools to help gain a bigger picture understanding of the landscape of investment opportunities.
 
 Developed in 3.5 weeks at Hackbright Academy's Software Engineering Fellowship in the Winter 2014 cohort. 
 
