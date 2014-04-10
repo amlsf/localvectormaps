@@ -55,7 +55,7 @@ Project Walk Through
 ###Planning
 ######Leaflet, Cloudmade, OpenStreetMap
 
-This project proved to be a test of resourcefulness in finding, understanding, and selecting the right data and tools given the time constraints. With no prior experience with GIS or cartography, one of the biggest tasks was determining what data to use and how to display it on the map, as well as navigating the sea of geo systems and tools. This included quickly getting up to speed on the ecosystem of tools in the geo space, understanding how they fit together and their pros and cons to decide which ones would be best suited for this project. 
+This project proved to be a test of resourcefulness in finding, understanding, and selecting the right data and tools given the time constraints. With no prior experience with GIS or cartography, one of the biggest tasks was determining what data to use and how to display it on the map, as well as navigating the sea of geo systems and tools. 
 
 The application uses the Leaflet Javascript library for mapping applications, the Cloudmade API for basemap tileserving, which uses OpenStreetMaps for the base mapping data. I built some preliminary applications using the Google Maps API and explored Mapbox and CartoDB, but Leaflet had more features and 3rd party libraries I could use for customizing a map, had excellent documentation, and because it's open source, I didn't need to worry about Terms of Service. 
 
@@ -67,13 +67,13 @@ In terms of granularity of detail, I felt that either the zipcode or neighborhoo
 ######QuantumGIS, Shapefile library, Mapquest Bulk Geocoder, PostgreSQL, SQLAlchemy
 A bulk of the work involved finding and preparing the geodata and real estate data to be used for the web application. 
 
-I found that the US Census Bureau has large shapefiles gigabytes in size containing latitude and longitudinal pairs of the polygon vertices to draw each region onto a map throughout the US. Many of the regions consist of hundreds of vertices and multiple separate polygons. 
+I found that the US Census Bureau has large shapefiles gigabytes in size containing geospatial data including the latitude and longitudinal pairs of the polygon vertices to draw each region (zipcodes, block groups, etc) onto a map throughout the US. Many of the regions consist of hundreds of vertices and multiple separate polygons. 
 
 I learned how to use an open source GIS system called QuantumGIS to quickly visualize the shapefiles and convert them to a GeoJSON format for displaying as a layer on the map. I also used the Python shapefile library to extract data from the shapefile and seed into my database where I then trimmed the unnecessary regions. I wrote another Python script to modify the GeoJSON to extract a subset of the data once I determined those regions from the previous step in the process. 
 
-A major task was designing the structure of the database to store all the longlat data so it could be easily and efficiently accessed, particularly to be able to run a Ray Casting algorithm that determines the membership of each home in the appropriate region, be it block group, census tract or subcounty.  
+A major task was designing the structure of the database to store all the latlong data so it could be easily and efficiently accessed, particularly to be able to run a Ray Casting algorithm that determines the membership of each home in the appropriate region, be it block group, census tract or subcounty.  
 
-As for the real estate data, I used the Python csv module to seed the MLS data of over 200,000 homes into my database, while validating, cleaning and normalizing the data. I then used a Mapquest tool to bulk geocode all the addresses to to longlat pairs for placement on the map.
+As for the real estate data, I used the Python csv module to seed the MLS data of over 200,000 homes into my database, while validating, cleaning and normalizing the data. I then used a Mapquest tool to bulk geocode all the addresses to to latlong tuples for placement on the map.
 
 ###Displaying Data with Performance in Mind
 ######AJAX, JQuery, GeoJSON, numpy
