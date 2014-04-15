@@ -6,12 +6,12 @@ The application uses over 200,000 rows of licensed Multiple Listing Services rea
 
 I built this application because I noticed a lack exploratory tools for non-professional investors like the mom-and-pops, particularly tools that presented data with maps focused on change over time in addition to price level snapshots. While line graphs are popularly used and also certainly show growth, they are limiting in granularity and the number of regions that can be compared in a single visualization.
 
-Developed in 3.5 weeks at Hackbright Academy's Software Engineering Fellowship in the Winter 2014 cohort. 
+Developed in 3.5 weeks at Hackbright Academy's Software Engineering Fellowship in the Spring 2014 cohort. 
 
 #####Note on cloning this repository:
 Note that this application uses licensed Multiple Listing Services (MLS) data, it is not possible to run this repository locally on your machine. The site where the app will be hosted will be posted shortly.
 
-#####Technologies & tools used:
+#####Technology used:
 This application is built using the Flask framework and is written in Python in the back-end, Javascript in the front-end, and uses a PostgreSQL database.
 
 1. Front-end: Javascript, jQuery, AJAX, HTML, CSS, Bootstrap, D3
@@ -59,7 +59,7 @@ With no prior experience in GIS or cartography, this project proved to be a test
 
 With only 3.5 weeks to build the project, I had to be selective on what I wanted to focus on. Because of the nature of this application, I chose to focus on optimizing for speed. Users aren't likely to wait for more than 2-3 seconds for the map visualization to update. 
 
-The application uses the Leaflet Javascript library for mapping applications, the Cloudmade API for basemap tileserving, which uses OpenStreetMaps for the base mapping data. I built some preliminary applications using the Google Maps API and explored Mapbox and CartoDB, but Leaflet had more features and 3rd party libraries I could use for customizing a map, had excellent documentation, and because it's open source, I didn't need to worry about Terms of Service. 
+The application uses the Leaflet Javascript library for mapping applications, the Cloudmade API for basemap tileserving, and OpenStreetMaps for the base mapping data. I built some preliminary applications using the Google Maps API and explored Mapbox and CartoDB, but Leaflet had more features and 3rd party libraries I could use for customizing a map, had excellent documentation, and because it's open source, I didn't need to worry about Terms of Service. 
 
 Choropleth maps are thematic maps in which areas are shaded or patterned in proportion to the measurement of statistical variable. They're similar to heatmaps, though I chose not to use heatmaps because they reflect the density of data points in a region in addition to values, which would not have been an accurate representation of the data for the purposes of this project. This is how all the heatmaps libraries for cartography behaved.
 
@@ -80,7 +80,7 @@ As for the real estate data, I used the Python csv module to seed the MLS data o
 ###Displaying Data with Performance in Mind
 ######AJAX, JQuery, GeoJSON, numpy
 
-I had originally used a Leaflet feature that drew each region's polygon by feeding my latlong data from the database to the client, but identified this as a major performance bottleneck. I researched and found another method that used GeoJSON files so that the frontend could handle all drawing of each polygon and avoided making extra server calls. While this increased the speed, it was still slower than I would have liked. I then switched to using a simplied version of the shapefiles with reduced accuracy by reducing the number of vertices while still retaining the shape integrity of each region. (As a next step for the future, to further improve performance by avoiding drawing hundreds of polygons altogether, I would want to use a tool called Tilemill to style the tiles ahead of time and then Mapbox's hosting services to serve the tiles/data.) 
+I had originally used a Leaflet feature that drew each region's polygon by feeding my latlong data from the database to the client, but identified this as a major performance bottleneck. I researched and found another method that used GeoJSON files so that the frontend could handle all drawing of each polygon and avoided making extra server calls. While this increased the speed, it was still slower than I would have liked. I then switched to using a simplied version of the shapefiles with reduced accuracy by reducing the number of vertices while still retaining the shape integrity of each region. (As a next step for the future, to further improve performance by avoiding drawing hundreds of polygons altogether, I would want to use a tool called Tilemill to style the tiles ahead of time and then Mapbox's hosting services to serve the tiles.) 
 
 Next, I wrote a number of scripts to pre-calculate the various metrics I planned to display on the map using the Python numpy module. I had originally coded the server side to calculate these metrics dynamically with each client request, but found this affected performance negatively. I updated my database model and wrote the scripts to pre-process and store as much of the metric calculations in the database ahead of time as possible, including the medians of the total price, price per square foot, and number of homes sold broken out by region and time period. As I plan to build out more features and filters in the future that allow many combinations of options for the users, it would not be as efficient to pre-compute everything. I would likely need to consider optimizing the balance between pre-calculations, server-side, and client-side computations.
 
@@ -125,12 +125,7 @@ I realized from the project this is much more complex than it seems both in term
 
 To solve this problem, I would experiment with a combination of techniques such as creating a caching layer, using Tilemill to pre-style and serve my own tiles, decreasing the granularity of regional breakouts in the choropleth map at a higher zoom level, and restricting the data calculations within the specific user's viewport.  
 
-On the front-end, I noticed that as more filter options are introduced, the complexity grows at an increasing rate as the number of conditional statements and edge cases increase. I would need to refactor my code so that variation is encoded as data and not as control.
-
-To solve this problem, I would like to need to refactor my Javascript code to build a unified change hander that acts as a function of the overall state of the form at any time. In terms of rendering, I would also explore a new technique called UTFGrids that can handle a large number of data objects on a map. 
-
-#####Security
-Given the proprietary nature of the licensed MLS data I am using, a security layer would need to be built prior to deployment.
+On the front-end, I noticed that as more filter options are introduced, the complexity grows at an increasing rate as the number of conditional statements and edge cases increase. I would need to refactor my code so that variation is encoded as data and not as control. In terms of rendering, I would also explore a new technique called UTFGrids that can handle a large number of data objects on a map. 
 
 #####Interactive Time Series Graphs
 
