@@ -1,14 +1,9 @@
 LocalVector Maps
 =================
-LocalVector Maps is a real estate data visualization and exploratory tool that uses colorful choropleth maps as an intuitive approach to help residential real estate buyers quickly absorb a large amount of data in order to compare trends, identify specific high growth areas, visualize the recovery of the real estate market since the 2009 meltdown, and explore homes currently for sale within five Bay Area counties. My goal was to build a unique real estate research tool that is intuitive and easy to gain a high level, comparative overview of the landscape and its trends but also offer enough granularity to be able to drill in and identify specific opportunities. 
+LocalVector Maps is an interactive real estate data visualization tool that uses colorful choropleth maps and graphs as an intuitive approach to help residential real estate buyers quickly absorb a large amount of data in order to compare trends, identify specific high growth areas, visualize market recovery since the most recent meltdown, and explore homes currently for sale within five Bay Area counties. My goal was to build a unique real estate research tool that was intuitive and easy to gain a high level, comparative overview of the landscape and its trends but also offer enough granularity to be able to drill in and identify specific opportunities. 
+The application uses over 200,000 rows of licensed Multiple Listing Services data about past sold homes and those currently for sale as well as geospatial data from the US Census Bureau. This project will be incorporated as a new feature in the website of LocalVector, a real estate tech company.
 
-The application uses over 200,000 rows of licensed Multiple Listing Services data about past sold homes and those currently for sale. This app will be incorporated as a new feature in the website of LocalVector, a real estate tech company.
-
-The users I had in mind 
-
-I built this application with the goal to make a large amount of data useful and easily digestible. Likely due to the proprietary nature of the MLS data used in this application, I noticed a lack of exploratory, interactive tools that displayed real estate growth and recovery over time rather than price level snapshots. While line graphs also certainly show growth, they are limiting in the number of regions that can be compared at the same time.
-
-I had in mind users like my parents and other mom-and-pop investors who invest their nest eggs on the side and have limited access to research tools to help gain a bigger picture understanding of the landscape of investment opportunities.
+I built this application because I noticed a lack exploratory tools for nonprofessional investors like the mom-and-pops, especially those that presented data using maps to provide a market overview of change over time rather than just price level snapshots. While line graphs are popularly used and also certainly show growth, they are limiting in granularity and the number of regions that can be compared in a single visualization.
 
 Developed in 3.5 weeks at Hackbright Academy's Software Engineering Fellowship in the Winter 2014 cohort. 
 
@@ -16,7 +11,7 @@ Developed in 3.5 weeks at Hackbright Academy's Software Engineering Fellowship i
 Note that this application uses licensed Multiple Listing Services (MLS) data, it is not possible to run this repository locally on your machine. The site where the app will be hosted will be posted shortly.
 
 #####Technologies & tools used:
-The application is built using the Flask framework and is written in Python in the back-end, Javascript in the front-end, and uses a PostgreSQL database.
+This application is built using the Flask framework and is written in Python in the back-end, Javascript in the front-end, and uses a PostgreSQL database.
 
 1. Front-end: Javascript, jQuery, AJAX, HTML, CSS, Bootstrap, D3
 2. Back-end: Python, Flask, SQLAlchemy, PostgreSQL, numpy module
@@ -60,6 +55,8 @@ Project Walk Through
 ######Leaflet, Cloudmade, OpenStreetMap
 
 This project proved to be a test of resourcefulness in finding, understanding, and selecting the right data and tools given the time constraints. With no prior experience with GIS or cartography, one of the biggest tasks was determining what data to use and how to display it on the map, as well as navigating the sea of geo systems and tools. 
+
+With only 3.5 weeks to build the project, I had to be selective on what I wanted to focus on. Because of the nature of this application, I chose to focus on optimizing for speed. Users aren't likely to wait for more than 2-3 seconds for the map visualization to update. 
 
 The application uses the Leaflet Javascript library for mapping applications, the Cloudmade API for basemap tileserving, which uses OpenStreetMaps for the base mapping data. I built some preliminary applications using the Google Maps API and explored Mapbox and CartoDB, but Leaflet had more features and 3rd party libraries I could use for customizing a map, had excellent documentation, and because it's open source, I didn't need to worry about Terms of Service. 
 
