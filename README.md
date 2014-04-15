@@ -1,9 +1,10 @@
 LocalVector Maps
 =================
-LocalVector Maps is an interactive real estate data visualization tool that uses colorful choropleth maps and graphs as an intuitive approach to help residential real estate buyers quickly absorb a large amount of data in order to compare trends, identify specific high growth areas, visualize market recovery since the most recent meltdown, and explore homes currently for sale within five Bay Area counties. My goal was to build a unique real estate research tool that was intuitive and easy to gain a high level, comparative overview of the landscape and its trends but also offer enough granularity to be able to drill in and identify specific opportunities. 
-The application uses over 200,000 rows of licensed Multiple Listing Services data about past sold homes and those currently for sale as well as geospatial data from the US Census Bureau. This project will be incorporated as a new feature in the website of LocalVector, a real estate tech company.
+LocalVector Maps is an interactive real estate data visualization tool that uses colorful choropleth maps and graphs as an intuitive approach to help residential real estate buyers quickly absorb a large amount of data in order to compare trends, identify specific high growth areas, visualize market recovery since the most recent meltdown, and explore homes currently for sale within five Bay Area counties. My goal was to build a unique real estate research tool that was intuitive and easy to gain a high level, comparative overview of the landscape and its trends but also offer enough granularity to be able to drill in and identify specific opportunities.
 
-I built this application because I noticed a lack exploratory tools for nonprofessional investors like the mom-and-pops, especially those that presented data using maps to provide a market overview of change over time rather than just price level snapshots. While line graphs are popularly used and also certainly show growth, they are limiting in granularity and the number of regions that can be compared in a single visualization.
+The application uses over 200,000 rows of licensed Multiple Listing Services real estate data as well as geospatial data from the US Census Bureau. This project will be incorporated as a new feature in the website of LocalVector, a real estate tech company.
+
+I built this application because I noticed a lack exploratory tools for nonprofessional investors like the mom-and-pops, particularly tools that presented data with maps focused on change over time rather than just price level snapshots. While line graphs are popularly used and also certainly show growth, they are limiting in granularity and the number of regions that can be compared in a single visualization.
 
 Developed in 3.5 weeks at Hackbright Academy's Software Engineering Fellowship in the Winter 2014 cohort. 
 
@@ -44,7 +45,7 @@ The map offers visualization of 3 different metrics split out by zipcode. A butt
   *	The code allows the legend to automatically scale with the range of any particular dataset that the user chooses to view.
 
 #####5.	Toggle Active listings & Markerclusters
-  *	In the control panel on the left, a button allows user to toggle on markers for active listings. When the users click on the markers, a pop-up displays showing detailed listing information including list price, address, # of beds/bath, a description of the property, and the MLS listing number. Users can click on the address and be taken to a separate detailed listings page  
+  *	In the control panel on the left, a button allows the user to toggle on markers for active listings. When the users click on the markers, a pop-up displays showing detailed listing information including list price, address, # of beds/bath, a description of the property, and the MLS listing number. Users can click on the address and be taken to a separate detailed listings page  
   *	The display uses a markercluster library to avoid overwhelming the user with too many markers and improve performance. When the user mouses over a particular cluster, a polygon appears on the map indicating what area of the map the cluster covers. Clicking on the cluster automatically zooms into the map and splits clusters out into smaller clusters or map pins. Double clicking zooms back out to the original view.   
 ![Other page](/screenshots/1-activelistings.JPG)
 ![Local page](/screenshots/11-activelistings2.JPG)
