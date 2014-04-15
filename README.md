@@ -4,7 +4,7 @@ LocalVector Maps is an interactive real estate data visualization tool that uses
 
 The application uses over 200,000 rows of licensed Multiple Listing Services real estate data as well as geospatial data from the US Census Bureau. This project will be incorporated as a new feature in the website of LocalVector, a real estate tech company.
 
-I built this application because I noticed a lack exploratory tools for non-professional investors like the mom-and-pops, particularly tools that presented data with maps focused on change over time rather than just price level snapshots. While line graphs are popularly used and also certainly show growth, they are limiting in granularity and the number of regions that can be compared in a single visualization.
+I built this application because I noticed a lack exploratory tools for non-professional investors like the mom-and-pops, particularly tools that presented data with maps focused on change over time in addition to price level snapshots. While line graphs are popularly used and also certainly show growth, they are limiting in granularity and the number of regions that can be compared in a single visualization.
 
 Developed in 3.5 weeks at Hackbright Academy's Software Engineering Fellowship in the Winter 2014 cohort. 
 
@@ -29,7 +29,7 @@ The map offers visualization of 3 different metrics split out by zipcode. A butt
   *	Median sales price of homes by zipcode
   *	Median sales price per square foot by zipcode
   *	Percent change in median sales price between any two years of the user's choice 
-      *	This uses a diverging color scheme instead of a sequential one used the metrics above. 
+      *	This uses a diverging color scheme instead of a sequential one as in the metrics above. 
       *	The Python script ensures a minimum number of houses in each region for a more accurate representation of the data.
 
 #####2. Range slider for year on year comparison
