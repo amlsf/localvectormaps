@@ -37,14 +37,14 @@ The map offers visualization of 3 different metrics split out by zipcode. A butt
 
 #####3.	Information boxes on mouseover
   * When the mouse hovers over any region, the region is highlighted and an information box on the upper right corner appears to drill down into additional details about the region such as median price and number of homes sold, and exact % change where appropriate.
-  * The Price Comparison option view shows in the mouseover information box a time series chart displaying the median price/sqft each year for the respective region.
+  * The Price Comparison option view shows in the mouseover information box a time series graph displaying the median price/sqft each year for the respective region.
   * Clicking on any particular region automatically zooms in to pull the region into the full viewport.
 
 #####4.	Legend 
   *	The legend updates dynamically with the dataset with a clear label that updates based on the metric and years selected giving the user a clear understanding of what is displayed.
   *	The code allows the legend to automatically scale with the range of any particular dataset that the user chooses to view.
 
-#####5.	Toggle Active listings & Markerclusters
+#####5.	Toggle to view homes currently for sale
   *	In the control panel on the left, a button allows the user to toggle on markers for active listings. When the users click on the markers, a pop-up displays showing detailed listing information including list price, address, # of beds/bath, a description of the property, and the MLS listing number. Users can click on the address and be taken to a separate detailed listings page  
   *	The display uses a markercluster library to avoid overwhelming the user with too many markers and improve performance. When the user mouses over a particular cluster, a polygon appears on the map indicating what area of the map the cluster covers. Clicking on the cluster automatically zooms into the map and splits clusters out into smaller clusters or map pins. Double clicking zooms back out to the original view.   
 ![Other page](/screenshots/1-activelistings.JPG)
