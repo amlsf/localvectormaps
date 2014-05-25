@@ -2,14 +2,14 @@ LocalVector Maps
 =================
 LocalVector Maps is an interactive real estate data visualization tool that uses colorful choropleth maps and graphs as an intuitive approach to help residential real estate buyers quickly absorb a large amount of data in order to compare trends, identify specific high growth areas, visualize market recovery since the most recent meltdown, and explore homes currently for sale within five Bay Area counties. My goal was to build a unique real estate research tool that was intuitive and easy to gain a high level, comparative overview of the landscape but also offer enough granularity to be able to drill in and identify specific opportunities.
 
-The application uses over 200,000 rows of licensed Multiple Listing Services real estate data as well as geospatial data from the US Census Bureau. This project will be incorporated as a new feature in the website of LocalVector, a real estate tech company.
+The application uses over 200,000 rows of licensed Multiple Listing Services real estate data as well as geospatial data from the US Census Bureau. This project will be incorporated as a new feature in the website of LocalVector, a Bay Area real estate search engine.
 
 I built this application because I noticed a lack exploratory tools for non-professional investors like the mom-and-pops, particularly tools that presented data with maps focused on change over time in addition to price level snapshots. While line graphs are popularly used and also certainly show growth, they are limiting in granularity and the number of regions that can be compared in a single visualization.
 
 Developed in 3.5 weeks at Hackbright Academy's Software Engineering Fellowship in the Spring 2014 cohort. 
 
 #####Note on cloning this repository:
-Note that this application uses licensed Multiple Listing Services (MLS) data, it is not possible to run this repository locally on your machine. The site where the app will be hosted will be posted shortly.
+Note that this application uses licensed Multiple Listing Services (MLS) data, it is not possible to run this repository locally on your machine. The link will be posted once the app is successfully integrated into Local Vector. 
 
 #####Technology used:
 This application is built using the Flask framework and is written in Python in the back-end, Javascript in the front-end, and uses a PostgreSQL database.
@@ -111,21 +111,21 @@ By comparing each of the years of 2010-2013 to the baseline of the 2006 peak in 
 You might then speculate the homes currently for sale around the fringes of the growing green hotspot have the most potential for growth (as well as near San Francisco and Monterrey) and investigate homes currently for sale by toggling on the active listings. 
 ![Searching] (/screenshots/9-2006-2013 with clusters.JPG)
 
-Planned Expansions
+Possible Expansions
 -----------------
 #####Predictive Analytics
 
-I plan to build in predictive analytics that estimate growth potential based on leading indicators and correlated factors such as trends in crime statistics, gentrification, major commercial real estate purchases by new employers, and stock market indices. In addition, linear regressions for each region could identify potentially undervalued homes based on whether the ask price falls below the linear regression. 
+The next step would be to build in predictive analytics that estimate growth potential based on leading indicators and correlated factors such as trends in crime statistics, gentrification, major commercial real estate purchases by new employers, and stock market indices. In addition, linear regressions for each region could identify potentially undervalued homes based on whether the ask price falls below the linear regression. 
 
 #####Building for Scalability & Increased Complexity
 
-I plan to add additional options and filters to view more cuts of the data, such as the ability to filter by number of bedrooms, baths, square footage and price level both for the heatmap and the active listing markers. In addition, users will have the option to view the choropleth map with regions broken out by increasing granularity, such as block groups. 
+Additional options and filters to view more cuts of the data, such as the ability to filter by number of bedrooms, baths, square footage and price level both for the heatmap and the active listing markers. In addition, users will have the option to view the choropleth map with regions broken out by increasing granularity, such as block groups. 
 
 I realized from the project this is much more complex than it seems both in terms of managing how to structure the code and managing performance. As I noted earlier, as the number of permutations of options users can select grows, the less feasible it is to pre-calculate and store metrics for every scenario in the database. However, having the server run many calculations on the fly can significantly slow down the application. 
 
-To solve this problem, I would experiment with a combination of techniques such as creating a caching layer, using Tilemill to pre-style and serve my own tiles, decreasing the granularity of regional breakouts in the choropleth map at a higher zoom level, and restricting the data calculations within the specific user's viewport.  
+To solve this problem, I would experiment with a combination of techniques such as adopting PostGIS, creating a caching layer, using Tilemill to pre-style and serve my own tiles, decreasing the granularity of regional breakouts in the choropleth map at a higher zoom level, and restricting the data calculations within the specific user's viewport.  
 
-On the front-end, I noticed that as more filter options are introduced, the complexity grows at an increasing rate as the number of conditional statements and edge cases increase. I would need to refactor my code so that variation is encoded as data and not as control. In terms of rendering, I would also explore a new technique called UTFGrids that can handle a large number of data objects on a map. 
+On the front-end, I noticed that as more filter options are introduced, the complexity grows at an increasing rate as the number of conditional statements and edge cases increase. I would need to refactor my code so that variation is encoded as data and not as control and explore frameworks such as AngularJS. In terms of rendering, I would also explore a new technique called UTFGrids that can handle a large number of data objects on a map. 
 
 #####Interactive Time Series Graphs
 
