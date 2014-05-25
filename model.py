@@ -53,7 +53,7 @@ class Listings(Base):
     lot_size = Column(Integer, nullable=True)
     address = Column(VARCHAR, nullable=True)
     street_name = Column(VARCHAR, nullable=True)
-# just use address or else street_suffix might product an error
+# just use address or else street_suffix might produce an error
     street_suffix = Column(VARCHAR, nullable=True)
     street_number = Column(VARCHAR, nullable=True)
     county_name = Column(VARCHAR, nullable=True)

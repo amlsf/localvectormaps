@@ -1,4 +1,4 @@
-mapid = 125674;
+mapid = "amlsfo.ib501ee0";
 apikey = "99d055cec8794a33b9e2cb09553e3506";
 
 var map = L.map('map').setView([36.685067, -121.73021], 9);
@@ -40,8 +40,8 @@ var initLeaflet = function () {
 
 // SECTION lays base map and region geojson layers
 function addBaseMap() {
-    L.tileLayer('http://{s}.tile.cloudmade.com/'+apikey+'/'+mapid+'/256/{z}/{x}/{y}.png', {
-    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
+    L.tileLayer('http://{s}.tiles.mapbox.com/v3/'+mapid+'/{z}/{x}/{y}.png', {
+    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">MapBox</a>',
     maxZoom: 20
 }).addTo(map);
 }

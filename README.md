@@ -16,7 +16,7 @@ This application is built using the Flask framework and is written in Python in 
 
 1. Front-end: Javascript, jQuery, AJAX, HTML, CSS, Bootstrap, D3
 2. Back-end: Python, Flask, SQLAlchemy, PostgreSQL, numpy module
-3. GIS-related: Leaflet API, Cloudmade, QuantumGIS, GeoJSON, Python shapefile library, markercluster library
+3. GIS-related: Leaflet API, Mapbox, QuantumGIS, GeoJSON, Python shapefile library, markercluster library
 
 Summary of Features
 -------------------
@@ -53,13 +53,13 @@ The map offers visualization of 3 different metrics split out by zipcode. A butt
 Project Walk Through
 --------------------
 ###Planning
-######Leaflet, Cloudmade, OpenStreetMap
+######Leafletjs, Mapbox tile server, OpenStreetMap
 
 With no prior experience in GIS or cartography, this project proved to be a test of resourcefulness in finding, understanding, and selecting the right GIS tools within the time constraints. Another big task was determining what geo and real estate data to use and how to display it on the map. 
 
 With only 3.5 weeks to build the project, I had to be selective on what I wanted to focus on. Because of the nature of this application, I chose to focus on optimizing for speed. Users aren't likely to wait for more than 2-3 seconds for the map visualization to update. 
 
-The application uses the Leaflet Javascript library for mapping applications, the Cloudmade API for basemap tileserving, and OpenStreetMaps for the base mapping data. I built some preliminary applications using the Google Maps API and explored Mapbox and CartoDB, but Leaflet had more features and 3rd party libraries I could use for customizing a map, had excellent documentation, and because it's open source, I didn't need to worry about Terms of Service. 
+The application uses the Leaflet Javascript library for mapping applications, the Mapbox API for basemap tileserving, and OpenStreetMaps for the base mapping data. I built some preliminary applications using the Google Maps API and explored Mapbox and CartoDB's libraries, but Leaflet had more features and 3rd party libraries I could use for customizing a map, had excellent documentation, and because it's open source, I didn't need to worry about Terms of Service. 
 
 Choropleth maps are thematic maps in which areas are shaded or patterned in proportion to the measurement of statistical variable. They're similar to heatmaps, though I chose not to use heatmaps because they reflect the density of data points in a region in addition to values, which would not have been an accurate representation of the data for the purposes of this project. This is how all the heatmaps libraries for cartography behaved.
 
@@ -80,7 +80,7 @@ As for the real estate data, I used the Python csv module to seed the MLS data o
 ###Displaying Data with Performance in Mind
 ######AJAX, JQuery, GeoJSON, numpy
 
-I had originally used a Leaflet feature that drew each region's polygon by feeding my latlong data from the database to the client, but identified this as a major performance bottleneck. I researched and found another method that used GeoJSON files so that the frontend could handle all drawing of each polygon and avoided making extra server calls. While this increased the speed, it was still slower than I would have liked. I then switched to using a simplied version of the shapefiles with reduced accuracy by reducing the number of vertices while still retaining the shape integrity of each region. (As a next step for the future, to further improve performance by avoiding drawing hundreds of polygons altogether, I would want to use a tool called Tilemill to style the tiles ahead of time and then Mapbox's hosting services to serve the tiles.) 
+I had originally used a Leaflet feature that drew each region's polygon by feeding my latlong data from the database to the client, but identified this as a major performance bottleneck. I researched and found another method that used GeoJSON files so that the frontend could handle all drawing of each polygon and avoided making extra server calls. While this increased the speed, it was still slower than I would have liked. I then switched to using a simplied version of the shapefiles with reduced accuracy by reducing the number of vertices while still retaining the shape integrity of each region. As a next step for the future, I'd want to adopt PostGIS for faster rendering and to further improve performance by avoiding drawing hundreds of polygons altogether, I would use a tool called Tilemill to style the tiles ahead of time. 
 
 Next, I wrote a number of scripts to pre-calculate the various metrics I planned to display on the map using the Python numpy module. I had originally coded the server side to calculate these metrics dynamically with each client request, but found this affected performance negatively. I updated my database model and wrote the scripts to pre-process and store as much of the metric calculations in the database ahead of time as possible, including the medians of the total price, price per square foot, and number of homes sold broken out by region and time period. As I plan to build out more features and filters in the future that allow many combinations of options for the users, it would not be as efficient to pre-compute everything. I would likely need to consider optimizing the balance between pre-calculations, server-side, and client-side computations.
 
